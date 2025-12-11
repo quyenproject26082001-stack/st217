@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:background="#A1CCEF"
+    android:layout_height="match_parent"
+    tools:context=".ui.customize.CustomizeCharacterActivity">
+
+
+    <!-- layoutActionBar -->
+    <FrameLayout
+        android:id="@+id/layoutActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/actionBar"
+            layout="@layout/layout_actionbar" />
+    </FrameLayout>
+
+    <!-- Layout Image Layer -->
+    <FrameLayout
+        android:id="@+id/layoutCustomLayer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/gl057"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutActionBar" />
+
+
+    <!--    gl056-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl057"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.567" />
+
+    <!--    gl056-->
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl056"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.65" />
+
+    <!--    btnFlip-->
+    <ImageView
+        android:id="@+id/btnFlip"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_flip"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutActionBar" />
+
+    <!--    btnHide-->
+    <ImageView
+        android:id="@+id/btnHide"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="16dp"
+        android:visibility="invisible"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_show"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnFlip" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/color"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:layout_marginEnd="16dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/gl056"
+        app:layout_constraintEnd_toStartOf="@+id/btnRandom"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!--    btnColor-->
+
+
+        <!--    flColor-->
+        <FrameLayout
+            android:id="@+id/flColor"
+            android:layout_width="0dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="-25dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_max="wrap"
+            android:layout_marginEnd="0dp"
+            android:visibility="invisible"
+            app:layout_constraintHorizontal_bias="0"
+            android:background="@drawable/bg_8_stroke_yellow_f6_solid_white_opacity_50">
+
+            <!--        rcvColor-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="28dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="horizontal"
+                android:clipToPadding="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_color" />
+        </FrameLayout>
+        <ImageView
+            android:id="@+id/btnColor"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:visibility="invisible"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:src="@drawable/ic_color" />
+
+        <androidx.constraintlayout.widget.Guideline android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="1.0"
+            />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <!-- btnRandom -->
+    <ImageView
+        android:id="@+id/btnRandom"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_random"
+        app:layout_constraintBottom_toBottomOf="@id/color"
+        app:layout_constraintTop_toTopOf="@id/color"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!--    rcvLayer-->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvLayer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#FFBFBF"
+        android:layerType="hardware"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/flBottomNav"
+        app:layout_constraintTop_toBottomOf="@+id/gl056"
+        app:spanCount="5"
+        tools:listitem="@layout/item_customize" />
+
+    <!--    flBottomNav-->
+    <FrameLayout
+        android:id="@+id/flBottomNav"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginBottom="0dp"
+        android:background="#FF8FFD"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!--        rcvNavigation-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcvNavigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layerType="hardware"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingVertical="2dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_bottom_navigation" />
+    </FrameLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

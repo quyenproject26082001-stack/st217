@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.home.HomeActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:background="@color/color_app" />
+
+    <!--    layoutActionBar-->
+    <FrameLayout
+        android:id="@+id/layoutActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/actionBar"
+            layout="@layout/layout_actionbar" />
+    </FrameLayout>
+
+    <!--    imvAppName-->
+    <ImageView
+        android:id="@+id/imvAppName"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:src="@drawable/img_app_name"
+        android:layout_marginTop="-30dp"
+
+        app:layout_constraintDimensionRatio="361:255"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutActionBar" />
+
+    <!--    scvMain-->
+    <ScrollView
+        android:id="@+id/scvMain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="-60dp"
+        android:layout_marginBottom="0dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imvAppName">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--            gl05-->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl05"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.08" />
+
+            <!--            gl063-->
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/gl063"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.91" />
+
+            <!--            btnCreate-->
+            <ImageView
+                android:id="@+id/btnCreate"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/img_home_1"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <!--            tv1-->
+
+            <!--            btnQuickMaker-->
+            <com.oc.space.ocmaker.creete.core.custom.text.DoubleStrokeTextView
+                android:id="@+id/tv1"
+                style="@style/single_marquee"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/pixelifysans_regular"
+                android:gravity="center|start"
+                android:paddingStart="16dp"
+                android:text="@string/character_maker"
+                android:textColor="#D316D0"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnCreate"
+                app:layout_constraintEnd_toEndOf="@+id/gl063"
+                app:layout_constraintStart_toStartOf="@id/gl05"
+                app:layout_constraintTop_toTopOf="@+id/btnCreate"
+                app:layout_constraintVertical_bias="0.0"
+
+                app:outerStrokeColor="@color/white"
+                app:outerStrokeWidth="3dp" />
+
+            <ImageView
+                android:id="@+id/btnQuickMaker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/img_home_2"
+                app:layout_constraintTop_toBottomOf="@+id/btnCreate" />
+
+            <!--            tv2-->
+            <com.oc.space.ocmaker.creete.core.custom.text.DoubleStrokeTextView
+                android:id="@+id/tv2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/pixelifysans_regular"
+                android:gravity="end|center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/quick_maker"
+                android:textColor="#01579B"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnQuickMaker"
+                app:layout_constraintEnd_toEndOf="@+id/gl063"
+                app:layout_constraintStart_toEndOf="@id/gl05"
+                app:layout_constraintTop_toTopOf="@+id/btnQuickMaker"
+                app:outerStrokeColor="@color/white"
+                app:outerStrokeWidth="3dp" />
+
+            <!--            btnMyAlbum-->
+            <ImageView
+                android:id="@+id/btnMyAlbum"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="8dp"
+                android:adjustViewBounds="true"
+                android:src="@drawable/img_home_3"
+                app:layout_constraintTop_toBottomOf="@+id/btnQuickMaker" />
+
+            <!--            tv3-->
+            <com.oc.space.ocmaker.creete.core.custom.text.DoubleStrokeTextView
+                android:id="@+id/tv3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="@font/pixelifysans_regular"
+                android:gravity="start|center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/my_character"
+                android:textColor="#65A300"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/btnMyAlbum"
+                app:layout_constraintEnd_toStartOf="@+id/gl063"
+                app:layout_constraintStart_toStartOf="@+id/gl05"
+                app:layout_constraintTop_toTopOf="@+id/btnMyAlbum"
+                app:outerStrokeColor="@color/white"
+                app:outerStrokeWidth="3dp"
+
+               />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

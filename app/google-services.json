@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229164004394",
+    "project_id": "st189-spacemaker",
+    "storage_bucket": "st189-spacemaker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229164004394:android:94bb88f54ceedb5f373f53",
+        "android_client_info": {
+          "package_name": "com.oc.space.ocmaker.creete"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYiTCahDsYSfMZNr5kBlSByNAdF1iO2hk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
