@@ -52,7 +52,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     val hideList: ArrayList<View> by lazy {
         arrayListOf(
             binding.btnRandom,
-            binding.btnColor,
+           // binding.btnColor,
             binding.flColor,
             binding.rcvLayer,
             binding.flBottomNav
@@ -294,7 +294,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
 
     private fun checkStatusColor() {
         if (viewModel.colorItemNavList[viewModel.positionNavSelected].isNotEmpty()) {
-            binding.btnColor.visible()
+          //  binding.btnColor.visible()
             val (res, status) = if (viewModel.isShowColorList[viewModel.positionNavSelected]) {
                 R.drawable.ic_color to true
             } else {

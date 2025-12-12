@@ -20,34 +20,26 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
-    <!-- Shadow Container -->
-    <FrameLayout
-        android:id="@+id/shadowContainer"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardLayerItem"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="2dp"
-        android:background="@drawable/shadow_bottom"
-        android:paddingBottom="6dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="6dp"
+        app:strokeWidth="2dp"
+        app:strokeColor="#FF9CFD"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="6dp"
-        app:cardElevation="0dp">
-
         <!--                    imvImage-->
         <ImageView
             android:id="@+id/imvImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_cus"
             android:scaleType="centerCrop" />
 
         <!--            btnNone-->
@@ -73,7 +65,5 @@
             android:visibility="gone" />
 
 
-    </androidx.cardview.widget.CardView>
-
-    </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

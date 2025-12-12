@@ -1,6 +1,7 @@
 package com.oc.space.ocmaker.creete.ui.customize
 
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -33,9 +34,11 @@ class LayerCustomizeAdapter(val context: Context) : ListAdapter<ItemNavCustomMod
                 if (item.isSelected) {
                     // Bring selected item to front with elevation
                     root.translationZ = 16f
-                    root.scaleX = 1.05f
-                    root.scaleY = 1.05f
+                    root.scaleX = 1.0f
+                    root.scaleY = 1.0f
                     vFocus.visible()
+                    cardLayerItem.strokeColor = Color.parseColor("#A1CCEF")
+                    cardLayerItem.setCardBackgroundColor(Color.parseColor("#A1CCEF"))
                     vFocus.setBackgroundResource(R.drawable.bg_10_stroke_yellow)
                 } else {
                     // Reset to normal state
@@ -43,6 +46,8 @@ class LayerCustomizeAdapter(val context: Context) : ListAdapter<ItemNavCustomMod
                     root.scaleX = 1f
                     root.scaleY = 1f
                     vFocus.gone()
+                    cardLayerItem.strokeColor = Color.parseColor("#FF9CFD")
+                    cardLayerItem.setCardBackgroundColor(Color.WHITE)
                 }
 
                 when (item.path) {

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/img_setting" />
+        android:background="@color/color_app" />
 
     <!--    layoutActionBar-->
     <FrameLayout
@@ -34,6 +34,8 @@
         android:layout_marginTop="4dp"
         android:layout_marginBottom="0dp"
         android:paddingHorizontal="8dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutActionBar"
