@@ -1,272 +1,498 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.add_character.AddCharacterActivity">
+
+    <!--    flGetText-->
+    <FrameLayout
+        android:id="@+id/flGetText"
         android:layout_width="match_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/main"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="48dp"
+        android:paddingHorizontal="5dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="5dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/img_cus"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
-            android:id="@+id/llTop"
+        <!--        tvGetText-->
+        <TextView
+            android:id="@+id/tvGetText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="45dp"
+            android:layout_gravity="center"
+            android:background="@color/transparent"
+            android:clickable="false"
+            android:focusable="false"
             android:gravity="center"
-            android:orientation="horizontal"
-            android:weightSum="358"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:maxLength="30"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="40sp" />
+    </FrameLayout>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="16" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_cus"
+        app:layout_constraintBottom_toTopOf="@id/gl"
+        app:layout_constraintTop_toTopOf="parent"
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imvBack"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="32"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ic_back" />
+        />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="66" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/blue_app"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@id/gl" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnReset"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="32"
-                android:adjustViewBounds="true"
-                android:src="@drawable/imv_reset" />
+    <!--    flActionBar-->
+    <FrameLayout
+        android:id="@+id/flActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="66" />
+        <include
+            android:id="@+id/actionBar"
+            layout="@layout/layout_actionbar" />
+    </FrameLayout>
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnSee"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="32"
-                android:adjustViewBounds="true"
-                android:src="@drawable/imv_see" />
+    <!--    flSave-->
+    <FrameLayout
+        android:id="@+id/flSave"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="20dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/flActionBar">
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="66" />
+        <!--        imvBackground-->
+        <ImageView
+            android:id="@+id/imvBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnSave"
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="32"
-                android:adjustViewBounds="true"
-                android:src="@drawable/imv_save" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="32dp"
-                android:layout_weight="16" />
-        </LinearLayout>
-
+        <!--        drawView-->
         <com.oc.space.ocmaker.creete.core.custom.drawview.DrawView
             android:id="@+id/drawView"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            app:layout_constraintBottom_toTopOf="@id/ctl"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/llTop">
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
+
+    <LinearLayout
+        android:id="@+id/sectionTab"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginHorizontal="0dp"
+        android:layout_marginTop="16dp"
+        android:background="@color/transparent"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/flSave">
+
+        <!--                btnBackgroundImage-->
+        <FrameLayout
+            android:id="@+id/btnBackgroundImage"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+
+            <!--                imvBgImage (nền)-->
             <ImageView
-                android:id="@+id/imvBackground"
+                android:id="@+id/imvBgImage"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-        </com.oc.space.ocmaker.creete.core.custom.drawview.DrawView>
+                android:scaleType="fitXY" />
 
+            <TextView
+                android:id="@+id/subTabImage"
+                android:layout_width="12dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:background="@drawable/un_selected_tab_sub"
+                android:visibility="gone" />
+
+            <!--                imvFocusImage (nền khi chọn)-->
+            <ImageView
+                android:id="@+id/imvFocusImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/selected_tab"
+                android:visibility="visible" />
+
+            <!--                tvBackgroundImage-->
+            <TextView
+                android:id="@+id/tvBackgroundImage"
+                style="@style/single_marquee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/londrina_solid_regular"
+                android:gravity="center"
+                android:text="@string/image"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </FrameLayout>
+
+        <!--                btnBackgroundColor-->
+        <FrameLayout
+            android:id="@+id/btnBackgroundColor"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_weight="1">
+
+            <!--                imvBgColor (nền)-->
+            <ImageView
+                android:id="@+id/imvBgColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/subTabColor"
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="start"
+                android:background="@drawable/un_selected_tab_sub"
+                android:visibility="gone" />
+
+            <!--                imvFocusColor (nền xanh khi chọn)-->
+            <ImageView
+                android:id="@+id/imvFocusColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:scaleX="1"
+                android:src="@drawable/un_selected_tab"
+                android:visibility="gone" />
+
+            <!--                tvBackgroundColor-->
+            <TextView
+                android:id="@+id/tvBackgroundColor"
+                style="@style/single_marquee"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/londrina_solid_regular"
+                android:gravity="center"
+                android:text="@string/color"
+                android:textColor="@color/dark"
+                android:textSize="14sp" />
+
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- Space to replace layout_goneMarginTop - provides 16dp gap when sectionTab is GONE -->
+    <TextView
+        android:id="@+id/spaceSectionTab"
+        android:layout_width="match_parent"
+        android:layout_height="16dp"
+        android:background="@color/blue_app"
+        app:layout_constraintTop_toBottomOf="@+id/sectionTab"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+
+    <!--    flFunction-->
+    <FrameLayout
+        android:id="@+id/flFunction"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#291985"
+        app:layout_constraintBottom_toTopOf="@+id/lnlBottom"
+        app:layout_constraintTop_toBottomOf="@+id/spaceSectionTab"
+      >
+
+        <!--        lnlBackground-->
         <LinearLayout
-            android:id="@+id/lnlBottom"
+            android:id="@+id/lnlBackground"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/bg_bottom_bg"
-            android:gravity="center"
-            android:layout_marginBottom="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="visible">
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnBg"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:src="@drawable/imv_bg_true" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnItem"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:src="@drawable/imv_item" />
+            <!--            rcvBackgroundImage-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvBackgroundImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4.5dp"
+                android:paddingHorizontal="7.5dp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="5"
+                tools:listitem="@layout/item_background_image" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnBgText"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:src="@drawable/imv_bg_text" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/btnText"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="1"
-                android:src="@drawable/imv_text" />
+            <!--            rcvBackgroundColor-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvBackgroundColor"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="4.5dp"
+                android:paddingHorizontal="7.5dp"
+                android:visibility="gone"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="5"
+                tools:listitem="@layout/item_background_color" />
         </LinearLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/ctl"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            app:layout_constraintBottom_toTopOf="@id/lnlBottom">
-
-            <LinearLayout
-                android:id="@+id/llBG"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <include
-                    android:id="@+id/iclBg"
-                    layout="@layout/layout_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="visible" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llStiker"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <include
-                    android:id="@+id/iclStiker"
-                    layout="@layout/layout_stiker"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llTextBG"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <include
-                    android:id="@+id/iclTextBG"
-                    layout="@layout/layout_text_bg"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/llText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone">
-
-                <include
-                    android:id="@+id/iclText"
-                    layout="@layout/layout_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <!--        lnlSticker-->
         <LinearLayout
-            android:id="@+id/llLoading"
+            android:id="@+id/lnlSticker"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginBottom="82dp"
-            android:background="#A0949494"
-            android:gravity="center"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!--            rcvSticker-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvSticker"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="11.5dp"
+                android:paddingHorizontal="7.5dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="5"
+                tools:listitem="@layout/item_sticker" />
+        </LinearLayout>
+
+        <!--        lnlSpeech-->
+        <LinearLayout
+            android:id="@+id/lnlSpeech"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!--            rcvSticker-->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvSpeech"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="11.5dp"
+                android:paddingHorizontal="7.5dp"
+                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                app:spanCount="5"
+                tools:listitem="@layout/item_sticker" />
+        </LinearLayout>
+
+        <!--        scvText-->
+        <ScrollView
+            android:id="@+id/scvText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:paddingTop="15dp"
+            android:clipToPadding="true"
+            android:isScrollContainer="true"
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:background="@drawable/bg_dialog_rate"
-                android:gravity="center"
                 android:orientation="vertical">
 
-                <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/animationView"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:layout_marginTop="24dp"
-                    app:layout_constraintBottom_toTopOf="@+id/appCompatTextView2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:lottie_autoPlay="true"
-                    app:lottie_loop="true"
-                    app:lottie_rawRes="@raw/json_loading" />
-
-                <androidx.appcompat.widget.AppCompatTextView
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="32dp"
-                    android:layout_marginBottom="24dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginVertical="16dp">
+
+                    <TextView
+                        android:id="@+id/tvText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:fontFamily="@font/londrina_solid_regular"
+                        android:text="@string/input_text"
+                        android:textSize="16sp" />
+
+                    <!--                    btnDoneText-->
+                    <ImageView
+                        android:id="@+id/btnDoneText"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="end|center_vertical"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_done_background"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </FrameLayout>
+
+
+                <!--            edtText-->
+                <EditText
+                    android:id="@+id/edtText"
+                    android:layout_width="match_parent"
+                    android:layout_height="42dp"
+                    android:layout_marginHorizontal="16dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/bg_8_solid_white"
+                    android:ellipsize="end"
                     android:fontFamily="@font/londrina_solid_regular"
-                    android:gravity="center"
-                    android:text="@string/wait_a_few_second"
-                    android:textColor="#4b4b4b"
+                    android:hint="@string/hello_world"
+                    android:imeOptions="actionDone"
+                    android:inputType="text"
+                    android:maxLength="30"
+                    android:paddingHorizontal="16dp"
+                    android:singleLine="true"
+                    android:textColor="@color/black"
+                    android:textColorHint="#808080"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tvFont"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="@font/londrina_solid_regular"
+                    android:gravity="start"
+                    android:text="@string/font"
+                    android:textSize="16sp" />
+
+                <!--            rcvFont-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@+id/titleFont"
+                    tools:listitem="@layout/item_font" />
+
+                <TextView
+                    android:id="@+id/tvColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/londrina_solid_regular"
+                    android:gravity="start"
+                    android:text="@string/color"
+                    android:textSize="16sp" />
+
+                <!--            rcvTextColor-->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rcvTextColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="6dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toBottomOf="@+id/titleColor"
+                    tools:listitem="@layout/item_text_color" />
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp" />
+
             </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
 
-        <FrameLayout
-            android:id="@+id/flGetText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="48dp"
-            android:paddingHorizontal="5dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"
-            android:visibility="invisible"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+    </FrameLayout>
 
-            <!--        tvGetText-->
-            <TextView
-                android:id="@+id/tvGetText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@color/transparent"
-                android:clickable="false"
-                android:focusable="false"
-                android:gravity="center"
-                android:text=""
-                android:textSize="40sp" />
-        </FrameLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/bg_add_character_bot_nav"
+        app:layout_constraintBottom_toBottomOf="@+id/lnlBottom"
+        app:layout_constraintEnd_toEndOf="@+id/lnlBottom"
+        app:layout_constraintStart_toStartOf="@+id/lnlBottom"
+        app:layout_constraintTop_toTopOf="@+id/lnlBottom" />
 
+    <!--    lnlBottom-->
+    <LinearLayout
+        android:id="@+id/lnlBottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:background="#1C1067"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingVertical="8dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!--        btnBackground-->
+        <ImageView
+            android:id="@+id/btnBackground"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_background_selected" />
+
+        <!--        btnSticker-->
+        <ImageView
+            android:id="@+id/btnSticker"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_sticker" />
+
+        <!--        btnSpeech-->
+        <ImageView
+            android:id="@+id/btnSpeech"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_speech" />
+
+        <!--        btnText-->
+        <ImageView
+            android:id="@+id/btnText"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginHorizontal="14dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_text" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/blue_app"
+        app:layout_constraintTop_toBottomOf="@id/flFunction"
+        app:layout_constraintBottom_toTopOf="@id/lnlBottom"/>
+
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.75" />
+
+<!--    &lt;!&ndash; Custom Input View (1/4 screen height) &ndash;&gt;-->
+<!--    <include-->
+<!--        android:id="@+id/customInputLayout"-->
+<!--        layout="@layout/layout_custom_input"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintHeight_percent="0.25" />-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
