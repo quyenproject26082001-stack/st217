@@ -13,7 +13,7 @@ class MyDesignAdapter() : BaseAdapter<MyAlbumModel, ItemMyDesignBinding>(ItemMyD
     var onItemClick: ((String) -> Unit) = {}
     var onLongClick: ((Int) -> Unit) = {}
     var onItemTick: ((Int) -> Unit) = {}
-    var onEditClick: ((String) -> Unit) = {}
+
     var onDeleteClick: ((String) -> Unit) = {}
 
     override fun onBind(binding: ItemMyDesignBinding, item: MyAlbumModel, position: Int) {
@@ -24,11 +24,9 @@ class MyDesignAdapter() : BaseAdapter<MyAlbumModel, ItemMyDesignBinding>(ItemMyD
             if (item.isShowSelection) {
                 btnSelect.visible()
                 btnDelete.gone()
-                btnEdit.gone()
             } else {
                 btnSelect.gone()
                 btnDelete.visible()
-                btnEdit.visible()
             }
 
             if (item.isSelected) {
@@ -48,7 +46,6 @@ class MyDesignAdapter() : BaseAdapter<MyAlbumModel, ItemMyDesignBinding>(ItemMyD
 
                 }
             }
-            btnEdit.tap { onEditClick.invoke(item.path) }
             btnDelete.tap { onDeleteClick.invoke(item.path) }
             btnSelect.tap { onItemTick.invoke(position) }
         }

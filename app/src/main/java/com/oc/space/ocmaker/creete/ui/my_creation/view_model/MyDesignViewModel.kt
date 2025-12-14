@@ -26,10 +26,8 @@ class MyDesignViewModel : ViewModel() {
     private val _isLastItem = MutableStateFlow<Boolean>(false)
     val isLastItem: StateFlow<Boolean> = _isLastItem
 
-    var positionCharacter = -1
-
     fun loadMyDesign(context: Context) {
-        val editList = MediaHelper.readListFromFile<SuggestionModel>(context, ValueKey.EDIT_FILE_INTERNAL).map { MyAlbumModel(it.pathInternalEdit) }
+        val editList = MediaHelper.getImageInternal(context, ValueKey.DOWNLOAD_ALBUM).map { MyAlbumModel(it) }
         _myDesignList.value = editList.toCollection(ArrayList())
         checkLastItem()
     }
@@ -46,13 +44,6 @@ class MyDesignViewModel : ViewModel() {
     }
 
     suspend fun deleteItem(context: Context, pathList: ArrayList<String>){
-        val originList = MediaHelper
-            .readListFromFile<SuggestionModel>(context, ValueKey.EDIT_FILE_INTERNAL)
-            .toCollection(ArrayList())
-
-        val newOriginList = originList.filterNot { pathList.contains(it.pathInternalEdit) }.toCollection(ArrayList())
-
-        MediaHelper.writeListToFile(context, ValueKey.EDIT_FILE_INTERNAL, newOriginList)
         MediaHelper.deleteFileByPathNotFlow(pathList)
     }
 
@@ -79,15 +70,5 @@ class MyDesignViewModel : ViewModel() {
             it.copy(isSelected = false, isShowSelection = false)
         }.toCollection(ArrayList())
         checkLastItem()
-    }
-
-    suspend fun editItem(context: Context, pathInternal: String) {
-        val originList = MediaHelper
-            .readListFromFile<SuggestionModel>(context, ValueKey.EDIT_FILE_INTERNAL)
-            .toCollection(ArrayList())
-
-        val editModel = originList.first { it.pathInternalEdit == pathInternal }
-        positionCharacter = 0 // Will be set properly when data is loaded
-        MediaHelper.writeModelToFile(context, ValueKey.SUGGESTION_FILE_INTERNAL, editModel)
     }
 }
