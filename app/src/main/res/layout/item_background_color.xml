@@ -20,14 +20,14 @@
             android:layout_height="match_parent"
             android:layout_margin="2.5dp"
             android:visibility="gone"
-            android:background="@drawable/bg_10_stroke_yellow" />
+            android:background="@drawable/bg_stroke_color" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4.5dp"
             app:cardBackgroundColor="@color/transparent"
-            app:cardCornerRadius="8dp"
+            app:cardCornerRadius="5dp"
             app:strokeColor="@color/transparent"
             app:cardElevation="0dp">
 

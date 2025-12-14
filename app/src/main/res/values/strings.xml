@@ -60,7 +60,7 @@
     <string name="please_select_an_image">Please select an image</string>
     <string name="error">Error</string>
     <string name="an_error_occurred">An error occurred, please try again later.</string>
-    <string name="image_has_been_saved_successfully">You have successfully created a character</string>
+    <string name="image_has_been_saved_successfully">The project has been saved successfully!</string>
     <string name="save">Save</string>
     <string name="are_you_sure_want_to_delete_this_item">Are you sure want to delete this item?</string>
     <string name="downloading">Downloading...</string>
@@ -80,12 +80,12 @@
     <string name="category">Category</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="no_item_space">You don’t have any character</string>
+    <string name="no_item_space">No current history</string>
     <string name="add_to_whatsapp">Add To WhatsApp</string>
     <string name="add_to_telegram">Add To Telegram</string>
     <string name="my_avatar">My Avatar</string>
     <string name="my_design">My Design</string>
-    <string name="my_work">Go to my work</string>
+    <string name="my_album">My album</string>
     <string name="no_app_found_to_handle_this_action">No app found to handle this action</string>
     <string name="invalid_action_msg">Application not installed</string>
     <string name="invalid_action">Error</string>
@@ -109,7 +109,7 @@
     <string name="my_pixel">My Pixel</string>
     <string name="input_text">Input text</string>
     <string name="hello_world">Hello World!</string>
-    <string name="no_item_desgin">You don’t have any design here</string>
+    <string name="no_item_desgin">No current history</string>
     <string name="my_character_in">My Work</string>
     <string name="quick_maker_in">Quick mix</string>
     <string name="exit_add">Exit your background</string>

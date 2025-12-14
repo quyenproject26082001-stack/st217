@@ -83,7 +83,7 @@
     <string name="add_to_telegram">Telegram में जोड़ें</string>
     <string name="my_avatar">मेरा अवतार</string>
     <string name="my_design">डिज़ाइन</string>
-    <string name="my_work">मेरे काम पर जाएँ</string>
+    <string name="my_album">मेरे काम पर जाएँ</string>
     <string name="no_app_found_to_handle_this_action">इस क्रिया को संभालने के लिए कोई ऐप नहीं मिला</string>
     <string name="invalid_action_msg">ऐप इंस्टॉल नहीं है</string>
     <string name="invalid_action">त्रुटि</string>

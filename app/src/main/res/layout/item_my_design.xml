@@ -29,17 +29,17 @@
         <!--        btnDelete-->
         <ImageView
             android:id="@+id/btnDelete"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
-            android:layout_gravity="start"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="end"
             android:layout_margin="10dp"
             android:src="@drawable/ic_delete" />
 
         <!--        btnSelect-->
         <ImageView
             android:id="@+id/btnSelect"
-            android:layout_width="26dp"
-            android:layout_height="26dp"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_gravity="end"
             android:layout_margin="10dp"
             android:src="@drawable/ic_not_select" />

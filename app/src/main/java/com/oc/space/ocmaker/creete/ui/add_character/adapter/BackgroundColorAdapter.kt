@@ -20,7 +20,7 @@ class BackgroundColorAdapter :
         binding.apply {
             vFocus.isVisible = item.isSelected
             if (position == 0) {
-                val radiusPx = (8 * root.context.resources.displayMetrics.density).toInt()
+                val radiusPx = (4 * root.context.resources.displayMetrics.density).toInt()
                 Glide.with(root.context)
                     .load(R.drawable.img)
                     .apply(RequestOptions.bitmapTransform(RoundedCorners(radiusPx)))

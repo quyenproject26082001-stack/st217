@@ -169,7 +169,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                // setImageActionBar(btnActionBarRight, R.drawable.ic_delete_view)
                // setImageActionBar(btnActionBarNextToRight, R.drawable.ic_edit_2)
                 setTextActionBar(tvCenter, getString(R.string.my_character_in))
-                setImageActionBar(btnActionBarRight, R.drawable.delete_select)
+                setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
                 setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
                 btnActionBarNextRight.visible()
                 // Hide btnShare in view mode
@@ -232,7 +232,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
 
             tvSuccess.visible()
 
-            includeLayoutBottom.tvWhatsapp.text = strings(R.string.my_work)
+            includeLayoutBottom.tvWhatsapp.text = strings(R.string.my_album)
             includeLayoutBottom.tvWhatsapp.select()
 
             includeLayoutBottom.tvTelegram.text = strings(R.string.download)

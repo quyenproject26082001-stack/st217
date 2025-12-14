@@ -83,7 +83,7 @@
     <string name="add_to_telegram">Zu Telegram hinzufügen</string>
     <string name="my_avatar">Mein Avatar</string>
     <string name="my_design">Design</string>
-    <string name="my_work">Zu meiner Arbeit</string>
+    <string name="my_album">Zu meiner Arbeit</string>
     <string name="no_app_found_to_handle_this_action">Keine App gefunden, um diese Aktion auszuführen</string>
     <string name="invalid_action_msg">App nicht installiert</string>
     <string name="invalid_action">Fehler</string>
