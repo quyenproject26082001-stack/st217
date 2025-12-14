@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.room.util.findColumnIndexBySuffix
 import com.lvt.ads.util.Admob
 import com.oc.space.ocmaker.creete.R
 import com.oc.space.ocmaker.creete.core.base.BaseActivity
@@ -64,6 +65,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     private var myAvatarFragment: MyAvatarFragment? = null
     private var myDesignFragment: MyDesignFragment? = null
     private var isInSelectionMode = false
+    private var isAllSelected = false
 
     override fun setViewBinding(): ActivityAlbumBinding {
         return ActivityAlbumBinding.inflate(LayoutInflater.from(this))
@@ -73,8 +75,11 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         viewModel.setTypeStatus(ValueKey.AVATAR_TYPE)
         viewModel.setStatusFrom(intent.getBooleanExtra(IntentKey.FROM_SAVE, false))
 
-        // Hide deleteSection by default
-        binding.deleteSection.gone()
+        // Hide action bar buttons by default (only show in selection mode)
+        binding.actionBar.apply {
+            btnActionBarRight.gone()
+            btnActionBarNextRight.gone()
+        }
     }
 
     override fun dataObservable() {
@@ -86,15 +91,17 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
                             if (type != -1) {
                                 if (type == ValueKey.AVATAR_TYPE) {
                                     // MyAvatar selected
-                                    setupSelectedTab(btnMySpace, tvSpace, imvFocusMyAvatar, subTabMyAvatar, isLeftTab = true)
+                                    setupSelectedTab(btnMyPixel, tvSpace, imvFocusMyAvatar, subTabMyAvatar, isLeftTab = true)
                                     setupUnselectedTab(btnMyDesign, tvMyDesign, imvFocusMyDesign, subTabMyDesign, isLeftTab = false)
                                     showFragment(ValueKey.AVATAR_TYPE)
                                 } else {
                                     // MyDesign selected
                                     setupSelectedTab(btnMyDesign, tvMyDesign, imvFocusMyDesign, subTabMyDesign, isLeftTab = false)
-                                    setupUnselectedTab(btnMySpace, tvSpace, imvFocusMyAvatar, subTabMyAvatar, isLeftTab = true)
+                                    setupUnselectedTab(btnMyPixel, tvSpace, imvFocusMyAvatar, subTabMyAvatar, isLeftTab = true)
                                     showFragment(ValueKey.MY_DESIGN_TYPE)
                                 }
+                                // Update bottom buttons visibility when tab changes
+                                updateBottomButtonsVisibility()
                             }
 
                         }
@@ -146,41 +153,36 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
                         startIntentWithClearTop(HomeActivity::class.java)
                     }
                 }
+
+                // Select All button
+                btnActionBarRight.tap {
+                    handleSelectAllFromCurrentFragment()
+                }
+
+                // Delete All button
+                btnActionBarNextRight.tap {
+                    handleDeleteSelectedFromCurrentFragment()
+                }
             }
 
-            btnMySpace.tap { viewModel.setTypeStatus(ValueKey.AVATAR_TYPE) }
+            btnMyPixel.tap { viewModel.setTypeStatus(ValueKey.AVATAR_TYPE) }
             btnMyDesign.tap { viewModel.setTypeStatus(ValueKey.MY_DESIGN_TYPE) }
 
-            // Share and Download buttons in lnlBottom
+            // WhatsApp, Telegram, and Download buttons in lnlBottom
             val layoutBottom = lnlBottom.getChildAt(0)
-            layoutBottom.findViewById<View>(R.id.btnBottomLeft)?.tap(2500) {
-                handleShareFromCurrentFragment()
+            layoutBottom.findViewById<View>(R.id.btnWhatsapp)?.tap(2500) {
+                val selectedPaths = getSelectedPathsFromCurrentFragment()
+                handleAddToWhatsApp(selectedPaths)
             }
-            layoutBottom.findViewById<View>(R.id.btnBottomRight)?.tap(2500) {
+            layoutBottom.findViewById<View>(R.id.btnTelegram)?.tap(2500) {
+                val selectedPaths = getSelectedPathsFromCurrentFragment()
+                handleAddToTelegram(selectedPaths)
+            }
+            layoutBottom.findViewById<View>(R.id.btnDownload)?.tap(2500) {
                 handleDownloadFromCurrentFragment()
             }
 
-            // Delete button in deleteSection
-            btnDeleteSelect.setOnClickListener {
-                android.util.Log.d("MyCreationActivity", "btnDeleteSelect clicked!")
-                // Use fragment by tag instead of by ID
-                val avatarFragment = supportFragmentManager.findFragmentByTag("MyAvatarFragment")
-                val designFragment = supportFragmentManager.findFragmentByTag("MyDesignFragment")
-
-                when {
-                    avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
-                        android.util.Log.d("MyCreationActivity", "Calling deleteSelectedItems on MyAvatarFragment")
-                        avatarFragment.deleteSelectedItems()
-                    }
-                    designFragment is MyDesignFragment && designFragment.isVisible -> {
-                        android.util.Log.d("MyCreationActivity", "Calling deleteSelectedItems on MyDesignFragment")
-                        designFragment.deleteSelectedItems()
-                    }
-                    else -> {
-                        android.util.Log.d("MyCreationActivity", "No visible fragment found")
-                    }
-                }
-            }
+            // Delete button in deleteSection         }
         }
     }
 
@@ -192,6 +194,54 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     private fun handleDownloadFromCurrentFragment() {
         val selectedPaths = getSelectedPathsFromCurrentFragment()
         handleDownload(selectedPaths)
+    }
+
+    private fun handleSelectAllFromCurrentFragment() {
+        val avatarFragment = supportFragmentManager.findFragmentByTag("MyAvatarFragment")
+        val designFragment = supportFragmentManager.findFragmentByTag("MyDesignFragment")
+
+        when {
+            avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
+                if (isAllSelected) {
+                    // Deselect all
+                    avatarFragment.deselectAllItems()
+                    isAllSelected = false
+                    binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
+                } else {
+                    // Select all
+                    avatarFragment.selectAllItems()
+                    isAllSelected = true
+                    binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_select_all)
+                }
+            }
+            designFragment is MyDesignFragment && designFragment.isVisible -> {
+                if (isAllSelected) {
+                    // Deselect all
+                    designFragment.deselectAllItems()
+                    isAllSelected = false
+                    binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
+                } else {
+                    // Select all
+                    designFragment.selectAllItems()
+                    isAllSelected = true
+                    binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_select_all)
+                }
+            }
+        }
+    }
+
+    private fun handleDeleteSelectedFromCurrentFragment() {
+        val avatarFragment = supportFragmentManager.findFragmentByTag("MyAvatarFragment")
+        val designFragment = supportFragmentManager.findFragmentByTag("MyDesignFragment")
+
+        when {
+            avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
+                avatarFragment.deleteSelectedItems()
+            }
+            designFragment is MyDesignFragment && designFragment.isVisible -> {
+                designFragment.deleteSelectedItems()
+            }
+        }
     }
 
     private fun getSelectedPathsFromCurrentFragment(): ArrayList<String> {
@@ -208,11 +258,15 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     override fun initActionBar() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
-            setTextActionBar(tvCenter, getString(R.string.my_character_in))
+            setTextActionBar(tvCenter, getString(R.string.my_pixel))
 
-            // Hide action bar buttons - using btnDeleteSelect instead
+            // Select All button (btnActionBarRight) - hidden initially, only shown in selection mode
+            btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
             btnActionBarRight.gone()
-            btnActionBarNextToRight.gone()
+
+            // Delete All button - hidden initially, only shown in selection mode
+            btnActionBarNextRight.setImageResource(R.drawable.ic_delete_all)
+            btnActionBarNextRight.gone()
         }
     }
 
@@ -345,20 +399,45 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
     fun enterSelectionMode() {
         isInSelectionMode = true
-        binding.apply {
-            // Show delete section
-            android.util.Log.d("MyCreationActivity", "enterSelectionMode called - showing deleteSection")
-            deleteSection.visible()
-            android.util.Log.d("MyCreationActivity", "deleteSection visibility: ${deleteSection.visibility}")
+        isAllSelected = false
+        binding.actionBar.apply {
+            // Show select all and delete all buttons
+            btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
+            btnActionBarRight.visible()
+            btnActionBarNextRight.visible()
         }
+        updateBottomButtonsVisibility()
+        android.util.Log.d("MyCreationActivity", "enterSelectionMode called - showing buttons")
     }
 
     fun exitSelectionMode() {
         isInSelectionMode = false
-        binding.apply {
-            // Hide delete section
-            android.util.Log.d("MyCreationActivity", "exitSelectionMode called - hiding deleteSection")
-            deleteSection.gone()
+        isAllSelected = false
+        binding.actionBar.apply {
+            // Hide select all and delete all buttons
+            btnActionBarRight.gone()
+            btnActionBarNextRight.gone()
+        }
+        updateBottomButtonsVisibility()
+        android.util.Log.d("MyCreationActivity", "exitSelectionMode called - hiding buttons")
+    }
+
+    private fun updateBottomButtonsVisibility() {
+        val layoutBottom = binding.lnlBottom.getChildAt(0)
+        val btnWhatsapp = layoutBottom.findViewById<View>(R.id.btnWhatsapp)
+        val btnTelegram = layoutBottom.findViewById<View>(R.id.btnTelegram)
+        val btnDownload = layoutBottom.findViewById<View>(R.id.btnDownload)
+
+        if (isInSelectionMode && viewModel.typeStatus.value == ValueKey.MY_DESIGN_TYPE) {
+            // In My Design tab selection mode: show only Download button
+            btnWhatsapp?.gone()
+            btnTelegram?.gone()
+            btnDownload?.visible()
+        } else {
+            // In My Pixel tab or not in selection mode: show WhatsApp and Telegram, hide Download
+            btnWhatsapp?.visible()
+            btnTelegram?.visible()
+            btnDownload?.gone()
         }
     }
 
@@ -371,26 +450,31 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     ) {
         // Set weight = 1.6
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
-        params.weight = 1.6f
+        params.weight = 1.0f
         params.topMargin = 0
         tabView.layoutParams = params
 
         // Set text size = 20sp
-        textView.textSize = 20f
+        textView.textSize = 16f
 
         // Apply gradient color from top to bottom (using fixed height based on text size)
         val textHeight = textView.lineHeight.toFloat()
-        val shader = LinearGradient(
-            0f, 0f, 0f, textHeight,
-            Color.parseColor("#8FFFFD"),
-            Color.parseColor("#2641D7"),
-            Shader.TileMode.CLAMP
-        )
-        textView.paint.shader = shader
+        textView.post {
+            val textHeight = textView.lineHeight.toFloat()
+            val shader = LinearGradient(
+                0f, 0f, 0f, textHeight,
+                Color.parseColor("#FFFFFF"),
+                Color.parseColor("#FFFFFF"),
+                Shader.TileMode.CLAMP
+            )
+            textView.paint.shader = shader
+            textView.invalidate()
+        }
 
-        // Show selected_tab drawable (no flip for selected)
-        focusImage.setImageResource(R.drawable.selected_tab)
-        focusImage.scaleX = 1f
+        // Show selected_tab drawable
+        focusImage.setImageResource(R.drawable.selected_tab_album)
+        // Flip horizontally if on right side
+        focusImage.scaleX = if (isLeftTab) 1f else -1f
         focusImage.visible()
 
         // Hide subTab
@@ -407,22 +491,32 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         // Set weight = 1
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
         params.weight = 1f
-        params.topMargin = UnitHelper.dpToPx(this, 16f).toInt()
+        params.topMargin = 0
         tabView.layoutParams = params
 
         // Set text size = 16sp, color = colorPrimary
         textView.textSize = 16f
         // Remove gradient shader and set solid color
         textView.paint.shader = null
-        textView.setTextColor(getColor(R.color.colorPrimary))
+        textView.post {
+            val textHeight = textView.lineHeight.toFloat()
+            val shader = LinearGradient(
+                0f, 0f, 0f, textHeight,
+                Color.parseColor("#01579B"),
+                Color.parseColor("#01579B"),
+                Shader.TileMode.CLAMP
+            )
+            textView.paint.shader = shader
+            textView.invalidate()
+        }
 
         // Show un_selected_tab drawable
-        focusImage.setImageResource(R.drawable.un_selected_tab)
+        focusImage.setImageResource(R.drawable.un_selected_tab_album)
         // Flip horizontally if on left side
         focusImage.scaleX = if (isLeftTab) -1f else 1f
         focusImage.visible()
 
         // Show subTab
-        subTab.visible()
+        subTab.gone()
     }
 }

@@ -217,6 +217,16 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
         return viewModel.getPathSelected()
     }
 
+    fun selectAllItems() {
+        viewModel.selectAll(true)
+        myAvatarAdapter.notifyDataSetChanged()
+    }
+
+    fun deselectAllItems() {
+        viewModel.selectAll(false)
+        myAvatarAdapter.notifyDataSetChanged()
+    }
+
     fun exitSelectMode() {
         myAvatarAdapter.isSelectMode = false
     }

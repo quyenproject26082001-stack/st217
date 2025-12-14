@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A1CCEF"
     tools:context=".ui.add_character.AddCharacterActivity">
 
     <!--    flGetText-->
@@ -37,15 +38,6 @@
             android:textSize="40sp" />
     </FrameLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/img_cus"
-        app:layout_constraintBottom_toTopOf="@id/gl"
-        app:layout_constraintTop_toTopOf="parent"
-
-        />
 
     <TextView
         android:layout_width="match_parent"
@@ -92,119 +84,8 @@
     </FrameLayout>
 
 
-    <LinearLayout
-        android:id="@+id/sectionTab"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginHorizontal="0dp"
-        android:layout_marginTop="16dp"
-        android:background="@color/transparent"
-        android:orientation="horizontal"
-        android:visibility="visible"
-        app:layout_constraintTop_toBottomOf="@+id/flSave">
 
-        <!--                btnBackgroundImage-->
-        <FrameLayout
-            android:id="@+id/btnBackgroundImage"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1">
 
-            <!--                imvBgImage (nền)-->
-            <ImageView
-                android:id="@+id/imvBgImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:id="@+id/subTabImage"
-                android:layout_width="12dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="end"
-                android:background="@drawable/un_selected_tab_sub"
-                android:visibility="gone" />
-
-            <!--                imvFocusImage (nền khi chọn)-->
-            <ImageView
-                android:id="@+id/imvFocusImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/selected_tab"
-                android:visibility="visible" />
-
-            <!--                tvBackgroundImage-->
-            <TextView
-                android:id="@+id/tvBackgroundImage"
-                style="@style/single_marquee"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/londrina_solid_regular"
-                android:gravity="center"
-                android:text="@string/image"
-                android:textColor="@color/white"
-                android:textSize="18sp" />
-
-        </FrameLayout>
-
-        <!--                btnBackgroundColor-->
-        <FrameLayout
-            android:id="@+id/btnBackgroundColor"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="16dp"
-            android:layout_weight="1">
-
-            <!--                imvBgColor (nền)-->
-            <ImageView
-                android:id="@+id/imvBgColor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:id="@+id/subTabColor"
-                android:layout_width="20dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="start"
-                android:background="@drawable/un_selected_tab_sub"
-                android:visibility="gone" />
-
-            <!--                imvFocusColor (nền xanh khi chọn)-->
-            <ImageView
-                android:id="@+id/imvFocusColor"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:scaleX="1"
-                android:src="@drawable/un_selected_tab"
-                android:visibility="gone" />
-
-            <!--                tvBackgroundColor-->
-            <TextView
-                android:id="@+id/tvBackgroundColor"
-                style="@style/single_marquee"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:fontFamily="@font/londrina_solid_regular"
-                android:gravity="center"
-                android:text="@string/color"
-                android:textColor="@color/dark"
-                android:textSize="14sp" />
-
-        </FrameLayout>
-    </LinearLayout>
-
-    <!-- Space to replace layout_goneMarginTop - provides 16dp gap when sectionTab is GONE -->
-    <TextView
-        android:id="@+id/spaceSectionTab"
-        android:layout_width="match_parent"
-        android:layout_height="16dp"
-        android:background="@color/blue_app"
-        app:layout_constraintTop_toBottomOf="@+id/sectionTab"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 
 
@@ -213,16 +94,133 @@
         android:id="@+id/flFunction"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="#291985"
-        app:layout_constraintBottom_toTopOf="@+id/lnlBottom"
-        app:layout_constraintTop_toBottomOf="@+id/spaceSectionTab"
+        android:background="#FFBFBF"
+        app:layout_constraintBottom_toTopOf="@id/lnlBottom"
+        app:layout_constraintTop_toBottomOf="@id/flSave"
       >
+        <!-- Space to replace layout_goneMarginTop - provides 16dp gap when sectionTab is GONE -->
+        <TextView
+            android:id="@+id/spaceSectionTab"
+            android:layout_width="match_parent"
+            android:layout_height="18sp"
+            android:text="@string/background"
+            android:gravity="center"
+            android:textColor="#BA0101"
+            android:layout_marginTop="12dp"
+            android:fontFamily="@font/pixelifysans_bold"
+            android:background="#FFBFBF"
+           />
+
+        <LinearLayout
+            android:id="@+id/sectionTab"
+            android:layout_width="match_parent"
+            android:layout_height="31dp"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="49dp"
+            android:background="@color/transparent"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/spaceSectionTab">
+
+            <!--                btnBackgroundImage-->
+            <FrameLayout
+                android:id="@+id/btnBackgroundImage"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <!--                imvBgImage (nền)-->
+                <ImageView
+                    android:id="@+id/imvBgImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/subTabImage"
+                    android:layout_width="12dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:background="@drawable/un_selected_tab_sub"
+                    android:visibility="gone" />
+
+                <!--                imvFocusImage (nền khi chọn)-->
+                <ImageView
+                    android:id="@+id/imvFocusImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/selected_tab"
+                    android:visibility="visible" />
+
+                <!--                tvBackgroundImage-->
+                <TextView
+                    android:id="@+id/tvBackgroundImage"
+                    style="@style/single_marquee"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/pixelifysans_bold"
+                    android:gravity="center"
+                    android:text="@string/image"
+                    android:textColor="@color/white"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+
+            <!--                btnBackgroundColor-->
+            <FrameLayout
+                android:id="@+id/btnBackgroundColor"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1">
+
+                <!--                imvBgColor (nền)-->
+                <ImageView
+                    android:id="@+id/imvBgColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY" />
+
+                <TextView
+                    android:id="@+id/subTabColor"
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="start"
+                    android:background="@drawable/un_selected_tab_sub"
+                    android:visibility="gone" />
+
+                <!--                imvFocusColor (nền xanh khi chọn)-->
+                <ImageView
+                    android:id="@+id/imvFocusColor"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:scaleX="1"
+                    android:src="@drawable/un_selected_tab"
+                    android:visibility="gone" />
+
+                <!--                tvBackgroundColor-->
+                <TextView
+                    android:id="@+id/tvBackgroundColor"
+                    style="@style/single_marquee"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/pixelifysans_bold"
+                    android:gravity="center"
+                    android:text="@string/color"
+                    android:textColor="#BA0101"
+                    android:textSize="14sp" />
+
+            </FrameLayout>
+        </LinearLayout>
 
         <!--        lnlBackground-->
         <LinearLayout
             android:id="@+id/lnlBackground"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="95dp"
             android:orientation="vertical"
             android:visibility="visible">
 
@@ -427,7 +425,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="0dp"
-        android:background="#1C1067"
+        android:background="#FF8FFD"
         android:gravity="center"
         android:orientation="horizontal"
         android:paddingVertical="8dp"

@@ -4,68 +4,203 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="22dp"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:baselineAligned="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="360:44"
-        app:layout_constraintEnd_toEndOf="parent"
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/lnlShareButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!--    btnBottomLeft-->
-        <LinearLayout
-            android:id="@+id/btnBottomLeft"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
+        <!--            btnWhatsapp-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btnWhatsapp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
             android:layout_weight="1"
-            android:background="@drawable/bg_btn_bottom_gradient_stroke"
+            android:padding="2dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="fitXY"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/lnlInLeft"
+                app:layout_constraintEnd_toEndOf="@+id/lnlInLeft"
+                app:layout_constraintStart_toStartOf="@+id/lnlInLeft"
+                app:layout_constraintTop_toTopOf="@+id/lnlInLeft">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_btn_whatsapp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!--                        lnlInLeft-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/lnlInLeft"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_whatsapp" />
+
+                <!--                        tvWhatsapp-->
+                <TextView
+                    android:id="@+id/tvWhatsapp"
+                    style="@style/single_marquee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="6dp"
+                    android:fontFamily="@font/londrina_solid_regular"
+                    android:text="@string/add_to_whatsapp"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!--            btnTelegram-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btnTelegram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="4dp"
+            android:layout_weight="1"
+            android:padding="2dp">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="fitXY"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/lnlInRight"
+                app:layout_constraintEnd_toEndOf="@+id/lnlInRight"
+                app:layout_constraintStart_toStartOf="@+id/lnlInRight"
+                app:layout_constraintTop_toTopOf="@+id/lnlInRight">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/bg_btn_telegram" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!--                        lnlInRight-->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/lnlInRight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_telegram" />
+
+                <!--                        tvTelegram-->
+                <TextView
+                    android:id="@+id/tvTelegram"
+                    style="@style/single_marquee"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="6dp"
+                    android:fontFamily="@font/londrina_solid_regular"
+                    android:text="@string/add_to_telegram"
+                    android:textColor="@color/white"
+                    android:textSize="13sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+    <!--            btnDownload-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/btnDownload"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="4dp"
+        android:layout_marginTop="14dp"
+        android:padding="2dp"
+        android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@id/lnlShareButtons"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="fitXY"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#01579B"
+
+            app:layout_constraintBottom_toBottomOf="@+id/lnlInBot"
+            app:layout_constraintEnd_toEndOf="@+id/lnlInBot"
+            app:layout_constraintStart_toStartOf="@+id/lnlInBot"
+            app:layout_constraintTop_toTopOf="@+id/lnlInBot">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_btn_download" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!--                        lnlInBot-->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/lnlInBot"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:paddingHorizontal="12dp">
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_download_red" />
 
-
-            <!--        tvBottomLeft-->
             <TextView
-                android:id="@+id/tvBottomLeft"
-                style="@style/single_marquee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/londrina_solid_regular"
-                android:text="@string/share"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <!--    btnBottomRight-->
-        <LinearLayout
-            android:id="@+id/btnBottomRight"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="4dp"
-            android:layout_weight="1"
-            android:background="@drawable/bg_btn_bottom_gradient_stroke"
-            android:gravity="center"
-            android:orientation="horizontal"
-            android:paddingHorizontal="12dp">
-
-            <!--        tvBottomRight-->
-            <TextView
-                android:id="@+id/tvBottomRight"
-                style="@style/single_marquee"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/londrina_solid_regular"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginStart="14dp"
+                android:fontFamily="@font/pixelifysans_regular"
                 android:text="@string/download"
-                android:textColor="@color/white"
+                android:textColor="#01579B"
                 android:textSize="16sp" />
-        </LinearLayout>
-    </LinearLayout>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -55,7 +55,7 @@
         app:outerStrokeColor="@color/dark"
         app:outerStrokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnActionBarLeft"
-        app:layout_constraintEnd_toStartOf="@+id/btnActionBarRight"
+        app:layout_constraintEnd_toStartOf="@+id/btnSelectAll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnActionBarLeft" />
 
@@ -91,7 +91,7 @@
         android:scaleType="fitXY"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/btnActionBarLeft"
-        app:layout_constraintEnd_toStartOf="@+id/btnActionBarRight"
+        app:layout_constraintEnd_toStartOf="@+id/btnSelectAll"
         app:layout_constraintStart_toEndOf="@+id/btnActionBarLeft"
         app:layout_constraintTop_toTopOf="@+id/btnActionBarLeft" />
 
@@ -119,9 +119,9 @@
         android:layout_marginStart="4dp"
         app:layout_constraintTop_toTopOf="@+id/btnActionBarLeft" />
 
-    <!--    btnActionBarNextToRight-->
+    <!--    btnActionBarNextRight-->
     <ImageView
-        android:id="@+id/btnActionBarNextToRight"
+        android:id="@+id/btnActionBarNextRight"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="8dp"
@@ -129,7 +129,7 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnActionBarRight" />
+        app:layout_constraintEnd_toStartOf="@id/btnActionBarRight" />
 
     <!--    btnActionBarRight-->
     <ImageView

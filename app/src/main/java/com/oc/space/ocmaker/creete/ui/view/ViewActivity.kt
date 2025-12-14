@@ -68,6 +68,50 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         viewModel.setPath(intent.getStringExtra(IntentKey.INTENT_KEY)!!)
         viewModel.updateStatusFrom(intent.getIntExtra(IntentKey.STATUS_KEY, ValueKey.AVATAR_TYPE))
         viewModel.setType(intent.getIntExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW))
+
+        // Set bg_btn_bottom for both buttons
+        setButtonBackgrounds()
+    }
+
+    private fun setButtonBackgrounds() {
+        binding.includeLayoutBottom.apply {
+            // Left button (Whatsapp)
+            btnWhatsapp.setBackgroundResource(R.drawable.bg_btn_bottom)
+            btnWhatsapp.setPadding(0, 0, 0, 0)
+            val paramsLeft = btnWhatsapp.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
+            paramsLeft?.apply {
+                height = UnitHelper.dpToPx(this@ViewActivity, 51f).toInt()
+                marginEnd = UnitHelper.dpToPx(this@ViewActivity, 14f).toInt()
+                marginStart = UnitHelper.dpToPx(this@ViewActivity, 4f).toInt()
+                btnWhatsapp.layoutParams = this
+            }
+            // Hide the CardView with rounded corners
+            val cardViewLeft = btnWhatsapp.getChildAt(0) as? androidx.cardview.widget.CardView
+            cardViewLeft?.gone()
+            // Hide WhatsApp icon
+            val lnlInLeft = btnWhatsapp.getChildAt(1) as? ViewGroup
+            lnlInLeft?.getChildAt(0)?.gone()
+
+            // Right button (Telegram)
+            btnTelegram.setBackgroundResource(R.drawable.bg_btn_bottom)
+            btnTelegram.setPadding(0, 0, 0, 0)
+            val paramsRight = btnTelegram.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
+            paramsRight?.apply {
+                height = UnitHelper.dpToPx(this@ViewActivity, 51f).toInt()
+                marginStart = UnitHelper.dpToPx(this@ViewActivity, 14f).toInt()
+                marginEnd = UnitHelper.dpToPx(this@ViewActivity, 4f).toInt()
+                btnTelegram.layoutParams = this
+            }
+            // Hide the CardView with rounded corners
+            val cardViewRight = btnTelegram.getChildAt(0) as? androidx.cardview.widget.CardView
+            cardViewRight?.gone()
+            // Hide Telegram icon
+            val lnlInRight = btnTelegram.getChildAt(1) as? ViewGroup
+            lnlInRight?.getChildAt(0)?.gone()
+
+            // Hide download button
+            btnDownload.gone()
+        }
     }
 
     override fun dataObservable() {
@@ -98,13 +142,13 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             actionBar.apply {
                 btnActionBarLeft.tap { handleBackLeftToRight() }
                 btnActionBarRight.tap { handleActionBarRight() }
-               // btnActionBarNextToRight.tap { handleEditClick(viewModel.pathInternal.value) }
+                btnActionBarNextRight.tap { handleEditClick(viewModel.pathInternal.value) }
                 btnShare.tap(2500) { viewModel.shareFiles(this@ViewActivity) }
             }
 
             // Access buttons from included layout_bottom
-            includeLayoutBottom.btnBottomLeft.tap(2590) { handleBottomBarLeft() }
-            includeLayoutBottom.btnBottomRight.tap(2000) { handleBottomBarRight() }
+            includeLayoutBottom.btnWhatsapp.tap(2590) { handleBottomBarLeft() }
+            includeLayoutBottom.btnTelegram.tap(2000) { handleBottomBarRight() }
         }
     }
 
@@ -125,7 +169,9 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                // setImageActionBar(btnActionBarRight, R.drawable.ic_delete_view)
                // setImageActionBar(btnActionBarNextToRight, R.drawable.ic_edit_2)
                 setTextActionBar(tvCenter, getString(R.string.my_character_in))
-                setImageActionBar(btnActionBarRight,R.drawable.delete_select)
+                setImageActionBar(btnActionBarRight, R.drawable.delete_select)
+                setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
+                btnActionBarNextRight.visible()
                 // Hide btnShare in view mode
                 btnShare.gone()
             }
@@ -139,13 +185,13 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             params.dimensionRatio = "1:1"
             cvImage.layoutParams = params
 
-            tvSuccess.visible()
+            tvSuccess.gone()
 
-            includeLayoutBottom.tvBottomLeft.text = strings(R.string.share)
-            includeLayoutBottom.tvBottomLeft.select()
+            includeLayoutBottom.tvWhatsapp.text = strings(R.string.share)
+            includeLayoutBottom.tvWhatsapp.select()
 
-            includeLayoutBottom.tvBottomRight.text = strings(R.string.download)
-            includeLayoutBottom.tvBottomRight.select()
+            includeLayoutBottom.tvTelegram.text = strings(R.string.download)
+            includeLayoutBottom.tvTelegram.select()
         }
     }
 
@@ -186,11 +232,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
 
             tvSuccess.visible()
 
-            includeLayoutBottom.tvBottomLeft.text = strings(R.string.my_work)
-            includeLayoutBottom.tvBottomLeft.select()
+            includeLayoutBottom.tvWhatsapp.text = strings(R.string.my_work)
+            includeLayoutBottom.tvWhatsapp.select()
 
-            includeLayoutBottom.tvBottomRight.text = strings(R.string.download)
-            includeLayoutBottom.tvBottomRight.select()
+            includeLayoutBottom.tvTelegram.text = strings(R.string.download)
+            includeLayoutBottom.tvTelegram.select()
         }
     }
 

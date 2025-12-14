@@ -111,6 +111,7 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
 
             myDesignAdapter.onItemClick = { pathInternal -> handleItemClick(pathInternal) }
             myDesignAdapter.onItemTick = { position -> viewModel.toggleSelect(position) }
+            myDesignAdapter.onEditClick = { pathInternal -> handleEditClick(pathInternal) }
             myDesignAdapter.onDeleteClick = { pathInternal -> handleDelete(arrayListOf(pathInternal)) }
             myDesignAdapter.onLongClick = { position -> handleLongClick(position) }
         }
@@ -143,12 +144,29 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
         }
         dialog.onYesClick = {
             lifecycleScope.launch(Dispatchers.IO) {
-                viewModel.deleteItem(pathInternalList)
+                viewModel.deleteItem(myAlbumActivity, pathInternalList)
                 withContext(Dispatchers.Main) {
                     dialog.dismiss()
                     myAlbumActivity.hideNavigation()
                     resetData()
                 }
+            }
+        }
+    }
+
+    private fun handleEditClick(pathInternal: String) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            myAlbumActivity.showLoading()
+            viewModel.editItem(myAlbumActivity, pathInternal)
+            withContext(Dispatchers.Main) {
+                myAlbumActivity.dismissLoading()
+                val intent = Intent(myAlbumActivity, CustomizeCharacterActivity::class.java)
+                intent.putExtra(IntentKey.INTENT_KEY, viewModel.positionCharacter)
+                intent.putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
+                val option = ActivityOptions.makeCustomAnimation(
+                    myAlbumActivity, R.anim.slide_out_left, R.anim.slide_in_right
+                )
+                myAlbumActivity.showInterAll { startActivity(intent, option.toBundle()) }
             }
         }
     }
@@ -182,6 +200,16 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
 
     fun deleteSelectedItems() {
         handleDelete(viewModel.getPathSelected())
+    }
+
+    fun selectAllItems() {
+        viewModel.selectAll(true)
+        myDesignAdapter.notifyDataSetChanged()
+    }
+
+    fun deselectAllItems() {
+        viewModel.selectAll(false)
+        myDesignAdapter.notifyDataSetChanged()
     }
 
     fun resetSelectionMode() {

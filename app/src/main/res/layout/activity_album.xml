@@ -4,13 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A1CCEF"
     tools:context=".ui.my_creation.MyCreationActivity">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/img_mywork" />
     <!-- layoutActionBar -->
     <FrameLayout
         android:id="@+id/layoutActionBar"
@@ -25,31 +21,6 @@
 
 
 
-    <!--    deleteSection-->
-    <LinearLayout
-        android:id="@+id/deleteSection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#291985"
-        app:layout_constraintTop_toBottomOf="@id/cvType"
-        android:orientation="horizontal"
-        android:gravity="end|center_vertical"
-        android:paddingTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"
-        android:clickable="true">
-
-        <ImageView
-            android:id="@+id/btnDeleteSelect"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:src="@drawable/delete_select"
-            />
-    </LinearLayout>
 
 
     <!--    frmList-->
@@ -59,16 +30,17 @@
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         app:layout_goneMarginTop="0dp"
-        android:background="#291985"
+        android:background="#A1CCEF"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/deleteSection" />
+        app:layout_constraintTop_toBottomOf="@id/cvType" />
     <!--    cvType-->
     <androidx.cardview.widget.CardView
         android:id="@+id/cvType"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="46dp"
         app:cardBackgroundColor="@android:color/transparent"
         android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="16dp"
         app:layout_constraintTop_toBottomOf="@id/layoutActionBar"
         app:strokeColor="@color/transparent"
         app:strokeWidth="0dp"
@@ -79,12 +51,12 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <!--            btnMySpace-->
+            <!--            btnMyPixel-->
             <FrameLayout
-                android:id="@+id/btnMySpace"
+                android:id="@+id/btnMyPixel"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.6">
+                android:layout_weight="1">
 
                 <!--                imvBgMyAvatar (nền trắng)-->
                 <ImageView
@@ -109,7 +81,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/selected_tab"
+                    android:src="@drawable/selected_tab_album"
                     android:visibility="visible" />
 
                 <!--                tvSpace-->
@@ -118,11 +90,11 @@
                     style="@style/single_marquee"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/londrina_solid_regular"
+                    android:fontFamily="@font/pixelifysans_regular"
                     android:gravity="center"
-                    android:text="@string/my_space"
+                    android:text="@string/my_pixel"
                     android:textColor="@color/white"
-                    android:textSize="20sp" />
+                    android:textSize="16sp" />
 
             </FrameLayout>
 
@@ -131,7 +103,7 @@
                 android:id="@+id/btnMyDesign"
                 android:layout_width="0dp"
                 android:translationY="0dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1">
 
@@ -148,7 +120,7 @@
                     android:layout_width="20dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="start"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     android:background="#291985"
                     />
                 <!--                imvFocusMyDesign (nền xanh khi chọn)-->
@@ -158,7 +130,7 @@
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
                     android:scaleX="1"
-                    android:src="@drawable/un_selected_tab"
+                    android:src="@drawable/un_selected_tab_album"
                     android:visibility="gone" />
 
                 <!--                tvMyDesign-->
@@ -167,7 +139,7 @@
                     style="@style/single_marquee"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:fontFamily="@font/londrina_solid_regular"
+                    android:fontFamily="@font/pixelifysans_regular"
                     android:gravity="center"
                     android:text="@string/my_design"
                     android:textColor="@color/colorPrimary"

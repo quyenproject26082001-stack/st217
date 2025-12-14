@@ -511,22 +511,25 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
     ) {
         // Set weight = 1.6
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
-        params.weight = 1.6f
+        params.weight = 1.0f
         params.topMargin = 0
         tabView.layoutParams = params
 
         // Set text size = 18sp
-        textView.textSize = 18f
+        textView.textSize = 14f
 
-        // Apply gradient color from top to bottom
-        val textHeight = textView.lineHeight.toFloat()
-        val shader = LinearGradient(
-            0f, 0f, 0f, textHeight,
-            Color.parseColor("#8FFFFD"),
-            Color.parseColor("#2641D7"),
-            Shader.TileMode.CLAMP
-        )
-        textView.paint.shader = shader
+        // Apply gradient color from top to bottom - WHITE gradient for selected
+        textView.post {
+            val textHeight = textView.lineHeight.toFloat()
+            val shader = LinearGradient(
+                0f, 0f, 0f, textHeight,
+                Color.parseColor("#FFFFFF"),
+                Color.parseColor("#FFFFFF"),
+                Shader.TileMode.CLAMP
+            )
+            textView.paint.shader = shader
+            textView.invalidate()
+        }
 
         // Show selected_tab drawable
         focusImage.setImageResource(R.drawable.selected_tab)
@@ -547,14 +550,24 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         // Set weight = 1
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
         params.weight = 1f
-        params.topMargin = UnitHelper.dpToPx(this, 10f).toInt()
+        params.topMargin = UnitHelper.dpToPx(this, 0f).toInt()
         tabView.layoutParams = params
 
         // Set text size = 14sp, color = colorPrimary
         textView.textSize = 14f
-        // Remove gradient shader and set solid color
-        textView.paint.shader = null
-        textView.setTextColor(getColor(R.color.colorPrimary))
+
+        // Apply RED gradient for unselected
+        textView.post {
+            val textHeight = textView.lineHeight.toFloat()
+            val shader = LinearGradient(
+                0f, 0f, 0f, textHeight,
+                Color.parseColor("#BA0101"),
+                Color.parseColor("#BA0101"),
+                Shader.TileMode.CLAMP
+            )
+            textView.paint.shader = shader
+            textView.invalidate()
+        }
 
         // Show un_selected_tab drawable
         focusImage.setImageResource(R.drawable.un_selected_tab)
@@ -563,7 +576,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         focusImage.visible()
 
         // Show subTab
-        subTab.visible()
+        subTab.gone()
     }
 
     private fun setupTypeNavigation(type: Int) {
