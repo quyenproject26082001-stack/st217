@@ -30,6 +30,12 @@ class TextColorAdapter : BaseAdapter<SelectedModel, ItemTextColorBinding>(ItemTe
             if (position == 0) {
                 Log.d("TextColorAdapter", "Position 0: Clearing and loading img0text_color")
                 imvColor.visible()
+
+                // Set margin to 0dp for position 0 to make it bigger
+                val layoutParams = imvColor.layoutParams as android.widget.FrameLayout.LayoutParams
+                layoutParams.setMargins(0, 0, 0, 0)
+                imvColor.layoutParams = layoutParams
+
                 // First clear any existing background drawable
                 imvColor.background = null
                 // Set background to transparent
@@ -47,6 +53,13 @@ class TextColorAdapter : BaseAdapter<SelectedModel, ItemTextColorBinding>(ItemTe
             } else {
                 Log.d("TextColorAdapter", "Position $position: Setting color background")
                 imvColor.visible()
+
+                // Set margin to 2dp for other positions (keep normal size)
+                val layoutParams = imvColor.layoutParams as android.widget.FrameLayout.LayoutParams
+                val margin2dp = imvColor.context.resources.displayMetrics.density * 2
+                layoutParams.setMargins(margin2dp.toInt(), margin2dp.toInt(), margin2dp.toInt(), margin2dp.toInt())
+                imvColor.layoutParams = layoutParams
+
                 imvColor.setImageResource(0) // Clear image resource
                 btnAddColor.gone()
 
