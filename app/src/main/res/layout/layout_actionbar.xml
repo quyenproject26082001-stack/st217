@@ -136,11 +136,12 @@
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="0dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/btnActionBarNextRight"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnActionBarNextRight" />
 
     <!--    btnShare-->
     <ImageView

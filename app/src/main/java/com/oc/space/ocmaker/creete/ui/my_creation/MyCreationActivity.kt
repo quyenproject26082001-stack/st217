@@ -260,7 +260,13 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
             setTextActionBar(tvCenter, getString(R.string.my_pixel))
 
-            // Select All button (btnActionBarRight) - hidden initially, only shown in selection mode
+            // Select All button (btnActionBarRight) - resize to 24dp for select all icons
+            val size24dp = (24 * resources.displayMetrics.density).toInt()
+            val params = btnActionBarRight.layoutParams
+            params.width = size24dp
+            params.height = size24dp
+            btnActionBarRight.layoutParams = params
+
             btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
             btnActionBarRight.gone()
 
@@ -394,6 +400,23 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
     override fun onRestart() {
         super.onRestart()
+
+        // Exit selection mode when returning from another activity
+        if (isInSelectionMode) {
+            val avatarFragment = supportFragmentManager.findFragmentByTag("MyAvatarFragment")
+            val designFragment = supportFragmentManager.findFragmentByTag("MyDesignFragment")
+
+            when {
+                avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
+                    avatarFragment.resetSelectionMode()
+                }
+                designFragment is MyDesignFragment && designFragment.isVisible -> {
+                    designFragment.resetSelectionMode()
+                }
+            }
+            exitSelectionMode()
+        }
+
        // initNativeCollab()
     }
 

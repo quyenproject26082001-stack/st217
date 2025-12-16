@@ -4,11 +4,14 @@
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
     android:layout_marginHorizontal="6dp"
-    >
+    android:clipToPadding="false"
+    android:clipChildren="false">
 
     <FrameLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,28 +25,38 @@
             android:layout_height="match_parent"
             android:visibility="gone" />
 
-        <FrameLayout
-            android:id="@+id/cvMain"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardShadow"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_circle_white">
-            <!--        vFocus-->
-            <View
-                android:id="@+id/vFocus"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white" />
+            app:cardCornerRadius="50dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@android:color/transparent">
 
-            <!--        tvFont-->
-            <TextView
-                android:id="@+id/tvFont"
+            <FrameLayout
+                android:id="@+id/cvMain"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Aa"
-                android:textColor="#000000"
-                android:textSize="18sp" />
-        </FrameLayout>
+                android:background="@drawable/bg_circle_white">
+                <!--        vFocus-->
+                <View
+                    android:id="@+id/vFocus"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+
+                <!--        tvFont-->
+                <TextView
+                    android:id="@+id/tvFont"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Aa"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+            </FrameLayout>
+
+        </androidx.cardview.widget.CardView>
 
     </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

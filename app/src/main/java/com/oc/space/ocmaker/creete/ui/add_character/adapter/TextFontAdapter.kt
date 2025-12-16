@@ -26,8 +26,11 @@ class TextFontAdapter(val context: Context) : BaseAdapter<SelectedModel, ItemFon
             vStroke.visible()
 
             if (item.isSelected) {
-                // Selected state - circular white background
+                // Selected state - circular white background with shadow
                 tvFont.setTextColor(android.graphics.Color.parseColor("#F61B1B")) // Red text
+
+                // Show shadow for selected item
+                cardShadow.cardElevation = 8f * context.resources.displayMetrics.density
 
                 // Create circular white background
                 val circularBackground = GradientDrawable().apply {
@@ -38,8 +41,12 @@ class TextFontAdapter(val context: Context) : BaseAdapter<SelectedModel, ItemFon
                 cvMain.setBackgroundColor(android.graphics.Color.TRANSPARENT)
                 vStroke.setBackgroundColor(android.graphics.Color.TRANSPARENT) // Transparent stroke (hidden but still takes space)
             } else {
-                // Not selected state - transparent with white stroke
+                // Not selected state - transparent with white stroke, no shadow
                 tvFont.setTextColor(android.graphics.Color.parseColor("#FFFFFF")) // White text
+
+                // Hide shadow for non-selected items
+                cardShadow.cardElevation = 0f
+
                 vFocus.setBackgroundColor(android.graphics.Color.TRANSPARENT) // Transparent background
                 cvMain.setBackgroundColor(android.graphics.Color.TRANSPARENT) // Transparent circle background
                 vStroke.setBackgroundResource(R.drawable.bg_100_stroke_white) // White stroke visible
