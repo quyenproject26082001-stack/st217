@@ -55,7 +55,6 @@
         app:outerStrokeColor="@color/dark"
         app:outerStrokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="@+id/btnActionBarLeft"
-        app:layout_constraintEnd_toStartOf="@+id/btnSelectAll"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/btnActionBarLeft" />
 
@@ -91,7 +90,7 @@
         android:scaleType="fitXY"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/btnActionBarLeft"
-        app:layout_constraintEnd_toStartOf="@+id/btnSelectAll"
+        app:layout_constraintEnd_toStartOf="@+id/btnActionBarNextRight"
         app:layout_constraintStart_toEndOf="@+id/btnActionBarLeft"
         app:layout_constraintTop_toTopOf="@+id/btnActionBarLeft" />
 

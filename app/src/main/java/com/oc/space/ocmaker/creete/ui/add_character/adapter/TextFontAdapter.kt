@@ -2,6 +2,7 @@ package com.oc.space.ocmaker.creete.ui.add_character.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.drawable.GradientDrawable
 import androidx.core.view.isVisible
 import com.oc.space.ocmaker.creete.R
 import com.oc.space.ocmaker.creete.core.base.BaseAdapter
@@ -19,16 +20,31 @@ class TextFontAdapter(val context: Context) : BaseAdapter<SelectedModel, ItemFon
 
     override fun onBind(binding: ItemFontBinding, item: SelectedModel, position: Int) {
         binding.apply {
-            val res = if (item.isSelected) R.drawable.bg_100_solid_white else R.drawable.bg_100_stroke_white
-            vFocus.setBackgroundResource(res)
-
-            // Show gradient stroke when selected
-            vStroke.isVisible = item.isSelected
-
             tvFont.setFont(item.color)
-            val (color, elevation) = if (item.isSelected) R.color.dark to 6f else R.color.dark to 0f
-            tvFont.setTextColor(context.getColor(color))
-           // cvMain.cardElevation = elevation
+
+            // Always keep vStroke visible to maintain consistent size
+            vStroke.visible()
+
+            if (item.isSelected) {
+                // Selected state - circular white background
+                tvFont.setTextColor(android.graphics.Color.parseColor("#F61B1B")) // Red text
+
+                // Create circular white background
+                val circularBackground = GradientDrawable().apply {
+                    shape = GradientDrawable.OVAL
+                    setColor(android.graphics.Color.parseColor("#FFFFFF"))
+                }
+                vFocus.background = circularBackground
+                cvMain.setBackgroundColor(android.graphics.Color.TRANSPARENT)
+                vStroke.setBackgroundColor(android.graphics.Color.TRANSPARENT) // Transparent stroke (hidden but still takes space)
+            } else {
+                // Not selected state - transparent with white stroke
+                tvFont.setTextColor(android.graphics.Color.parseColor("#FFFFFF")) // White text
+                vFocus.setBackgroundColor(android.graphics.Color.TRANSPARENT) // Transparent background
+                cvMain.setBackgroundColor(android.graphics.Color.TRANSPARENT) // Transparent circle background
+                vStroke.setBackgroundResource(R.drawable.bg_100_stroke_white) // White stroke visible
+            }
+
             root.tap { onTextFontClick.invoke(item.color, position) }
         }
     }

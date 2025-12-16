@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -92,6 +93,10 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             val lnlInLeft = btnWhatsapp.getChildAt(1) as? ViewGroup
             lnlInLeft?.getChildAt(0)?.gone()
 
+            // Update tvWhatsapp text properties
+            tvWhatsapp.textSize = 16f
+            tvWhatsapp.setTypeface(ResourcesCompat.getFont(this@ViewActivity, R.font.pixelifysans_medium))
+
             // Right button (Telegram)
             btnTelegram.setBackgroundResource(R.drawable.bg_btn_bottom)
             btnTelegram.setPadding(0, 0, 0, 0)
@@ -108,6 +113,9 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             // Hide Telegram icon
             val lnlInRight = btnTelegram.getChildAt(1) as? ViewGroup
             lnlInRight?.getChildAt(0)?.gone()
+
+            tvTelegram.textSize = 16f
+            tvTelegram.setTypeface(ResourcesCompat.getFont(this@ViewActivity, R.font.pixelifysans_medium))
 
             // Hide download button
             btnDownload.gone()
@@ -182,7 +190,6 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
 //            }
 
             val params = cvImage.layoutParams as ConstraintLayout.LayoutParams
-            params.dimensionRatio = "1:1"
             cvImage.layoutParams = params
 
             tvSuccess.gone()
@@ -197,37 +204,28 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
 
     private fun setUpSuccessUI() {
         binding.apply {
-//            Admob.getInstance().loadNativeAd(
-//                this@ViewActivity,
-//                getString(R.string.native_success),
-//                binding.nativeAds,
-//                R.layout.ads_native_big_btn_top
-//            )
-
-//            nativeAds.visible()
-//            flNativeCollab.gone()
-
             actionBar.apply {
-               // setImageActionBar(btnActionBarRight, R.drawable.ic_home)
-               // setTextActionBar(tvCenter, getString(R.string.successfully))
-                // Show btnShare in action bar for success mode
-                tvCenter.gone()
-                btnShare.visible()
+                // Hide center text and imgCenter
+                tvCenter.visible()
+                tvCenter.setText(getString(R.string.successfully))
+                imgCenter.gone()
 
-                // Show imgCenter with home icon
-                imgCenter.visible()
-                imgCenter.setImageResource(R.drawable.ic_home_ss)
-                imgCenter.tap { showInterAll { startIntentWithClearTop(HomeActivity::class.java) } }
+                // Hide left and next right buttons
+                btnActionBarLeft.visible()
+                btnActionBarNextRight.gone()
+
+                // Show and configure btnShare as home button
+                btnShare.visible()
+                btnShare.setImageResource(R.drawable.ic_home_ss)
+                btnShare.setOnClickListener(null) // Clear any existing listeners
+                btnShare.tap {
+                    showInterAll {
+                        startIntentWithClearTop(HomeActivity::class.java)
+                    }
+                }
             }
 
-//            cvImage.apply {
-//                radius = 20f
-//                strokeWidth = 8
-//                strokeColor = getColor(R.color.white)
-//            }
-
             val params = cvImage.layoutParams as ConstraintLayout.LayoutParams
-            params.dimensionRatio = "1:1"
             cvImage.layoutParams = params
 
             tvSuccess.visible()
@@ -239,7 +237,6 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             includeLayoutBottom.tvTelegram.select()
         }
     }
-
     private fun handleActionBarRight() {
         when (viewModel.typeUI.value) {
             ValueKey.TYPE_VIEW -> {

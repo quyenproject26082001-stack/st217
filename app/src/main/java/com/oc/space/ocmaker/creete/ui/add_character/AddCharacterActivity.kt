@@ -218,7 +218,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             actionBar.apply {
                 btnActionBarLeft.tap { confirmExit() }
                 btnActionBarCenter.tap { confirmReset() }
-                btnActionBarRightText.tap {
+                btnActionBarRight.tap {
                     handleSave()
                 }
             }
@@ -287,9 +287,8 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
             setImageActionBar(btnActionBarCenter, R.drawable.ic_reset)
-            btnActionBarRightText.visible()
-            tvRightText.isSelected =true
-            tvRightText.text = getString(R.string.save)
+            setImageActionBar(btnActionBarRight, R.drawable.ic_save_addbg)
+            btnActionBarRight.visible()
 
             // Căn giữa nút reset vào guideline
             val params = btnActionBarCenter.layoutParams as androidx.constraintlayout.widget.ConstraintLayout.LayoutParams
@@ -307,41 +306,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             tvBackgroundColor.select()
 
             // Apply gradient to tvText, tvFont, tvColor
-            tvText.post {
-                val textHeight = tvText.lineHeight.toFloat()
-                val shader = LinearGradient(
-                    0f, 0f, 0f, textHeight,
-                    Color.parseColor("#8FFFFD"),
-                    Color.parseColor("#2641D7"),
-                    Shader.TileMode.CLAMP
-                )
-                tvText.paint.shader = shader
-                tvText.invalidate()
-            }
 
-            tvFont.post {
-                val textHeight = tvFont.lineHeight.toFloat()
-                val shader = LinearGradient(
-                    0f, 0f, 0f, textHeight,
-                    Color.parseColor("#8FFFFD"),
-                    Color.parseColor("#2641D7"),
-                    Shader.TileMode.CLAMP
-                )
-                tvFont.paint.shader = shader
-                tvFont.invalidate()
-            }
-
-            tvColor.post {
-                val textHeight = tvColor.lineHeight.toFloat()
-                val shader = LinearGradient(
-                    0f, 0f, 0f, textHeight,
-                    Color.parseColor("#8FFFFD"),
-                    Color.parseColor("#2641D7"),
-                    Shader.TileMode.CLAMP
-                )
-                tvColor.paint.shader = shader
-                tvColor.invalidate()
-            }
         }
     }
 
@@ -694,9 +659,12 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
 
         dialog.onDoneEvent = { color ->
             dismissDialog()
+            Log.d("AddCharacterActivity", "Color picker selected color: ${String.format("#%06X", 0xFFFFFF and color)}, isTextColor=$isTextColor")
             if (!isTextColor) {
+                Log.d("AddCharacterActivity", "Calling handleSetBackgroundColor with position 0")
                 handleSetBackgroundColor(color, 0)
             } else {
+                Log.d("AddCharacterActivity", "Calling handleTextColorClick with position 0")
                 handleTextColorClick(color, 0)
             }
         }
@@ -715,11 +683,14 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
     }
 
     private fun handleSetBackgroundColor(color: Int, position: Int) {
+        Log.d("AddCharacterActivity", "handleSetBackgroundColor called: color=${String.format("#%06X", 0xFFFFFF and color)}, position=$position")
         binding.apply {
             imvBackground.setImageBitmap(null)
             imvBackground.setBackgroundColor(color)
             lifecycleScope.launch(Dispatchers.IO) {
+                Log.d("AddCharacterActivity", "Before updateBackgroundColorSelected: list[0].color=${String.format("#%06X", 0xFFFFFF and viewModel.backgroundColorList[0].color)}")
                 viewModel.updateBackgroundColorSelected(position)
+                Log.d("AddCharacterActivity", "After updateBackgroundColorSelected: list[0].color=${String.format("#%06X", 0xFFFFFF and viewModel.backgroundColorList[0].color)}, list[0].isSelected=${viewModel.backgroundColorList[0].isSelected}")
                 withContext(Dispatchers.Main) {
                     backgroundColorAdapter.submitItem(position, viewModel.backgroundColorList)
                 }
@@ -738,10 +709,13 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
     }
 
     private fun handleTextColorClick(color: Int, position: Int) {
+        Log.d("AddCharacterActivity", "handleTextColorClick called: color=${String.format("#%06X", 0xFFFFFF and color)}, position=$position")
         binding.apply {
             edtText.setTextColor(color)
             tvGetText.setTextColor(color)
+            Log.d("AddCharacterActivity", "Before updateTextColorSelected: list[0].color=${String.format("#%06X", 0xFFFFFF and viewModel.textColorList[0].color)}")
             viewModel.updateTextColorSelected(position)
+            Log.d("AddCharacterActivity", "After updateTextColorSelected: list[0].color=${String.format("#%06X", 0xFFFFFF and viewModel.textColorList[0].color)}, list[0].isSelected=${viewModel.textColorList[0].isSelected}")
             textColorAdapter.submitItem(position, viewModel.textColorList)
         }
     }

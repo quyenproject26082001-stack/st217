@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:layout_margin="4.5dp"
             app:cardBackgroundColor="@color/white"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="4dp"
             app:cardElevation="0dp">
 
             <!--            imvSticker-->

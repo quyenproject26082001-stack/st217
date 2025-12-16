@@ -102,11 +102,12 @@
         <TextView
             android:id="@+id/spaceSectionTab"
             android:layout_width="match_parent"
-            android:layout_height="18sp"
+            android:layout_height="wrap_content"
             android:text="@string/background"
             android:gravity="center"
             android:textColor="#BA0101"
             android:layout_marginTop="12dp"
+            android:textSize="18sp"
             android:fontFamily="@font/pixelifysans_bold"
             android:background="#FFBFBF"
            />
@@ -119,7 +120,7 @@
             android:layout_marginTop="49dp"
             android:background="@color/transparent"
             android:orientation="horizontal"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@id/spaceSectionTab">
 
             <!--                btnBackgroundImage-->
@@ -226,7 +227,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="95dp"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
 
             <!--            rcvBackgroundImage-->
@@ -262,6 +263,19 @@
             android:orientation="vertical"
             android:visibility="gone">
 
+            <!-- Title: Sticker -->
+            <TextView
+                android:id="@+id/tvTitleSticker"
+                android:layout_width="match_parent"
+                android:layout_height="18sp"
+                android:text="@string/sticker"
+                android:gravity="center"
+                android:textColor="#BA0101"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/pixelifysans_bold"
+                android:background="#FFBFBF"
+                android:textSize="18sp" />
+
             <!--            rcvSticker-->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcvSticker"
@@ -281,6 +295,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:visibility="gone">
+
+            <!-- Title: Speech Bubbles -->
+            <TextView
+                android:id="@+id/tvTitleSpeech"
+                android:layout_width="match_parent"
+                android:layout_height="18sp"
+                android:text="@string/speech_bubbles"
+                android:gravity="center"
+                android:textColor="#BA0101"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/pixelifysans_bold"
+                android:background="#FFBFBF"
+                android:textSize="18sp" />
 
             <!--            rcvSticker-->
             <androidx.recyclerview.widget.RecyclerView
@@ -303,27 +330,30 @@
             android:paddingTop="15dp"
             android:clipToPadding="true"
             android:isScrollContainer="true"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <!-- Title: Text with Done Button -->
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="16dp"
-                    android:layout_marginVertical="16dp">
+                    android:layout_marginTop="-3dp">
 
+                    <!-- Title: Text -->
                     <TextView
-                        android:id="@+id/tvText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="start"
-                        android:fontFamily="@font/londrina_solid_regular"
-                        android:text="@string/input_text"
-                        android:textSize="16sp" />
+                        android:id="@+id/tvTitleText"
+                        android:layout_width="match_parent"
+                        android:layout_height="18sp"
+                        android:text="@string/text"
+                        android:gravity="center"
+                        android:textColor="#BA0101"
+                        android:fontFamily="@font/pixelifysans_bold"
+                        android:background="#FFBFBF"
+                        android:textSize="18sp" />
 
                     <!--                    btnDoneText-->
                     <ImageView
@@ -332,9 +362,7 @@
                         android:layout_height="24dp"
                         android:layout_gravity="end|center_vertical"
                         android:layout_marginEnd="16dp"
-                        android:src="@drawable/ic_done_background"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:src="@drawable/ic_done_background" />
                 </FrameLayout>
 
 
@@ -344,53 +372,36 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_marginHorizontal="16dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="15dp"
                     android:background="@drawable/bg_8_solid_white"
                     android:ellipsize="end"
-                    android:fontFamily="@font/londrina_solid_regular"
+                    android:fontFamily="@font/pixelifysans_regular"
                     android:hint="@string/hello_world"
                     android:imeOptions="actionDone"
                     android:inputType="text"
+
                     android:maxLength="30"
                     android:paddingHorizontal="16dp"
                     android:singleLine="true"
                     android:textColor="@color/black"
-                    android:textColorHint="#808080"
-                    android:textSize="16sp" />
+                    android:textColorHint="#868686"
+                    android:textSize="14sp" />
 
-                <TextView
-                    android:id="@+id/tvFont"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:fontFamily="@font/londrina_solid_regular"
-                    android:gravity="start"
-                    android:text="@string/font"
-                    android:textSize="16sp" />
+
 
                 <!--            rcvFont-->
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcvFont"
                     android:layout_width="match_parent"
-                    android:layout_height="52dp"
+                    android:layout_height="37dp"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/titleFont"
                     tools:listitem="@layout/item_font" />
 
-                <TextView
-                    android:id="@+id/tvColor"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="6dp"
-                    android:fontFamily="@font/londrina_solid_regular"
-                    android:gravity="start"
-                    android:text="@string/color"
-                    android:textSize="16sp" />
 
                 <!--            rcvTextColor-->
                 <androidx.recyclerview.widget.RecyclerView
@@ -399,6 +410,7 @@
                     android:layout_height="37dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="6dp"
+                    android:layout_marginVertical="10dp"
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/titleColor"
@@ -427,7 +439,7 @@
     <LinearLayout
         android:id="@+id/lnlBottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:layout_marginBottom="0dp"
         android:background="#FF8FFD"
         android:gravity="center"
@@ -438,8 +450,8 @@
         <!--        btnBackground-->
         <ImageView
             android:id="@+id/btnBackground"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginHorizontal="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_background_selected" />
@@ -447,8 +459,8 @@
         <!--        btnSticker-->
         <ImageView
             android:id="@+id/btnSticker"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginHorizontal="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_sticker" />
@@ -456,8 +468,8 @@
         <!--        btnSpeech-->
         <ImageView
             android:id="@+id/btnSpeech"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginHorizontal="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_speech" />
@@ -465,8 +477,8 @@
         <!--        btnText-->
         <ImageView
             android:id="@+id/btnText"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_marginHorizontal="14dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_text" />

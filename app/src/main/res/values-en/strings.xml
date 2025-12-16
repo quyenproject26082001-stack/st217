@@ -53,7 +53,7 @@
     <string name="download">Download</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="wait_a_minute">It only takes a few seconds.</string>
+    <string name="wait_a_minute">Wait a minute</string>
     <string name="reset">Reset</string>
     <string name="download_success">Download successful to the Space OC album</string>
     <string name="please_check_your_internet">Please check your internet</string>
@@ -62,7 +62,7 @@
     <string name="an_error_occurred">An error occurred, please try again later.</string>
     <string name="image_has_been_saved_successfully">The project has been saved successfully!</string>
     <string name="save">Save</string>
-    <string name="are_you_sure_want_to_delete_this_item">Are you sure want to delete this item?</string>
+    <string name="are_you_sure_want_to_delete_this_item">Do you want to delete?</string>
     <string name="downloading">Downloading...</string>
     <string name="successfully">Successfully</string>
     <string name="download_failed_please_try_again_later">Download failed, please try again later!</string>
@@ -71,13 +71,13 @@
     <string name="my_creation">My Creation</string>
     <string name="delete_your_customize">Delete your customize</string>
     <string name="are_you_sure_you_want_to_delete_the_image">Are you sure you want to delete the image?</string>
-    <string name="haven_t_saved_it_yet_do_you_want_to_exit">HHaven’t saved it yet, are you sure to exit?</string>
-    <string name="change_your_whole_design_are_you_sure">Change your whole design, are you sure?</string>
+    <string name="haven_t_saved_it_yet_do_you_want_to_exit">Haven’t saved it yet, are you sure to exit?</string>
+    <string name="change_your_whole_design_are_you_sure">Do you want to reset?</string>
     <string name="character_maker">Pixel Maker</string>
     <string name="no_item_here">No Item Here</string>
     <string name="quick_maker">Quick Maker</string>
     <string name="my_character">My Pixel</string>
-    <string name="category">Category</string>
+    <string name="category">Pixel Maker</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_item_space">No current history</string>
@@ -108,7 +108,7 @@
     <string name="null_edt">Please enter text</string>
     <string name="my_pixel">My Pixel</string>
     <string name="input_text">Input text</string>
-    <string name="hello_world">Hello World!</string>
+    <string name="hello_world">Type your content...</string>
     <string name="no_item_desgin">No current history</string>
     <string name="my_character_in">My Work</string>
     <string name="quick_maker_in">Quick mix</string>

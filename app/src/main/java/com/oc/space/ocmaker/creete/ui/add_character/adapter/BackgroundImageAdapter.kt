@@ -24,7 +24,7 @@ class BackgroundImageAdapter :
             if (position == 0) {
                 lnlAddItem.visible()
                 imvImage.gone()
-                lnlAddItem.tap { onAddImageClick.invoke() }
+                lnlAddItem.tap(2500) { onAddImageClick.invoke() }
             } else {
                 lnlAddItem.gone()
                 imvImage.visible()

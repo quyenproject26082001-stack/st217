@@ -4,6 +4,7 @@ import android.R.attr.bitmap
 import android.R.attr.type
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.drawable.toDrawable
@@ -101,10 +102,16 @@ class AddCharacterViewModel : ViewModel() {
     }
 
     suspend fun updateBackgroundColorSelected(position: Int) {
+        Log.d("AddCharacterViewModel", "updateBackgroundColorSelected called with position=$position")
+        Log.d("AddCharacterViewModel", "Before update: backgroundColorList[0].color=${String.format("#%06X", 0xFFFFFF and backgroundColorList[0].color)}, isSelected=${backgroundColorList[0].isSelected}")
+
         backgroundImageList = backgroundImageList.map { it.copy(isSelected = false) }.toCollection(ArrayList())
         backgroundColorList.forEachIndexed { index, model ->
+            Log.d("AddCharacterViewModel", "Setting position $index isSelected = ${index == position}")
             model.isSelected = index == position
         }
+
+        Log.d("AddCharacterViewModel", "After update: backgroundColorList[0].color=${String.format("#%06X", 0xFFFFFF and backgroundColorList[0].color)}, isSelected=${backgroundColorList[0].isSelected}")
     }
 
     fun updateTextFontSelected(position: Int) {
@@ -115,10 +122,16 @@ class AddCharacterViewModel : ViewModel() {
     }
 
     fun updateTextColorSelected(position: Int) {
+        Log.d("AddCharacterViewModel", "updateTextColorSelected called with position=$position")
+        Log.d("AddCharacterViewModel", "Before update: textColorList[0].color=${String.format("#%06X", 0xFFFFFF and textColorList[0].color)}, isSelected=${textColorList[0].isSelected}")
+
         textColorList = textColorList.map { it.copy(isSelected = false) }.toCollection(ArrayList())
         textColorList.forEachIndexed { index, model ->
+            Log.d("AddCharacterViewModel", "Setting position $index isSelected = ${index == position}")
             model.isSelected = index == position
         }
+
+        Log.d("AddCharacterViewModel", "After update: textColorList[0].color=${String.format("#%06X", 0xFFFFFF and textColorList[0].color)}, isSelected=${textColorList[0].isSelected}")
     }
 
     fun updateCurrentCurrentDraw(draw: Draw) {

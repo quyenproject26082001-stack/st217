@@ -45,13 +45,12 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 launch {
                     viewModel.isFirstLanguage.collect { isFirst ->
+                        languageAdapter.isFirstLanguage = isFirst
                         if (isFirst) {
                             binding.actionBar.tvStart.visible()
                         } else {
                             binding.actionBar.btnActionBarLeft.visible()
                             binding.actionBar.tvCenter.visible()
-                            binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_done_settings)
-                            binding.btnBackground.setImageResource(R.drawable.img_setting)
 
                         }
                     }

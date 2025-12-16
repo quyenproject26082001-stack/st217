@@ -15,6 +15,7 @@ class LanguageAdapter(val context: Context) : BaseAdapter<LanguageModel, ItemLan
     ItemLanguageBinding::inflate
 ) {
     var onItemClick: ((code: String) -> Unit) = {}
+    var isFirstLanguage: Boolean = false
 
     override fun submitList(list: List<LanguageModel>) {
         if (items.isEmpty()) {
@@ -64,6 +65,16 @@ class LanguageAdapter(val context: Context) : BaseAdapter<LanguageModel, ItemLan
                 R.drawable.ic_not_tick_lang
             }
             loadImage(root, ratio, btnRadio, false)
+
+            // Apply color tint when activated and not first language
+            if (item.activate && !isFirstLanguage) {
+                btnRadio.setColorFilter(
+                    android.graphics.Color.parseColor("#01579B"),
+                    android.graphics.PorterDuff.Mode.SRC_IN
+                )
+            } else {
+                btnRadio.clearColorFilter()
+            }
 
             // Set selected state to trigger the selector drawable
             flMain.isSelected = item.activate

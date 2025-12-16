@@ -2,7 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginHorizontal="6dp"
+    >
 
     <FrameLayout
         android:layout_width="0dp"
@@ -18,15 +20,12 @@
             android:id="@+id/vStroke"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="6dp"
-            android:background="@drawable/bg_stroke_gradient_circle"
             android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/cvMain"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="9dp"
             android:background="@drawable/bg_circle_white">
             <!--        vFocus-->
             <View

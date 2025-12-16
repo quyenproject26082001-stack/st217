@@ -686,7 +686,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
                         DrawKey.LEFT_BOTTOM -> setupMatrix(icon, x3, y3, rotation)
                         DrawKey.RIGHT_BOTTOM -> setupMatrix(icon, x4, y4, rotation)
                     }
-                    if (icon.positionDefault == DrawKey.LEFT_BOTTOM) {
+                    if (icon.positionDefault == DrawKey.RIGHT_TOP) {
                         // Don't draw delete icon for character
                         if (!handlingDraw!!.isCharacter) {
                             icon.draw(canvas, borderPaint)
@@ -766,7 +766,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
             downMatrix.getValues(values)
             val currentScaleX = values[Matrix.MSCALE_X]
             val currentScaleY = values[Matrix.MSCALE_Y]
-            val currentScale = Math.sqrt((currentScaleX * currentScaleX + currentScaleY * currentScaleY).toDouble()).toFloat()
+            val currentScale = Math.abs(currentScaleX)
 
             // Calculate new scale
             val newScale = currentScale * scaleFactor
@@ -815,7 +815,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         for (icon in iconList) {
             // Skip delete icon for character
             if (handlingDraw?.isCharacter == true) {
-                if (icon.positionDefault == DrawKey.LEFT_BOTTOM) {
+                if (icon.positionDefault == DrawKey.RIGHT_TOP) {
                     continue
                 }
             }
@@ -968,24 +968,24 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     private fun setupDefaultIcons() {
         val deleteIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_close_1), DrawKey.LEFT_BOTTOM
+            ContextCompat.getDrawable(context, R.drawable.ic_close_1), DrawKey.RIGHT_TOP
         )
         deleteIcon.event = DeleteEvent()
 
         val zoomIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_rotation), DrawKey.RIGHT_TOP
+            ContextCompat.getDrawable(context, R.drawable.ic_rotation), DrawKey.RIGHT_BOTTOM
         )
         zoomIcon.event = ZoomEvent()
 
         val flipIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_flip_add), DrawKey.RIGHT_BOTTOM
+            ContextCompat.getDrawable(context, R.drawable.ic_flip), DrawKey.TOP_LEFT
         )
         flipIcon.event = FlipEvent()
 
         val editIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_flip_adjust), DrawKey.RIGHT_BOTTOM
+            ContextCompat.getDrawable(context, R.drawable.ic_flip), DrawKey.TOP_LEFT
         )
-        editIcon.event = EditEvent()
+        editIcon.event = FlipEvent()
 
         iconList.clear()
         iconList.add(deleteIcon)
