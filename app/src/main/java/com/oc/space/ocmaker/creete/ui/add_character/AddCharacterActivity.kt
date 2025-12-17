@@ -119,6 +119,53 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         initRcv()
         initDrawView()
         initData()
+        setupKeyboardLogging()
+        setupBackPressHandler()
+    }
+
+    private var lastImeVisible = false
+
+    private fun setupKeyboardLogging() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
+            val imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime())
+            val imeHeight = insets.getInsets(WindowInsetsCompat.Type.ime()).bottom
+            Log.d("EditTextFlow", "WindowInsets: imeVisible=$imeVisible, imeHeight=$imeHeight")
+            Log.d("EditTextFlow", "scvText.scrollY=${binding.scvText.scrollY}, scvText.canScrollVertically(1)=${binding.scvText.canScrollVertically(1)}, scvText.canScrollVertically(-1)=${binding.scvText.canScrollVertically(-1)}")
+
+            // Handle keyboard visibility changes
+            if (lastImeVisible && !imeVisible) {
+                // Keyboard was visible, now it's hidden
+                Log.d("EditTextFlow", "Keyboard dismissed by system (via window insets)")
+                if (viewModel.isFocusEditText.value && binding.edtText.hasFocus()) {
+                    Log.d("EditTextFlow", "EditText still has focus - back button dismissed keyboard")
+                    // Back button was pressed while EditText had focus
+                    viewModel.setIsFocusEditText(false)
+                }
+            }
+            lastImeVisible = imeVisible
+
+            insets
+        }
+    }
+
+    private fun setupBackPressHandler() {
+        val callback = object : androidx.activity.OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                Log.d("EditTextFlow", "OnBackPressedCallback.handleOnBackPressed called")
+                Log.d("EditTextFlow", "isFocusEditText.value=${viewModel.isFocusEditText.value}")
+                Log.d("EditTextFlow", "edtText.hasFocus()=${binding.edtText.hasFocus()}")
+
+                if (viewModel.isFocusEditText.value || binding.edtText.hasFocus()) {
+                    Log.d("EditTextFlow", "Back pressed with EditText focused - hiding keyboard via callback")
+                    viewModel.setIsFocusEditText(false)
+                } else {
+                    Log.d("EditTextFlow", "Back pressed without EditText focused - showing confirmExit")
+                    confirmExit()
+                }
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, callback)
+        Log.d("EditTextFlow", "OnBackPressedCallback registered, enabled=${callback.isEnabled}")
     }
 //    private fun setupKeyboardDetection() {
 //        binding.main.viewTreeObserver.addOnGlobalLayoutListener {
@@ -194,17 +241,28 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                     launch {
 //                        isFocusEditText
                         viewModel.isFocusEditText.collect { status ->
+                            Log.d("EditTextFlow", "isFocusEditText.collect: status=$status")
                             if (status) {
                                 // Clear FLAG_LAYOUT_NO_LIMITS to allow adjustResize to work
+                                Log.d("EditTextFlow", "Keyboard showing - clearing FLAG_LAYOUT_NO_LIMITS")
                                 window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
                                 viewModel.layoutParams.topMargin = UnitHelper.dpToPx(this@AddCharacterActivity, -160)
                                 flFunction.layoutParams = viewModel.layoutParams
+                                Log.d("EditTextFlow", "Layout adjusted - topMargin: ${viewModel.layoutParams.topMargin}")
                             } else {
+                                Log.d("EditTextFlow", "Keyboard hiding - resetting layout")
+                                // Scroll back to top
+                                scvText.smoothScrollTo(0, 0)
+                                Log.d("EditTextFlow", "Scrolled back to top")
                                 viewModel.layoutParams.topMargin = viewModel.originalMarginBottom
                                 flFunction.layoutParams = viewModel.layoutParams
+                                Log.d("EditTextFlow", "Calling hideSoftKeyboard()")
                                 hideSoftKeyboard()
+                                Log.d("EditTextFlow", "Calling edtText.clearFocus()")
                                 edtText.clearFocus()
+                                Log.d("EditTextFlow", "Calling hideNavigation() - re-setting FLAG_LAYOUT_NO_LIMITS")
                                 hideNavigation()  // Re-set FLAG_LAYOUT_NO_LIMITS
+                                Log.d("EditTextFlow", "Layout reset complete - topMargin: ${viewModel.layoutParams.topMargin}")
                             }
                         }
                     }
@@ -247,15 +305,27 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                 }
             }
             edtText.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+                Log.d("EditTextFlow", "edtText.onFocusChangeListener: hasFocus=$hasFocus")
+                Log.d("EditTextFlow", "scvText.scrollY=${binding.scvText.scrollY}, scvText.height=${binding.scvText.height}")
                 if (hasFocus) {
+                    Log.d("EditTextFlow", "EditText gained focus - setting isFocusEditText=true")
                     viewModel.setIsFocusEditText(true)
+                    // Let adjustResize handle layout - no programmatic scroll needed
                 } else {
-                    viewModel.setIsFocusEditText(false)
+                    Log.d("EditTextFlow", "EditText lost focus - setting isFocusEditText=false")
+                    // Only update if not already false (prevent recursive calls)
+                    if (viewModel.isFocusEditText.value) {
+                        viewModel.setIsFocusEditText(false)
+                    }
                 }
             }
-            btnDoneText.tap { handleDoneText() }
+            btnDoneText.tap {
+                Log.d("EditTextFlow", "btnDoneText tapped")
+                handleDoneText()
+            }
 
             main.tap {
+                Log.d("EditTextFlow", "main layout tapped - clearing focus")
                 viewModel.setIsFocusEditText(false)
                 clearFocus()
             }
@@ -392,25 +462,30 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             setLocked(false)
             setOnDrawListener(object : OnDrawListener {
                 override fun onAddedDraw(draw: Draw) {
+                    Log.d("EditTextFlow", "DrawView: onAddedDraw")
                     viewModel.updateCurrentCurrentDraw(draw)
                     viewModel.addDrawView(draw)
                     viewModel.setIsFocusEditText(false)
                 }
 
                 override fun onClickedDraw(draw: Draw) {
+                    Log.d("EditTextFlow", "DrawView: onClickedDraw")
                     viewModel.setIsFocusEditText(false)
                 }
 
                 override fun onDeletedDraw(draw: Draw) {
+                    Log.d("EditTextFlow", "DrawView: onDeletedDraw")
                     viewModel.deleteDrawView(draw)
                     viewModel.setIsFocusEditText(false)
                 }
 
                 override fun onDragFinishedDraw(draw: Draw) {
+                    Log.d("EditTextFlow", "DrawView: onDragFinishedDraw")
                     viewModel.setIsFocusEditText(false)
                 }
 
                 override fun onTouchedDownDraw(draw: Draw) {
+                    Log.d("EditTextFlow", "DrawView: onTouchedDownDraw")
                     viewModel.updateCurrentCurrentDraw(draw)
                     viewModel.setIsFocusEditText(false)
                 }
@@ -418,6 +493,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                 override fun onZoomFinishedDraw(draw: Draw) {}
 
                 override fun onFlippedDraw(draw: Draw) {
+                    Log.d("EditTextFlow", "DrawView: onFlippedDraw")
                     viewModel.setIsFocusEditText(false)
                 }
 
@@ -814,13 +890,12 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         }
     }
 
-    @SuppressLint("MissingSuperCall", "GestureBackNavigation")
+    @Deprecated("Use OnBackPressedCallback instead")
+    @SuppressLint("GestureBackNavigation")
     override fun onBackPressed() {
-        if (viewModel.isFocusEditText.value) {
-            viewModel.setIsFocusEditText(false)
-        } else {
-            confirmExit()
-        }
+        Log.d("EditTextFlow", "DEPRECATED onBackPressed called - this should NOT happen if callback is working")
+        // Don't call super or handle anything - let the callback handle it
+        // This method should not be called if the OnBackPressedCallback is working properly
     }
 
 //    fun initNativeCollab() {
