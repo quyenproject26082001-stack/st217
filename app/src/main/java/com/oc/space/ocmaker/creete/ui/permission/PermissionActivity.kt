@@ -90,7 +90,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         val perms = if (isStorage) viewModel.getStoragePermissions() else viewModel.getNotificationPermissions()
         if (checkPermissions(perms)) {
             showToast(if (isStorage) R.string.granted_storage else R.string.granted_notification)
-        } else if (viewModel.needGoToSettings(isStorage)) {
+        } else if (viewModel.needGoToSettings(sharePreference, isStorage)) {
             goToSettings()
         } else {
             val requestCode = if (isStorage) RequestKey.STORAGE_PERMISSION_CODE else RequestKey.NOTIFICATION_PERMISSION_CODE
@@ -109,9 +109,9 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         val granted = grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }
         when (requestCode) {
-            RequestKey.STORAGE_PERMISSION_CODE -> viewModel.updateStorageGranted(granted)
+            RequestKey.STORAGE_PERMISSION_CODE -> viewModel.updateStorageGranted(sharePreference, granted)
 
-            RequestKey.NOTIFICATION_PERMISSION_CODE -> viewModel.updateNotificationGranted(granted)
+            RequestKey.NOTIFICATION_PERMISSION_CODE -> viewModel.updateNotificationGranted(sharePreference, granted)
         }
         if (granted) {
             showToast(if (requestCode == RequestKey.STORAGE_PERMISSION_CODE) R.string.granted_storage else R.string.granted_notification)
@@ -120,12 +120,11 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
 
     override fun onStart() {
         super.onStart()
-        // Check current permission status without saving to SharedPreferences
         viewModel.updateStorageGranted(
-            checkPermissions(viewModel.getStoragePermissions())
+            sharePreference, checkPermissions(viewModel.getStoragePermissions())
         )
         viewModel.updateNotificationGranted(
-            checkPermissions(viewModel.getNotificationPermissions())
+            sharePreference, checkPermissions(viewModel.getNotificationPermissions())
         )
     }
 
@@ -147,7 +146,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         Admob.getInstance().showInterAds(this@PermissionActivity, inter, object : InterCallback() {
             override fun onNextAction() {
                 super.onNextAction()
-                // Removed: sharePreference.setIsFirstPermission(false)
+                sharePreference.setIsFirstPermission(false)
                 startIntentRightToLeft(HomeActivity::class.java)
                 finishAffinity()
             }

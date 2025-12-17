@@ -2,6 +2,7 @@ package com.oc.space.ocmaker.creete.ui.permission
 
 import androidx.lifecycle.ViewModel
 import com.oc.space.ocmaker.creete.core.helper.PermissionHelper
+import com.oc.space.ocmaker.creete.core.helper.SharePreferenceHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,25 +14,21 @@ class PermissionViewModel : ViewModel() {
     private val _notificationGranted = MutableStateFlow(false)
     val notificationGranted: StateFlow<Boolean> = _notificationGranted
 
-    // In-memory counters (reset when app closes)
-    private var storagePermissionCount = 0
-    private var notificationPermissionCount = 0
-
-    fun updateStorageGranted(granted: Boolean) {
+    fun updateStorageGranted(sharePrefer: SharePreferenceHelper, granted: Boolean) {
         _storageGranted.value = granted
-        storagePermissionCount = if (granted) 0 else storagePermissionCount + 1
+        sharePrefer.setStoragePermission(if (granted) 0 else sharePrefer.getStoragePermission() + 1)
     }
 
-    fun updateNotificationGranted(granted: Boolean) {
+    fun updateNotificationGranted(sharePrefer: SharePreferenceHelper, granted: Boolean) {
         _notificationGranted.value = granted
-        notificationPermissionCount = if (granted) 0 else notificationPermissionCount + 1
+        sharePrefer.setNotificationPermission(if (granted) 0 else sharePrefer.getNotificationPermission() + 1)
     }
 
-    fun needGoToSettings(storage: Boolean): Boolean {
+    fun needGoToSettings(sharePrefer: SharePreferenceHelper, storage: Boolean): Boolean {
         return if (storage) {
-            storagePermissionCount > 2 && !_storageGranted.value
+            sharePrefer.getStoragePermission() > 2 && !_storageGranted.value
         } else {
-            notificationPermissionCount > 2 && !_notificationGranted.value
+            sharePrefer.getNotificationPermission() > 2 && !_notificationGranted.value
         }
     }
 
