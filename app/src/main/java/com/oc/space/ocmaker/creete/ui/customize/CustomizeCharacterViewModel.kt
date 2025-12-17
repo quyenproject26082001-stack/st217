@@ -648,17 +648,20 @@ class CustomizeCharacterViewModel : ViewModel() {
         val indexEdit = editList.indexOfFirst { it.pathInternalEdit == suggestionModel.pathInternalEdit }
         if (indexEdit != -1) {
             editList[indexEdit].apply {
-                avatarPath = avatarPath
-                positionColorItemList = this@CustomizeCharacterViewModel.positionColorItemList
-                itemNavList = this@CustomizeCharacterViewModel.itemNavList
-                colorItemNavList = this@CustomizeCharacterViewModel.colorItemNavList
-                isSelectedItemList = this@CustomizeCharacterViewModel.isSelectedItemList
-                keySelectedItemList = this@CustomizeCharacterViewModel.keySelectedItemList
-                isShowColorList = this@CustomizeCharacterViewModel.isShowColorList
-                pathSelectedList = this@CustomizeCharacterViewModel.pathSelectedList
+                avatarPath = this@CustomizeCharacterViewModel.avatarPath
+                positionColorItemList = ArrayList(this@CustomizeCharacterViewModel.positionColorItemList)
+                itemNavList = ArrayList(this@CustomizeCharacterViewModel.itemNavList.map { ArrayList(it) })
+                colorItemNavList = ArrayList(this@CustomizeCharacterViewModel.colorItemNavList.map { ArrayList(it) })
+                isSelectedItemList = ArrayList(this@CustomizeCharacterViewModel.isSelectedItemList)
+                keySelectedItemList = ArrayList(this@CustomizeCharacterViewModel.keySelectedItemList)
+                isShowColorList = ArrayList(this@CustomizeCharacterViewModel.isShowColorList)
+                pathSelectedList = ArrayList(this@CustomizeCharacterViewModel.pathSelectedList)
                 pathInternalEdit = pathInternal
             }
             MediaHelper.writeListToFile(context, ValueKey.EDIT_FILE_INTERNAL, editList)
+
+            // ⭐ CRITICAL FIX: Update suggestionModel.pathInternalEdit so next save can find the entry
+            suggestionModel.pathInternalEdit = pathInternal
         }
     }
 
