@@ -153,6 +153,13 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         })
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        // Reset permission counters to 0 when exiting the permission activity
+        sharePreference.setStoragePermission(0)
+        sharePreference.setNotificationPermission(0)
+    }
+
 //    override fun initAds() {
 //        Admob.getInstance().loadInterAds(
 //            this@PermissionActivity, getString(R.string.inter_per), object : InterCallback() {

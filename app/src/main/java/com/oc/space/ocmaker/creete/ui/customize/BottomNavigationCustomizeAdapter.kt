@@ -30,6 +30,7 @@ class BottomNavigationCustomizeAdapter(private val context: Context) :
             if (item.isSelected) {
                 vFocus.setBackgroundResource(R.drawable.bg_bottom_navi)
                 imvImage.setBackgroundColor(Color.parseColor("#A1CCEF"))
+                cvContent.strokeColor = Color.TRANSPARENT
 
                 // Apply 6dp rounded corners
                 val cornerRadiusPx = UnitHelper.dpToPx(context, 6f)
