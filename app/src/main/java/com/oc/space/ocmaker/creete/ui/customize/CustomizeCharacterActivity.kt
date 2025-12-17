@@ -45,6 +45,7 @@ import kotlin.jvm.java
 
 class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     private val viewModel: CustomizeCharacterViewModel by viewModels()
+    private var lastClickedLayerPosition: Int = -1 // Track last clicked layer position for scrolling
     private val dataViewModel: DataViewModel by viewModels()
     val colorLayerCustomizeAdapter by lazy { ColorLayerCustomizeAdapter(this) }
     val layerCustomizeAdapter by lazy { LayerCustomizeAdapter(this) }
@@ -327,6 +328,9 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun handleFillLayer(item: ItemNavCustomModel, position: Int) {
+        lastClickedLayerPosition = position // Save clicked position for scrolling
+        android.util.Log.d("CustomizeScroll", "Layer clicked at position: $position")
+
         lifecycleScope.launch(Dispatchers.IO) {
             val pathSelected = viewModel.setClickFillLayer(item, position)
             withContext(Dispatchers.Main) {
@@ -338,6 +342,9 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun handleNoneLayer(position: Int) {
+        lastClickedLayerPosition = position // Save clicked position for scrolling
+        android.util.Log.d("CustomizeScroll", "None layer clicked at position: $position")
+
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.setIsSelectedItem(viewModel.positionCustom)
             viewModel.setPathSelected(viewModel.positionCustom, "")
@@ -386,9 +393,42 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
 
                 // 5. ⭐ Refresh rcvLayer với data mới (tất cả items đã đổi màu)
                 // Sử dụng .toList() để tạo list mới, giúp DiffUtil detect changes
-                layerCustomizeAdapter.submitList(
-                    viewModel.itemNavList[viewModel.positionNavSelected].toList()
-                )
+                val newList = viewModel.itemNavList[viewModel.positionNavSelected].toList()
+                android.util.Log.d("CustomizeScroll", "submitList called - list size: ${newList.size}")
+
+                layerCustomizeAdapter.submitList(newList) {
+                    android.util.Log.d("CustomizeScroll", "submitList callback - list committed")
+
+                    // 6. ⭐ Scroll rcvLayer to center the last clicked layer position IMMEDIATELY
+                    if (lastClickedLayerPosition >= 0) {
+                        val layoutManager = binding.rcvLayer.layoutManager
+
+                        if (layoutManager is androidx.recyclerview.widget.GridLayoutManager) {
+                            val spanCount = layoutManager.spanCount
+
+                            // Calculate row position
+                            val rowPosition = (lastClickedLayerPosition / spanCount) * spanCount
+
+                            // Calculate offset to center the row on screen
+                            val recyclerHeight = binding.rcvLayer.height
+
+                            // Use estimated item height if view not yet laid out
+                            val itemView = layoutManager.findViewByPosition(lastClickedLayerPosition)
+                            val itemHeight = itemView?.height ?: (recyclerHeight / 5) // Estimate ~1/5 of screen
+
+                            // Center the item vertically: (recyclerHeight / 2) - (itemHeight / 2)
+                            val centerOffset = (recyclerHeight / 2) - (itemHeight / 2)
+
+                            android.util.Log.d("CustomizeScroll", "INSTANT scroll to position $lastClickedLayerPosition - row: $rowPosition, offset: $centerOffset")
+
+                            // Immediate scroll without animation
+                            layoutManager.scrollToPositionWithOffset(rowPosition, centerOffset)
+                        } else {
+                            // Fallback - but shouldn't happen
+                            binding.rcvLayer.scrollToPosition(lastClickedLayerPosition)
+                        }
+                    }
+                }
             }
         }
     }
