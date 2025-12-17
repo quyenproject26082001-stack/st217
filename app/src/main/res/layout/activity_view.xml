@@ -34,7 +34,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/layoutActionBar"
-        app:strokeColor="@color/transparent"
+        app:strokeColor="#FFF3D2"
+        app:strokeWidth="4dp"
+        app:cardCornerRadius="8dp"
         >
 
         <!--        imvImage-->

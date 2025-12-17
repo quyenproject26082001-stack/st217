@@ -114,7 +114,12 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
             // Share and Download buttons are handled in MyCreationActivity
 
             myAvatarAdapter.onItemClick = { pathInternal -> handleItemClick(pathInternal) }
-            myAvatarAdapter.onItemTick = { position -> viewModel.toggleSelect(position) }
+            myAvatarAdapter.onItemTick = { position ->
+                viewModel.toggleSelect(position)
+                // Check if all items are now selected and update the icon
+                val allSelected = viewModel.myAvatarList.value.all { it.isSelected }
+                myAlbumActivity.updateSelectAllIcon(allSelected)
+            }
             myAvatarAdapter.onEditClick = { pathInternal -> handleEditClick(pathInternal) }
             myAvatarAdapter.onDeleteClick = { pathInternal -> handleDelete(arrayListOf(pathInternal)) }
             myAvatarAdapter.onLongClick = { position -> handleLongClick(position) }

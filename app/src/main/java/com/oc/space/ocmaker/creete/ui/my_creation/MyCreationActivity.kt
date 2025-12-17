@@ -542,4 +542,14 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         // Show subTab
         subTab.gone()
     }
+
+    // Public method to update select all icon based on selection state
+    fun updateSelectAllIcon(allSelected: Boolean) {
+        isAllSelected = allSelected
+        if (allSelected) {
+            binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_select_all)
+        } else {
+            binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
+        }
+    }
 }

@@ -110,7 +110,12 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
             // Share and Download buttons are handled in MyCreationActivity
 
             myDesignAdapter.onItemClick = { pathInternal -> handleItemClick(pathInternal) }
-            myDesignAdapter.onItemTick = { position -> viewModel.toggleSelect(position) }
+            myDesignAdapter.onItemTick = { position ->
+                viewModel.toggleSelect(position)
+                // Check if all items are now selected and update the icon
+                val allSelected = viewModel.myDesignList.value.all { it.isSelected }
+                myAlbumActivity.updateSelectAllIcon(allSelected)
+            }
             myDesignAdapter.onDeleteClick = { pathInternal -> handleDelete(arrayListOf(pathInternal)) }
             myDesignAdapter.onLongClick = { position -> handleLongClick(position) }
         }
