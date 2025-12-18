@@ -23,6 +23,7 @@ import com.ocmaker.pixcel.maker.core.extensions.goToSettings
 import com.ocmaker.pixcel.maker.core.extensions.gone
 import com.ocmaker.pixcel.maker.core.extensions.handleBackLeftToRight
 import com.ocmaker.pixcel.maker.core.extensions.hideNavigation
+import com.ocmaker.pixcel.maker.core.extensions.invisible
 import com.ocmaker.pixcel.maker.core.extensions.loadImage
 import com.ocmaker.pixcel.maker.core.extensions.loadNativeCollabAds
 import com.ocmaker.pixcel.maker.core.extensions.requestPermission
@@ -48,6 +49,7 @@ import com.ocmaker.pixcel.maker.core.extensions.strings
 import com.ocmaker.pixcel.maker.core.helper.UnitHelper
 import com.ocmaker.pixcel.maker.ui.customize.CustomizeCharacterActivity
 import com.ocmaker.pixcel.maker.ui.home.DataViewModel
+import com.ocmaker.pixcel.maker.ui.my_creation.fragment.MyAvatarFragment
 import com.ocmaker.pixcel.maker.ui.my_creation.view_model.MyAvatarViewModel
 import com.ocmaker.pixcel.maker.ui.permission.PermissionViewModel
 import kotlinx.coroutines.Dispatchers
@@ -148,7 +150,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     override fun viewListener() {
         binding.apply {
             actionBar.apply {
-                btnActionBarLeft.tap { handleBackLeftToRight() }
+                btnActionBarLeft.tap { handleBack() }
                 btnActionBarRight.tap { handleActionBarRight() }
                 btnActionBarNextRight.tap { handleEditClick(viewModel.pathInternal.value) }
                 btnShare.tap(2500) { viewModel.shareFiles(this@ViewActivity) }
@@ -178,16 +180,16 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                // setImageActionBar(btnActionBarNextToRight, R.drawable.ic_edit_2)
                 setTextActionBar(tvCenter, getString(R.string.my_pixel))
 
-                // Hide delete icon when coming from design section
-                if (viewModel.statusFrom == ValueKey.MY_DESIGN_TYPE) {
-                    btnActionBarRight.gone()
-                } else {
-                    setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
-                    btnActionBarRight.visible()
-                }
 
                 setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
-                btnActionBarNextRight.visible()
+
+                // Hide delete icon when coming from design section
+                if (viewModel.statusFrom == ValueKey.MY_DESIGN_TYPE) {
+                    btnActionBarNextRight.invisible()
+
+                }
+
+                setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
                 // Hide btnShare in view mode
                 btnShare.gone()
 
@@ -326,6 +328,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                         HandleState.LOADING -> showLoading()
                         HandleState.SUCCESS -> {
                             dismissLoading()
+                            resetMyCreationSelectionMode()
                             finish()
                         }
 
@@ -336,6 +339,35 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                     }
                 }
             }
+        }
+    }
+
+    private fun handleBack() {
+        resetMyCreationSelectionMode()
+        handleBackLeftToRight()
+    }
+
+    private fun resetMyCreationSelectionMode() {
+        // Reset selection mode in MyCreationActivity before going back
+        val myCreationActivity = MyCreationActivity.getInstance()
+        if (myCreationActivity != null) {
+            android.util.Log.d("ViewActivity", "Resetting selection mode in MyCreationActivity")
+
+            // Reset the fragment's selection state first
+            val designFragment = myCreationActivity.supportFragmentManager.findFragmentByTag("MyDesignFragment")
+            if (designFragment is com.ocmaker.pixcel.maker.ui.my_creation.fragment.MyDesignFragment) {
+                designFragment.resetSelectionMode()
+            }
+
+            val avatarFragment = myCreationActivity.supportFragmentManager.findFragmentByTag("MyAvatarFragment")
+            if (avatarFragment is MyAvatarFragment) {
+                avatarFragment.resetSelectionMode()
+            }
+
+            // Exit selection mode in activity
+            myCreationActivity.exitSelectionMode()
+        } else {
+            android.util.Log.w("ViewActivity", "MyCreationActivity instance not found - unable to reset selection mode")
         }
     }
 
@@ -369,6 +401,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 permissionViewModel.updateStorageGranted(sharePreference, false)
             }
         }
+    }
+
+    @android.annotation.SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        handleBack()
     }
 
 }

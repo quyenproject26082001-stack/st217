@@ -37,6 +37,7 @@ import com.ocmaker.pixcel.maker.ui.my_creation.view_model.MyAvatarViewModel
 import com.ocmaker.pixcel.maker.ui.my_creation.view_model.MyDesignViewModel
 import com.ocmaker.pixcel.maker.ui.view.ViewActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.getValue
@@ -55,7 +56,8 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
 
     override fun initView() {
         initRcv()
-        viewModel.loadMyDesign(myAlbumActivity)
+        // ✅ FIX: Removed redundant load - onStart() will handle it
+        android.util.Log.d("MyDesignFragment", "initView() - NOT loading data (onStart will do it)")
     }
 
     override fun dataObservable() {
@@ -74,9 +76,13 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
                 //     }
                 // }
                 launch {
-                    myCreationViewModel.typeStatus.collect { status ->
-                        resetData()
-                    }
+                    // ✅ FIX: Only reload on actual tab changes
+                    myCreationViewModel.typeStatus
+                        .drop(1) // Skip initial emission
+                        .collect { status ->
+                            android.util.Log.d("MyDesignFragment", "Tab switched to MyDesign - reloading data")
+                            resetData()
+                        }
                 }
             }
         }
@@ -159,6 +165,10 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
     }
 
     private fun handleItemClick(pathInternal: String) {
+        if (myDesignAdapter.items.any { it.isShowSelection }) {
+            // In selection mode - reset before navigating
+            resetSelectionMode()
+        }
         val intent = Intent(myAlbumActivity, ViewActivity::class.java)
         intent.putExtra(IntentKey.INTENT_KEY, pathInternal)
         intent.putExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW)
@@ -172,13 +182,22 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
         // Show deleteSection and bottom bar
         myAlbumActivity.binding.lnlBottom.visible()
         myAlbumActivity.enterSelectionMode()
+
+        // Check if all items are now selected (e.g., if there's only 1 item)
+        val allSelected = viewModel.myDesignList.value.all { it.isSelected }
+        myAlbumActivity.updateSelectAllIcon(allSelected)
     }
 
     private fun resetData() {
+        android.util.Log.d("MyDesignFragment", "========================================")
+        android.util.Log.d("MyDesignFragment", "resetData() called")
+        android.util.Log.d("MyDesignFragment", "Loading from: ValueKey.DOWNLOAD_ALBUM")
         viewModel.loadMyDesign(myAlbumActivity)
         // Hide deleteSection and bottom bar
         myAlbumActivity.binding.lnlBottom.gone()
         myAlbumActivity.exitSelectionMode()
+        android.util.Log.d("MyDesignFragment", "resetData() completed")
+        android.util.Log.d("MyDesignFragment", "========================================")
     }
 
     fun getSelectedPaths(): ArrayList<String> {
@@ -208,6 +227,23 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
 
     override fun onStart() {
         super.onStart()
+        android.util.Log.w("MyDesignFragment", "🔵 onStart() called - Fragment is starting")
         resetData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        android.util.Log.w("MyDesignFragment", "🟢 onResume() called - Fragment is visible")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        android.util.Log.w("MyDesignFragment", "🟡 onPause() called - Fragment losing focus")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        android.util.Log.w("MyDesignFragment", "🔴 onStop() called - Fragment no longer visible")
+        android.util.Log.w("MyDesignFragment", "Current image count: ${viewModel.myDesignList.value.size}")
     }
 }

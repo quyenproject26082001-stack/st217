@@ -73,10 +73,10 @@
     <string name="are_you_sure_you_want_to_delete_the_image">¿Estás seguro de que quieres eliminar la imagen?</string>
     <string name="haven_t_saved_it_yet_do_you_want_to_exit">Aún no se ha guardado, ¿estás seguro de que quieres salir?</string>
     <string name="change_your_whole_design_are_you_sure">¿Quieres restablecer?</string>
-    <string name="character_maker">Pixel Maker</string>
+    <string name="character_maker">Creador de píxeles</string>
     <string name="no_item_here">No Hay Artículos Aquí</string>
-    <string name="quick_maker">Quick Maker</string>
-    <string name="my_character">Mi Pixel</string>
+    <string name="quick_maker">Creador rápido</string>
+    <string name="my_character">Mi píxel</string>
     <string name="category">Pixel Maker</string>
 
     <string name="hello_blank_fragment">Hola fragmento en blanco</string>

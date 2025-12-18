@@ -15,6 +15,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.flow.drop
 import androidx.recyclerview.widget.RecyclerView
 import com.ocmaker.pixcel.maker.R
 import com.ocmaker.pixcel.maker.core.base.BaseFragment
@@ -59,7 +60,8 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
     override fun initView() {
         initRcv()
         dataViewModel.ensureData(myAlbumActivity)
-        viewModel.loadMyAvatar(myAlbumActivity)
+        // ✅ FIX: Removed redundant loadMyAvatar() - onStart() will handle it
+        android.util.Log.d("MyAvatarFragment", "initView() - NOT loading data (onStart will do it)")
     }
 
     override fun dataObservable() {
@@ -78,9 +80,14 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
                 //     }
                 // }
                 launch {
-                    myCreationViewModel.typeStatus.collect { status ->
-                        resetData()
-                    }
+                    // ✅ FIX: Only reload on actual tab changes, not initial value
+                    // StateFlow already has distinctUntilChanged built-in
+                    myCreationViewModel.typeStatus
+                        .drop(1) // Skip the first emission (initial value)
+                        .collect { status ->
+                            android.util.Log.d("MyAvatarFragment", "Tab switched to MyAvatar - reloading data")
+                            resetData()
+                        }
                 }
             }
         }
@@ -203,6 +210,10 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
         myAlbumActivity.enterSelectionMode()
         // Enable select mode margins in adapter
         myAvatarAdapter.isSelectMode = true
+
+        // Check if all items are now selected (e.g., if there's only 1 item)
+        val allSelected = viewModel.myAvatarList.value.all { it.isSelected }
+        myAlbumActivity.updateSelectAllIcon(allSelected)
     }
 
     private fun resetData() {

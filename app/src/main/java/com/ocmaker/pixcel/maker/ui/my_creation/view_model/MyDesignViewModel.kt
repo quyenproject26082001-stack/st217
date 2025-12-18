@@ -27,9 +27,36 @@ class MyDesignViewModel : ViewModel() {
     val isLastItem: StateFlow<Boolean> = _isLastItem
 
     fun loadMyDesign(context: Context) {
-        val editList = MediaHelper.getImageInternal(context, ValueKey.DOWNLOAD_ALBUM).map { MyAlbumModel(it) }
-        _myDesignList.value = editList.toCollection(ArrayList())
+        android.util.Log.d("MyDesignViewModel", "📂 loadMyDesign() START")
+        android.util.Log.d("MyDesignViewModel", "Thread: ${Thread.currentThread().name}")
+        android.util.Log.d("MyDesignViewModel", "Context: ${context.javaClass.simpleName}")
+        android.util.Log.d("MyDesignViewModel", "Loading from: ValueKey.DOWNLOAD_ALBUM")
+
+        try {
+            val imageList = MediaHelper.getImageInternal(context, ValueKey.DOWNLOAD_ALBUM)
+            android.util.Log.d("MyDesignViewModel", "✅ Loaded ${imageList.size} items from DOWNLOAD_ALBUM")
+
+            imageList.forEachIndexed { index, path ->
+                android.util.Log.d("MyDesignViewModel", "  [$index] path: $path")
+                // Check if file exists
+                val file = java.io.File(path)
+                val exists = file.exists()
+                val size = if (exists) file.length() else 0
+                android.util.Log.d("MyDesignViewModel", "  [$index] File exists: $exists, Size: $size bytes")
+            }
+
+            val albumList = imageList.map { MyAlbumModel(it) }.toCollection(ArrayList())
+            _myDesignList.value = albumList
+
+            android.util.Log.d("MyDesignViewModel", "✅ Updated myDesignList with ${albumList.size} items")
+            android.util.Log.d("MyDesignViewModel", "Current myDesignList size: ${_myDesignList.value.size}")
+        } catch (e: Exception) {
+            android.util.Log.e("MyDesignViewModel", "❌ ERROR loading designs: ${e.message}", e)
+            _myDesignList.value = arrayListOf()
+        }
+
         checkLastItem()
+        android.util.Log.d("MyDesignViewModel", "📂 loadMyDesign() END")
     }
 
     fun showLongClick(positionSelect: Int) {

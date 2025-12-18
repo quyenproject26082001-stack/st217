@@ -59,6 +59,12 @@ import kotlinx.coroutines.launch
 import kotlin.text.replace
 
 class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
+    companion object {
+        private var instanceRef: java.lang.ref.WeakReference<MyCreationActivity>? = null
+
+        fun getInstance(): MyCreationActivity? = instanceRef?.get()
+    }
+
     private val viewModel: MyCreationViewModel by viewModels()
     private val permissionViewModel: PermissionViewModel by viewModels()
 
@@ -72,6 +78,9 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     }
 
     override fun initView() {
+        // Store instance reference for ViewActivity to access
+        instanceRef = java.lang.ref.WeakReference(this)
+
         viewModel.setTypeStatus(ValueKey.AVATAR_TYPE)
         viewModel.setStatusFrom(intent.getBooleanExtra(IntentKey.FROM_SAVE, false))
 
@@ -357,23 +366,31 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     }
 
     private fun showFragment(type: Int) {
+        android.util.Log.d("MyCreationActivity", "🔄 showFragment() called with type=$type")
+        android.util.Log.d("MyCreationActivity", "  type == AVATAR_TYPE: ${type == ValueKey.AVATAR_TYPE}")
+        android.util.Log.d("MyCreationActivity", "  type == MY_DESIGN_TYPE: ${type == ValueKey.MY_DESIGN_TYPE}")
+
         val transaction = supportFragmentManager.beginTransaction()
 
         // Initialize fragments if null
         if (myAvatarFragment == null) {
+            android.util.Log.d("MyCreationActivity", "  Creating NEW MyAvatarFragment")
             myAvatarFragment = MyAvatarFragment()
             transaction.add(R.id.frmList, myAvatarFragment!!, "MyAvatarFragment")
         }
         if (myDesignFragment == null) {
+            android.util.Log.d("MyCreationActivity", "  Creating NEW MyDesignFragment")
             myDesignFragment = MyDesignFragment()
             transaction.add(R.id.frmList, myDesignFragment!!, "MyDesignFragment")
         }
 
         // Show/Hide based on type
         if (type == ValueKey.AVATAR_TYPE) {
+            android.util.Log.d("MyCreationActivity", "  ➡️ SHOWING MyAvatarFragment, HIDING MyDesignFragment")
             myAvatarFragment?.let { transaction.show(it) }
             myDesignFragment?.let { transaction.hide(it) }
         } else {
+            android.util.Log.d("MyCreationActivity", "  ➡️ HIDING MyAvatarFragment, SHOWING MyDesignFragment")
             myAvatarFragment?.let { transaction.hide(it) }
             myDesignFragment?.let { transaction.show(it) }
         }
@@ -502,10 +519,17 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         subTab: View,
         isLeftTab: Boolean
     ) {
-        // Set weight = 1.6
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
         params.weight = 1.0f
         params.topMargin = 0
+
+
+        // Add extra margin when My Pixel (left tab) is selected
+        if (isLeftTab) {
+            params.marginEnd = (-1.5 * resources.displayMetrics.density).toInt() // -2.5dp
+        } else {
+            params.marginStart = (-1.5 * resources.displayMetrics.density).toInt() // Keep -1.5dp
+        }
         tabView.layoutParams = params
 
         // Set text size = 20sp
@@ -546,6 +570,13 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
         params.weight = 1f
         params.topMargin = 0
+
+        // Reset to original margins when unselected
+        if (isLeftTab) {
+            params.marginEnd = (-1.5 * resources.displayMetrics.density).toInt() // -1.5dp
+        } else {
+            params.marginStart = (-1.5 * resources.displayMetrics.density).toInt() // -1.5dp
+        }
         tabView.layoutParams = params
 
         // Set text size = 16sp, color = colorPrimary

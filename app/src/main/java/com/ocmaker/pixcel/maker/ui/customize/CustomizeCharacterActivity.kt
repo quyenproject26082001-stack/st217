@@ -330,8 +330,19 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun handleFillLayer(item: ItemNavCustomModel, position: Int) {
+        android.util.Log.d("CustomizeScroll", "════════════════════════════════════════")
+        android.util.Log.d("CustomizeScroll", "📱 LAYER ITEM CLICKED")
+        android.util.Log.d("CustomizeScroll", "  Position: $position")
+        android.util.Log.d("CustomizeScroll", "  Item path: ${item.path}")
+
         lastClickedLayerPosition = position // Save clicked position for scrolling
-        android.util.Log.d("CustomizeScroll", "Layer clicked at position: $position")
+        android.util.Log.d("CustomizeScroll", "  💾 Saved lastClickedLayerPosition = $position")
+
+        val layoutManager = binding.rcvLayer.layoutManager as? androidx.recyclerview.widget.GridLayoutManager
+        val firstVisible = layoutManager?.findFirstVisibleItemPosition() ?: -1
+        val lastVisible = layoutManager?.findLastVisibleItemPosition() ?: -1
+        android.util.Log.d("CustomizeScroll", "  Current visible range: $firstVisible - $lastVisible")
+        android.util.Log.d("CustomizeScroll", "════════════════════════════════════════")
 
         lifecycleScope.launch(Dispatchers.IO) {
             val pathSelected = viewModel.setClickFillLayer(item, position)
@@ -344,8 +355,18 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun handleNoneLayer(position: Int) {
+        android.util.Log.d("CustomizeScroll", "════════════════════════════════════════")
+        android.util.Log.d("CustomizeScroll", "🚫 NONE LAYER CLICKED")
+        android.util.Log.d("CustomizeScroll", "  Position: $position")
+
         lastClickedLayerPosition = position // Save clicked position for scrolling
-        android.util.Log.d("CustomizeScroll", "None layer clicked at position: $position")
+        android.util.Log.d("CustomizeScroll", "  💾 Saved lastClickedLayerPosition = $position")
+
+        val layoutManager = binding.rcvLayer.layoutManager as? androidx.recyclerview.widget.GridLayoutManager
+        val firstVisible = layoutManager?.findFirstVisibleItemPosition() ?: -1
+        val lastVisible = layoutManager?.findLastVisibleItemPosition() ?: -1
+        android.util.Log.d("CustomizeScroll", "  Current visible range: $firstVisible - $lastVisible")
+        android.util.Log.d("CustomizeScroll", "════════════════════════════════════════")
 
         lifecycleScope.launch(Dispatchers.IO) {
             viewModel.setIsSelectedItem(viewModel.positionCustom)
@@ -375,9 +396,21 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun handleChangeColorLayer(position: Int) {
+        android.util.Log.d("CustomizeScroll", "════════════════════════════════════════")
+        android.util.Log.d("CustomizeScroll", "🎨 COLOR ITEM CLICKED")
+        android.util.Log.d("CustomizeScroll", "  Color position: $position")
+        android.util.Log.d("CustomizeScroll", "  lastClickedLayerPosition: $lastClickedLayerPosition")
+
+        val layoutManager = binding.rcvLayer.layoutManager as? androidx.recyclerview.widget.GridLayoutManager
+        val firstVisible = layoutManager?.findFirstVisibleItemPosition() ?: -1
+        val lastVisible = layoutManager?.findLastVisibleItemPosition() ?: -1
+        android.util.Log.d("CustomizeScroll", "  Current visible range BEFORE: $firstVisible - $lastVisible")
+        android.util.Log.d("CustomizeScroll", "────────────────────────────────────────")
+
         lifecycleScope.launch(Dispatchers.IO) {
             // 1. Lấy path màu mới cho item đang được chọn
             val pathColor = viewModel.setClickChangeColor(position)
+            android.util.Log.d("CustomizeScroll", "  pathColor retrieved: $pathColor")
 
             // 2. ⭐ Update màu cho TẤT CẢ items trong rcvLayer
             viewModel.updateAllItemsColor(position)
@@ -396,40 +429,88 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                 // 5. ⭐ Refresh rcvLayer với data mới (tất cả items đã đổi màu)
                 // Sử dụng .toList() để tạo list mới, giúp DiffUtil detect changes
                 val newList = viewModel.itemNavList[viewModel.positionNavSelected].toList()
-                android.util.Log.d("CustomizeScroll", "submitList called - list size: ${newList.size}")
+                android.util.Log.d("CustomizeScroll", "  submitList called - list size: ${newList.size}")
+                android.util.Log.d("CustomizeScroll", "  rcvLayer height: ${binding.rcvLayer.height}")
+
+                // ✅ FIX: Save scroll position BEFORE submitList to prevent auto-scroll
+                val layoutManager = binding.rcvLayer.layoutManager as? androidx.recyclerview.widget.GridLayoutManager
+                val savedScrollPosition = layoutManager?.findFirstVisibleItemPosition() ?: 0
+                val savedScrollOffset = layoutManager?.findViewByPosition(savedScrollPosition)?.top ?: 0
+                android.util.Log.d("CustomizeScroll", "  💾 Saving scroll position: $savedScrollPosition, offset: $savedScrollOffset")
 
                 layerCustomizeAdapter.submitList(newList) {
-                    android.util.Log.d("CustomizeScroll", "submitList callback - list committed")
+                    android.util.Log.d("CustomizeScroll", "  ✅ submitList callback - list committed")
 
-                    // 6. ⭐ Scroll rcvLayer to center the last clicked layer position IMMEDIATELY
-                    if (lastClickedLayerPosition >= 0) {
-                        val layoutManager = binding.rcvLayer.layoutManager
+                    // ✅ FIX: Restore scroll position FIRST to prevent auto-scroll
+                    layoutManager?.scrollToPositionWithOffset(savedScrollPosition, savedScrollOffset)
+                    android.util.Log.d("CustomizeScroll", "  🔄 Restored scroll position: $savedScrollPosition, offset: $savedScrollOffset")
 
-                        if (layoutManager is androidx.recyclerview.widget.GridLayoutManager) {
-                            val spanCount = layoutManager.spanCount
+                    // 6. ⭐ ALWAYS scroll to focus the clicked layer item
+                    if (lastClickedLayerPosition >= 0 && layoutManager != null) {
+                        android.util.Log.d("CustomizeScroll", "  📍 Scrolling to focus clicked item...")
 
-                            // Calculate row position
-                            val rowPosition = (lastClickedLayerPosition / spanCount) * spanCount
+                        val spanCount = layoutManager.spanCount
+                        val totalItems = newList.size
+                        val totalRows = (totalItems + spanCount - 1) / spanCount // Ceiling division
 
-                            // Calculate offset to center the row on screen
+                        // Calculate which row this position is in
+                        val itemRow = lastClickedLayerPosition / spanCount
+                        val rowPosition = itemRow * spanCount
+
+                        // ✅ NEW: Detect if item is in last 3 rows
+                        val isInLast3Rows = itemRow >= (totalRows - 3)
+
+                        android.util.Log.d("CustomizeScroll", "    spanCount: $spanCount")
+                        android.util.Log.d("CustomizeScroll", "    totalItems: $totalItems")
+                        android.util.Log.d("CustomizeScroll", "    totalRows: $totalRows")
+                        android.util.Log.d("CustomizeScroll", "    lastClickedLayerPosition: $lastClickedLayerPosition")
+                        android.util.Log.d("CustomizeScroll", "    itemRow: $itemRow")
+                        android.util.Log.d("CustomizeScroll", "    rowPosition: $rowPosition")
+                        android.util.Log.d("CustomizeScroll", "    isInLast3Rows: $isInLast3Rows")
+
+                        if (isInLast3Rows) {
+                            // ✅ For last 3 rows: scroll to show at BOTTOM of screen
+                            android.util.Log.d("CustomizeScroll", "    🔴 LAST 3 ROWS - scrolling to bottom")
+
+                            // Calculate offset to position at bottom
                             val recyclerHeight = binding.rcvLayer.height
-
-                            // Use estimated item height if view not yet laid out
                             val itemView = layoutManager.findViewByPosition(lastClickedLayerPosition)
-                            val itemHeight = itemView?.height ?: (recyclerHeight / 5) // Estimate ~1/5 of screen
+                            val itemHeight = itemView?.height ?: (recyclerHeight / 5)
 
-                            // Center the item vertically: (recyclerHeight / 2) - (itemHeight / 2)
+                            // Position at bottom: negative offset to push item down
+                            val bottomOffset = -(recyclerHeight - itemHeight)
+
+                            android.util.Log.d("CustomizeScroll", "      recyclerHeight: $recyclerHeight")
+                            android.util.Log.d("CustomizeScroll", "      itemHeight: $itemHeight")
+                            android.util.Log.d("CustomizeScroll", "      bottomOffset: $bottomOffset")
+
+                            // Use post to ensure layout is complete
+                            binding.rcvLayer.post {
+                                layoutManager.scrollToPositionWithOffset(rowPosition, bottomOffset)
+                                android.util.Log.d("CustomizeScroll", "      ✅ Scrolled to bottom")
+                            }
+                        } else {
+                            // ✅ For other items: CENTER them on screen
+                            val recyclerHeight = binding.rcvLayer.height
+                            val itemView = layoutManager.findViewByPosition(lastClickedLayerPosition)
+                            val itemHeight = itemView?.height ?: (recyclerHeight / 5)
+
+                            // Center the item: (recyclerHeight / 2) - (itemHeight / 2)
                             val centerOffset = (recyclerHeight / 2) - (itemHeight / 2)
 
-                            android.util.Log.d("CustomizeScroll", "INSTANT scroll to position $lastClickedLayerPosition - row: $rowPosition, offset: $centerOffset")
+                            android.util.Log.d("CustomizeScroll", "    🔵 REGULAR ITEM - scrolling to center")
+                            android.util.Log.d("CustomizeScroll", "      recyclerHeight: $recyclerHeight")
+                            android.util.Log.d("CustomizeScroll", "      itemHeight: $itemHeight")
+                            android.util.Log.d("CustomizeScroll", "      centerOffset: $centerOffset")
 
                             // Immediate scroll without animation
                             layoutManager.scrollToPositionWithOffset(rowPosition, centerOffset)
-                        } else {
-                            // Fallback - but shouldn't happen
-                            binding.rcvLayer.scrollToPosition(lastClickedLayerPosition)
+                            android.util.Log.d("CustomizeScroll", "      ✅ Scrolled to center")
                         }
+                    } else {
+                        android.util.Log.d("CustomizeScroll", "  ⚠️ lastClickedLayerPosition is negative or layoutManager is null - skipping scroll")
                     }
+                    android.util.Log.d("CustomizeScroll", "════════════════════════════════════════")
                 }
             }
         }

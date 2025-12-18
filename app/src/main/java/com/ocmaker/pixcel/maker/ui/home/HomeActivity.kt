@@ -44,10 +44,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
 
     override fun viewListener() {
         binding.apply {
-            actionBar.btnActionBarRight.tap { startIntentRightToLeft(SettingsActivity::class.java) }
-            btnCreate.tap { startIntentRightToLeft(ChooseCharacterActivity::class.java) }
-            btnMyAlbum.tap { showInterAll { startIntentRightToLeft(MyCreationActivity::class.java) } }
-            btnQuickMaker.tap { startIntentRightToLeft(RandomCharacterActivity::class.java) }
+            actionBar.btnActionBarRight.tap(2000) { startIntentRightToLeft(SettingsActivity::class.java) }
+            btnCreate.tap(2000) { startIntentRightToLeft(ChooseCharacterActivity::class.java) }
+            btnMyAlbum.tap(2000) { showInterAll { startIntentRightToLeft(MyCreationActivity::class.java) } }
+            btnQuickMaker.tap(2000) { startIntentRightToLeft(RandomCharacterActivity::class.java) }
         }
     }
 

@@ -18,6 +18,15 @@ class MyDesignAdapter() : BaseAdapter<MyAlbumModel, ItemMyDesignBinding>(ItemMyD
 
     override fun onBind(binding: ItemMyDesignBinding, item: MyAlbumModel, position: Int) {
         binding.apply {
+            android.util.Log.d("MyDesignAdapter", "🖼️ onBind() position=$position")
+            android.util.Log.d("MyDesignAdapter", "  Image path: ${item.path}")
+            // Check if file exists
+            val file = java.io.File(item.path)
+            val exists = file.exists()
+            val size = if (exists) file.length() else 0
+            val lastModified = if (exists) java.util.Date(file.lastModified()) else "N/A"
+            android.util.Log.d("MyDesignAdapter", "  File exists: $exists, Size: $size bytes")
+            android.util.Log.d("MyDesignAdapter", "  Last modified: $lastModified")
 
             loadImage(root, item.path, imvImage)
 

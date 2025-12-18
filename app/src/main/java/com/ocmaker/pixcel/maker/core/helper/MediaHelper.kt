@@ -44,15 +44,33 @@ object MediaHelper {
 
     // Get file from internal
     fun getImageInternal(context: Context, album: String): ArrayList<String> {
+        android.util.Log.d("MediaHelper", "📁 getImageInternal() called")
+        android.util.Log.d("MediaHelper", "  Album name: $album")
+        android.util.Log.d("MediaHelper", "  filesDir: ${context.filesDir.absolutePath}")
+
         val imagePaths = ArrayList<String>()
         val targetDir = File(context.filesDir, album)
 
+        android.util.Log.d("MediaHelper", "  Target directory: ${targetDir.absolutePath}")
+        android.util.Log.d("MediaHelper", "  Directory exists: ${targetDir.exists()}")
+        android.util.Log.d("MediaHelper", "  Is directory: ${targetDir.isDirectory}")
+
         if (targetDir.exists() && targetDir.isDirectory) {
-            targetDir.listFiles()?.filter { isImageFile(it) }?.sortedByDescending { it.lastModified() }
-                ?.forEach { file ->
-                    imagePaths.add(file.absolutePath)
-                }
+            val allFiles = targetDir.listFiles()
+            android.util.Log.d("MediaHelper", "  Total files in directory: ${allFiles?.size ?: 0}")
+
+            val imageFiles = allFiles?.filter { isImageFile(it) }?.sortedByDescending { it.lastModified() }
+            android.util.Log.d("MediaHelper", "  Image files found: ${imageFiles?.size ?: 0}")
+
+            imageFiles?.forEach { file ->
+                imagePaths.add(file.absolutePath)
+                android.util.Log.d("MediaHelper", "    - ${file.name} (${file.length()} bytes)")
+            }
+        } else {
+            android.util.Log.w("MediaHelper", "  ⚠️ Target directory does not exist or is not a directory!")
         }
+
+        android.util.Log.d("MediaHelper", "  Returning ${imagePaths.size} image paths")
         return imagePaths
     }
 
