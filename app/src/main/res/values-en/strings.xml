@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">ST193_PixelMaker</string>
+    <string name="app_name" translatable="false">Pixcel Character Maker</string>
 
     <string name="go_to_setting_message">The app needs this permission</string>
     <string name="settings">Settings</string>
@@ -53,9 +53,10 @@
     <string name="download">Download</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">Ok</string>
     <string name="wait_a_minute">Wait a minute</string>
     <string name="reset">Reset</string>
-    <string name="download_success">Download successful to the Space OC album</string>
+    <string name="download_success">Download successful to the Pixcel Character Maker album</string>
     <string name="please_check_your_internet">Please check your internet</string>
     <string name="please_select_an_image">Please select an image</string>
     <string name="error">Error</string>

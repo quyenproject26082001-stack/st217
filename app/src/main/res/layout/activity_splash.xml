@@ -39,14 +39,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
+        <ImageView
+            android:id="@+id/ivLoading"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
             android:layout_gravity="center"
-            app:lottie_autoPlay="true"
-            app:lottie_loop="true"
-            app:lottie_colorFilter="@color/white"
-            app:lottie_rawRes="@raw/lottie_splash" />
+            android:src="@drawable/ic_loading_spinner" />
 
     </FrameLayout>
 

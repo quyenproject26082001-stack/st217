@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.oc.space.ocmaker.creete'
+    namespace 'com.ocmaker.pixcel.maker'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.oc.space.ocmaker.creete"
+        applicationId "com.ocmaker.pixcel.maker"
         minSdk 24
         targetSdk 36
         versionCode 1
