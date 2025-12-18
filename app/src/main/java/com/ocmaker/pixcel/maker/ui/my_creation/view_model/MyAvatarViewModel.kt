@@ -36,9 +36,36 @@ class MyAvatarViewModel : ViewModel() {
     var editModel = SuggestionModel()
 
     fun loadMyAvatar(context: Context) {
-        val editList = MediaHelper.readListFromFile<SuggestionModel>(context, ValueKey.EDIT_FILE_INTERNAL).map { MyAlbumModel(it.pathInternalEdit) }
-        _myAvatarList.value = editList.toCollection(ArrayList())
+        android.util.Log.d("MyAvatarViewModel", "📂 loadMyAvatar() START")
+        android.util.Log.d("MyAvatarViewModel", "Thread: ${Thread.currentThread().name}")
+        android.util.Log.d("MyAvatarViewModel", "Context: ${context.javaClass.simpleName}")
+
+        try {
+            val editList = MediaHelper.readListFromFile<SuggestionModel>(context, ValueKey.EDIT_FILE_INTERNAL)
+            android.util.Log.d("MyAvatarViewModel", "✅ Loaded ${editList.size} items from EDIT_FILE_INTERNAL")
+
+            editList.forEachIndexed { index, suggestion ->
+                android.util.Log.d("MyAvatarViewModel", "  [$index] path: ${suggestion.pathInternalEdit}")
+                android.util.Log.d("MyAvatarViewModel", "  [$index] avatarPath: ${suggestion.avatarPath}")
+                // Check if file exists
+                val file = java.io.File(suggestion.pathInternalEdit)
+                val exists = file.exists()
+                val size = if (exists) file.length() else 0
+                android.util.Log.d("MyAvatarViewModel", "  [$index] File exists: $exists, Size: $size bytes")
+            }
+
+            val albumList = editList.map { MyAlbumModel(it.pathInternalEdit) }.toCollection(ArrayList())
+            _myAvatarList.value = albumList
+
+            android.util.Log.d("MyAvatarViewModel", "✅ Updated myAvatarList with ${albumList.size} items")
+            android.util.Log.d("MyAvatarViewModel", "Current myAvatarList size: ${_myAvatarList.value.size}")
+        } catch (e: Exception) {
+            android.util.Log.e("MyAvatarViewModel", "❌ ERROR loading avatars: ${e.message}", e)
+            _myAvatarList.value = arrayListOf()
+        }
+
         checkLastItem()
+        android.util.Log.d("MyAvatarViewModel", "📂 loadMyAvatar() END")
     }
 
     private fun checkLastItem() {
@@ -75,7 +102,8 @@ class MyAvatarViewModel : ViewModel() {
 
         editModel = originList.first { it.pathInternalEdit == pathInternal }
         positionCharacter = allData.indexOfFirst { it.avatar == editModel.avatarPath }
-        isApi = positionCharacter >= ValueKey.POSITION_API
+        // ✅ FIX: Use isFromAPI flag from character data instead of position
+        isApi = if (positionCharacter >= 0) allData[positionCharacter].isFromAPI else false
         MediaHelper.writeModelToFile(context, ValueKey.SUGGESTION_FILE_INTERNAL, editModel)
     }
 

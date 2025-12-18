@@ -104,7 +104,7 @@
                         android:gravity="center"
                         android:paddingVertical="9dp"
                         android:text="@string/no"
-                        android:textColor="#291985"
+                        android:textColor="#01579B"
                         android:textSize="16sp" />
 
                     <!--                    btnYes-->

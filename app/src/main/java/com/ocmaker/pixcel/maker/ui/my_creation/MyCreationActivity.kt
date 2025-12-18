@@ -80,6 +80,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             btnActionBarRight.gone()
             btnActionBarNextRight.gone()
         }
+        binding.lnlBottom.isSelected =true
     }
 
     override fun dataObservable() {
@@ -400,6 +401,13 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
     override fun onRestart() {
         super.onRestart()
+        android.util.Log.w("MyCreationActivity", "🔄 onRestart() called - Activity restarting after being stopped")
+        android.util.Log.w("MyCreationActivity", "Current tab: ${if (viewModel.typeStatus.value == ValueKey.AVATAR_TYPE) "MyAvatar" else "MyDesign"}")
+        android.util.Log.w("MyCreationActivity", "Selection mode: $isInSelectionMode")
+
+        // Check permission status
+        val hasPermission = checkPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE))
+        android.util.Log.w("MyCreationActivity", "📱 Storage permission: $hasPermission")
 
         // Exit selection mode when returning from another activity
         if (isInSelectionMode) {
@@ -408,9 +416,11 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
             when {
                 avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
+                    android.util.Log.d("MyCreationActivity", "Resetting MyAvatarFragment selection mode")
                     avatarFragment.resetSelectionMode()
                 }
                 designFragment is MyDesignFragment && designFragment.isVisible -> {
+                    android.util.Log.d("MyCreationActivity", "Resetting MyDesignFragment selection mode")
                     designFragment.resetSelectionMode()
                 }
             }
@@ -418,6 +428,27 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         }
 
        // initNativeCollab()
+       android.util.Log.w("MyCreationActivity", "🔄 onRestart() END")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        android.util.Log.w("MyCreationActivity", "🔵 onStart() called - Activity becoming visible")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        android.util.Log.w("MyCreationActivity", "🟢 onResume() called - Activity in foreground")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        android.util.Log.w("MyCreationActivity", "🟡 onPause() called - Activity losing focus")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        android.util.Log.w("MyCreationActivity", "🔴 onStop() called - Activity no longer visible")
     }
 
     fun enterSelectionMode() {

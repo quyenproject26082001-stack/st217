@@ -189,7 +189,9 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
 
     private fun handleItemClick(model: SuggestionModel) {
         customizeCharacterViewModel.positionSelected = dataViewModel.allData.value.indexOfFirst { it.avatar == model.avatarPath }
-        viewModel.setIsDataAPI(customizeCharacterViewModel.positionSelected >= ValueKey.POSITION_API)
+        // ✅ FIX: Use isFromAPI flag from character data instead of position
+        val selectedCharacter = dataViewModel.allData.value.getOrNull(customizeCharacterViewModel.positionSelected)
+        viewModel.setIsDataAPI(selectedCharacter?.isFromAPI ?: false)
         viewModel.checkDataInternet(this@RandomCharacterActivity) {
             lifecycleScope.launch {
                 showLoading()

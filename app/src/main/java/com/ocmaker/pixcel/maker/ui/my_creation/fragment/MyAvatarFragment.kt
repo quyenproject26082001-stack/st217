@@ -206,12 +206,18 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
     }
 
     private fun resetData() {
+        android.util.Log.d("MyAvatarFragment", "========================================")
+        android.util.Log.d("MyAvatarFragment", "resetData() called")
+        android.util.Log.d("MyAvatarFragment", "Current thread: ${Thread.currentThread().name}")
+        android.util.Log.d("MyAvatarFragment", "Fragment state: ${lifecycle.currentState}")
         viewModel.loadMyAvatar(myAlbumActivity)
         // Hide deleteSection and bottom bar
         myAlbumActivity.binding.lnlBottom.gone()
         myAlbumActivity.exitSelectionMode()
         // Disable select mode margins in adapter
         myAvatarAdapter.isSelectMode = false
+        android.util.Log.d("MyAvatarFragment", "resetData() completed")
+        android.util.Log.d("MyAvatarFragment", "========================================")
     }
 
     fun deleteSelectedItems() {
@@ -246,6 +252,29 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
 
     override fun onStart() {
         super.onStart()
+        android.util.Log.w("MyAvatarFragment", "🔵 onStart() called - Fragment is starting")
         resetData()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        android.util.Log.w("MyAvatarFragment", "🟢 onResume() called - Fragment is visible")
+        // Force reload when returning from edit
+    }
+
+    override fun onPause() {
+        super.onPause()
+        android.util.Log.w("MyAvatarFragment", "🟡 onPause() called - Fragment losing focus")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        android.util.Log.w("MyAvatarFragment", "🔴 onStop() called - Fragment no longer visible")
+        android.util.Log.w("MyAvatarFragment", "Current image count: ${viewModel.myAvatarList.value.size}")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        android.util.Log.w("MyAvatarFragment", "💀 onDestroyView() called - View being destroyed")
     }
 }

@@ -176,12 +176,21 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             actionBar.apply {
                // setImageActionBar(btnActionBarRight, R.drawable.ic_delete_view)
                // setImageActionBar(btnActionBarNextToRight, R.drawable.ic_edit_2)
-                setTextActionBar(tvCenter, getString(R.string.my_character_in))
-                setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
+                setTextActionBar(tvCenter, getString(R.string.my_pixel))
+
+                // Hide delete icon when coming from design section
+                if (viewModel.statusFrom == ValueKey.MY_DESIGN_TYPE) {
+                    btnActionBarRight.gone()
+                } else {
+                    setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
+                    btnActionBarRight.visible()
+                }
+
                 setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
                 btnActionBarNextRight.visible()
                 // Hide btnShare in view mode
                 btnShare.gone()
+
             }
 //            cvImage.apply {
 //                radius = 16f

@@ -54,7 +54,11 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
         }
         chooseCharacterAdapter.onItemClick = { position ->
             AdmobEvent.logEvent(this@ChooseCharacterActivity, "click_item_$position", null)
-            if (position >= ValueKey.POSITION_API) {
+            // ✅ FIX: Use isFromAPI flag from character data instead of position
+            val selectedCharacter = dataViewModel.allData.value.getOrNull(position)
+            val needsInternet = selectedCharacter?.isFromAPI ?: false
+
+            if (needsInternet) {
                 InternetHelper.checkInternet(this) { state ->
                     if (state == HandleState.SUCCESS) {
                         showInterAll { startIntentRightToLeft(CustomizeCharacterActivity::class.java, position) }

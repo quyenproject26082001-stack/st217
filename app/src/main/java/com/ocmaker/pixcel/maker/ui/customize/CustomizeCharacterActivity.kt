@@ -79,8 +79,10 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                     if (list.isNotEmpty()) {
                         viewModel.positionSelected = intent.getIntExtra(IntentKey.INTENT_KEY, 0)
                         viewModel.statusFrom = intent.getIntExtra(IntentKey.STATUS_FROM_KEY, ValueKey.CREATE)
-                        viewModel.setDataCustomize(list[viewModel.positionSelected])
-                        viewModel.setIsDataAPI(viewModel.positionSelected >= ValueKey.POSITION_API)
+                        val selectedData = list[viewModel.positionSelected]
+                        viewModel.setDataCustomize(selectedData)
+                        // ✅ FIX: Use isFromAPI flag instead of position check
+                        viewModel.setIsDataAPI(selectedData.isFromAPI)
                         initData()
                     }
                 }
