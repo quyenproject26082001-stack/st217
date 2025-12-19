@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import com.ocmaker.pixcel.maker.R
+import com.ocmaker.pixcel.maker.core.extensions.hideNavigation
 
 import com.ocmaker.pixcel.maker.core.helper.BitmapHelper
 import com.ocmaker.pixcel.maker.core.helper.InternetHelper
@@ -593,9 +594,12 @@ class CustomizeCharacterViewModel : ViewModel() {
                 dialog.onYesClick = {
                     dialog.dismiss()
                 }
+
             }
         }
     }
+
+
 
     suspend fun resetDataList() {
         val quantityLayer = _dataCustomize.value!!.layerList.size

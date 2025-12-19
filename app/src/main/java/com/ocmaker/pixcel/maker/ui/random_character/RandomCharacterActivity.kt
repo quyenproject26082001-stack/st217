@@ -109,30 +109,31 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
             // Get data from list
             val deferred1 = async {
                 val timeStart1 = System.currentTimeMillis()
-                val size = if (dataViewModel.allData.value.size > ValueKey.POSITION_API){
-                    dataViewModel.allData.value.size
-                }else{
-                    if (InternetHelper.isInternetAvailable(this@RandomCharacterActivity)) {
-                        dataViewModel.allData.value.size
-                    } else {
-                        ValueKey.POSITION_API
-                    }
+                val hasInternet = InternetHelper.isInternetAvailable(this@RandomCharacterActivity)
+
+                // Filter data: if no internet, show only local data (isFromAPI = false)
+                val filteredData = if (hasInternet) {
+                    dataViewModel.allData.value
+                } else {
+                    dataViewModel.allData.value.filter { !it.isFromAPI }
                 }
 
                 dLog("==========================================================")
-                dLog("RandomCharacter: Starting to process $size characters")
+                dLog("RandomCharacter: Starting to process ${filteredData.size} characters")
                 dLog("Total data available: ${dataViewModel.allData.value.size}")
-                dLog("POSITION_API: ${ValueKey.POSITION_API}")
+                dLog("Has Internet: $hasInternet")
+                dLog("Filtered to local only: ${!hasInternet}")
                 dLog("==========================================================")
 
-                for (i in 0 until size) {
+                for (i in 0 until filteredData.size) {
                     try {
                         dLog("---------- Processing Character $i ----------")
-                        customizeCharacterViewModel.positionSelected = i
-                        val currentData = dataViewModel.allData.value[i]
+                        val currentData = filteredData[i]
+                        customizeCharacterViewModel.positionSelected = dataViewModel.allData.value.indexOf(currentData)
                         dLog("Character name: ${currentData.dataName}")
                         dLog("Avatar path: ${currentData.avatar}")
                         dLog("Layer count: ${currentData.layerList.size}")
+                        dLog("Is from API: ${currentData.isFromAPI}")
 
                         customizeCharacterViewModel.setDataCustomize(currentData)
                         customizeCharacterViewModel.updateAvatarPath(currentData.avatar)

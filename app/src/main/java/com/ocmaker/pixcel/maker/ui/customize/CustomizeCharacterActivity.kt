@@ -3,6 +3,7 @@ package com.ocmaker.pixcel.maker.ui.customize
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
@@ -45,7 +46,8 @@ import kotlin.jvm.java
 
 class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     private val viewModel: CustomizeCharacterViewModel by viewModels()
-    private var lastClickedLayerPosition: Int = -1 // Track last clicked layer position for scrolling
+    private var lastClickedLayerPosition: Int =
+        -1 // Track last clicked layer position for scrolling
     private val dataViewModel: DataViewModel by viewModels()
     val colorLayerCustomizeAdapter by lazy { ColorLayerCustomizeAdapter(this) }
     val layerCustomizeAdapter by lazy { LayerCustomizeAdapter(this) }
@@ -77,7 +79,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                 dataViewModel.allData.collect { list ->
                     if (list.isNotEmpty()) {
                         viewModel.positionSelected = intent.getIntExtra(IntentKey.INTENT_KEY, 0)
-                        viewModel.statusFrom = intent.getIntExtra(IntentKey.STATUS_FROM_KEY, ValueKey.CREATE)
+                        viewModel.statusFrom =
+                            intent.getIntExtra(IntentKey.STATUS_FROM_KEY, ValueKey.CREATE)
                         viewModel.setDataCustomize(list[viewModel.positionSelected])
                         viewModel.setIsDataAPI(list[viewModel.positionSelected].isFromAPI)
                         initData()
@@ -145,7 +148,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             setImageActionBar(btnActionBarCenter, R.drawable.ic_reset)
             btnActionBarRightText.visible()
             btnActionBarRight.invisible()
-            tvRightText.isSelected =true
+            tvRightText.isSelected = true
         }
 
     }
@@ -171,18 +174,32 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
 
     private fun handleRcv() {
         layerCustomizeAdapter.onItemClick =
-            { item, position -> viewModel.checkDataInternet(this) { handleFillLayer(item, position) } }
+            { item, position ->
+                viewModel.checkDataInternet(this) {
+                    handleFillLayer(
+                        item,
+                        position
+                    )
+                }
+            }
 
         layerCustomizeAdapter.onNoneClick =
             { position -> viewModel.checkDataInternet(this) { handleNoneLayer(position) } }
 
-        layerCustomizeAdapter.onRandomClick = { viewModel.checkDataInternet(this) { handleRandomLayer() } }
+        layerCustomizeAdapter.onRandomClick =
+            { viewModel.checkDataInternet(this) { handleRandomLayer() } }
 
         colorLayerCustomizeAdapter.onItemClick =
             { position -> viewModel.checkDataInternet(this) { handleChangeColorLayer(position) } }
 
         bottomNavigationCustomizeAdapter.onItemClick =
-            { positionBottomNavigation -> viewModel.checkDataInternet(this) { handleClickBottomNavigation(positionBottomNavigation) } }
+            { positionBottomNavigation ->
+                viewModel.checkDataInternet(this) {
+                    handleClickBottomNavigation(
+                        positionBottomNavigation
+                    )
+                }
+            }
     }
 
     private fun initData() {
@@ -190,8 +207,14 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             eLog("initData: ${throwable.message}")
             CoroutineScope(Dispatchers.Main).launch {
                 dismissLoading()
+                hideNavigation(true)
+
                 val dialogExit =
-                    YesNoDialog(this@CustomizeCharacterActivity, R.string.error, R.string.an_error_occurred)
+                    YesNoDialog(
+                        this@CustomizeCharacterActivity,
+                        R.string.error,
+                        R.string.an_error_occurred
+                    )
                 dialogExit.show()
                 dialogExit.onNoClick = {
                     dialogExit.dismiss()
@@ -200,7 +223,11 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                 dialogExit.onYesClick = {
                     dialogExit.dismiss()
                     hideNavigation(false)
-                    startIntentRightToLeft(CustomizeCharacterActivity::class.java, viewModel.positionSelected)
+
+                    startIntentRightToLeft(
+                        CustomizeCharacterActivity::class.java,
+                        viewModel.positionSelected
+                    )
                     finish()
                 }
             }
@@ -250,7 +277,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             val deferred3 = async {
                 if (deferred1.await() && deferred2.await()) {
                     if (viewModel.statusFrom == ValueKey.CREATE) {
-                        pathImageDefault = viewModel.dataCustomize.value!!.layerList.first().layer.first().image
+                        pathImageDefault =
+                            viewModel.dataCustomize.value!!.layerList.first().layer.first().image
                         viewModel.setIsSelectedItem(viewModel.positionCustom)
                         viewModel.setPathSelected(viewModel.positionCustom, pathImageDefault)
                         viewModel.setKeySelected(viewModel.positionNavSelected, pathImageDefault)
@@ -286,6 +314,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                     dismissLoading()
                     delay(300)
                     dismissLoading()
+                    hideNavigation(true)
                     dLog("main")
                 }
             }
@@ -352,7 +381,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             viewModel.setKeySelected(viewModel.positionNavSelected, "")
             viewModel.setItemNavList(viewModel.positionNavSelected, position)
             withContext(Dispatchers.Main) {
-                Glide.with(this@CustomizeCharacterActivity).clear(viewModel.imageViewList[viewModel.positionCustom])
+                Glide.with(this@CustomizeCharacterActivity)
+                    .clear(viewModel.imageViewList[viewModel.positionCustom])
                 layerCustomizeAdapter.submitList(viewModel.itemNavList[viewModel.positionNavSelected])
             }
         }
@@ -395,7 +425,10 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                 // 5. ⭐ Refresh rcvLayer với data mới (tất cả items đã đổi màu)
                 // Sử dụng .toList() để tạo list mới, giúp DiffUtil detect changes
                 val newList = viewModel.itemNavList[viewModel.positionNavSelected].toList()
-                android.util.Log.d("CustomizeScroll", "submitList called - list size: ${newList.size}")
+                android.util.Log.d(
+                    "CustomizeScroll",
+                    "submitList called - list size: ${newList.size}"
+                )
 
                 layerCustomizeAdapter.submitList(newList) {
                     android.util.Log.d("CustomizeScroll", "submitList callback - list committed")
@@ -414,13 +447,18 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                             val recyclerHeight = binding.rcvLayer.height
 
                             // Use estimated item height if view not yet laid out
-                            val itemView = layoutManager.findViewByPosition(lastClickedLayerPosition)
-                            val itemHeight = itemView?.height ?: (recyclerHeight / 5) // Estimate ~1/5 of screen
+                            val itemView =
+                                layoutManager.findViewByPosition(lastClickedLayerPosition)
+                            val itemHeight =
+                                itemView?.height ?: (recyclerHeight / 5) // Estimate ~1/5 of screen
 
                             // Center the item vertically: (recyclerHeight / 2) - (itemHeight / 2)
                             val centerOffset = (recyclerHeight / 2) - (itemHeight / 2)
 
-                            android.util.Log.d("CustomizeScroll", "INSTANT scroll to position $lastClickedLayerPosition - row: $rowPosition, offset: $centerOffset")
+                            android.util.Log.d(
+                                "CustomizeScroll",
+                                "INSTANT scroll to position $lastClickedLayerPosition - row: $rowPosition, offset: $centerOffset"
+                            )
 
                             // Immediate scroll without animation
                             layoutManager.scrollToPositionWithOffset(rowPosition, centerOffset)
@@ -445,7 +483,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun confirmExit() {
-        val dialog = YesNoDialog(this, R.string.exit_cus, R.string.haven_t_saved_it_yet_do_you_want_to_exit)
+        val dialog =
+            YesNoDialog(this, R.string.exit_cus, R.string.haven_t_saved_it_yet_do_you_want_to_exit)
         LanguageHelper.setLocale(this)
         dialog.show()
         dialog.onYesClick = {
@@ -460,51 +499,58 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
 
     private fun handleSave() {
         lifecycleScope.launch(Dispatchers.IO) {
-            viewModel.saveImageFromView(this@CustomizeCharacterActivity, binding.layoutCustomLayer).collect { result ->
-                when (result) {
-                    is SaveState.Loading -> showLoading()
+            viewModel.saveImageFromView(this@CustomizeCharacterActivity, binding.layoutCustomLayer)
+                .collect { result ->
+                    when (result) {
+                        is SaveState.Loading -> showLoading()
 
-                    is SaveState.Error -> {
-                        dismissLoading()
-                        withContext(Dispatchers.Main) {
-                            showToast(R.string.save_failed_please_try_again)
+                        is SaveState.Error -> {
+                            dismissLoading()
+                            withContext(Dispatchers.Main) {
+                                showToast(R.string.save_failed_please_try_again)
+                            }
                         }
-                    }
 
-                    is SaveState.Success -> {
-                        when (viewModel.statusFrom) {
-                            ValueKey.EDIT -> {
-                                viewModel.updateEditCharacter(this@CustomizeCharacterActivity, result.path)
-                                dismissLoading()
-                                withContext(Dispatchers.Main) {
-                                    logEvent("click_item_${viewModel.positionSelected}_edit")
-                                    showInterAll {
-                                        startIntentRightToLeft(
-                                            AddCharacterActivity::class.java,
-                                            result.path
-                                        )
+                        is SaveState.Success -> {
+                            when (viewModel.statusFrom) {
+                                ValueKey.EDIT -> {
+                                    viewModel.updateEditCharacter(
+                                        this@CustomizeCharacterActivity,
+                                        result.path
+                                    )
+                                    dismissLoading()
+                                    withContext(Dispatchers.Main) {
+                                        logEvent("click_item_${viewModel.positionSelected}_edit")
+                                        showInterAll {
+                                            startIntentRightToLeft(
+                                                AddCharacterActivity::class.java,
+                                                result.path
+                                            )
+                                        }
+                                    }
+                                }
+
+                                else -> {
+                                    viewModel.addCharacterToEditList(
+                                        this@CustomizeCharacterActivity,
+                                        result.path
+                                    )
+                                    dismissLoading()
+                                    withContext(Dispatchers.Main) {
+                                        logEvent("click_item_${viewModel.positionSelected}_done")
+                                        showInterAll {
+                                            startIntentRightToLeft(
+                                                AddCharacterActivity::class.java,
+                                                result.path
+                                            )
+                                        }
                                     }
                                 }
                             }
 
-                            else -> {
-                                viewModel.addCharacterToEditList(this@CustomizeCharacterActivity, result.path)
-                                dismissLoading()
-                                withContext(Dispatchers.Main) {
-                                    logEvent("click_item_${viewModel.positionSelected}_done")
-                                    showInterAll {
-                                        startIntentRightToLeft(
-                                            AddCharacterActivity::class.java,
-                                            result.path
-                                        )
-                                    }
-                                }
-                            }
                         }
-
                     }
                 }
-            }
         }
     }
 
@@ -587,16 +633,52 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     override fun onRestart() {
         super.onRestart()
         // initNativeCollab()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        android.util.Log.d("CustomizeLifecycle", "onStart() called")
     }
 
     override fun onResume() {
         super.onResume()
-        hideNavigation(false)
+        android.util.Log.d("CustomizeLifecycle", "onResume() called")
     }
+
+    override fun onPause() {
+        super.onPause()
+        android.util.Log.d("CustomizeLifecycle", "onPause() called")
+    }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {
-            hideNavigation(false)
+            applyUiCustomize()
+            hideNavigation(true)
+            android.util.Log.d("UI", "flags=${window.decorView.systemUiVisibility}")
+
         }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun applyUiCustomize() {
+        // Cho phép app tự vẽ màu system bar
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+        // Transparent status bar
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.navigationBarColor = android.graphics.Color.TRANSPARENT
+
+        // Flags
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                     View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        // nếu muốn icon status bar đen thì thêm:
+        // or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 }
