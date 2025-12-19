@@ -7,6 +7,7 @@ import androidx.lifecycle.lifecycleScope
 import com.lvt.ads.util.Admob
 import com.ocmaker.pixcel.maker.R
 import com.ocmaker.pixcel.maker.core.base.BaseActivity
+import com.ocmaker.pixcel.maker.core.extensions.hideNavigation
 import com.ocmaker.pixcel.maker.core.extensions.loadNativeCollabAds
 import com.ocmaker.pixcel.maker.core.extensions.rateApp
 import com.ocmaker.pixcel.maker.core.extensions.select
@@ -114,6 +115,32 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
         LanguageHelper.setLocale(this)
         updateText()
         //initNativeCollab()
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+        startStaggeredAnimations()
+
+        }
+    }
+
+    private fun startStaggeredAnimations() {
+        // Card 1: Slide from right (no delay)
+        val slideFromRight1 = AnimationUtils.loadAnimation(this, R.anim.slide_in_right_home)
+        binding.btnCreate.startAnimation(slideFromRight1)
+
+        // Card 2: Slide from left (200ms delay)
+        val slideFromLeft = AnimationUtils.loadAnimation(this, R.anim.slide_in_left_home)
+        binding.btnQuickMaker.postDelayed({
+            binding.btnQuickMaker.startAnimation(slideFromLeft)
+        }, 200)
+
+        // Card 3: Slide from right (400ms delay)
+        val slideFromRight2 = AnimationUtils.loadAnimation(this, R.anim.slide_in_right_home)
+        binding.btnMyAlbum.postDelayed({
+            binding.btnMyAlbum.startAnimation(slideFromRight2)
+        }, 400)
     }
 
 //    fun initNativeCollab() {
