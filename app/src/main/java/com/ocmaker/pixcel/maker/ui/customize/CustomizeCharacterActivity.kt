@@ -79,7 +79,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                         viewModel.positionSelected = intent.getIntExtra(IntentKey.INTENT_KEY, 0)
                         viewModel.statusFrom = intent.getIntExtra(IntentKey.STATUS_FROM_KEY, ValueKey.CREATE)
                         viewModel.setDataCustomize(list[viewModel.positionSelected])
-                        viewModel.setIsDataAPI(viewModel.positionSelected >= ValueKey.POSITION_API)
+                        viewModel.setIsDataAPI(list[viewModel.positionSelected].isFromAPI)
                         initData()
                     }
                 }
@@ -127,7 +127,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             actionBar.apply {
                 btnActionBarLeft.tap { confirmExit() }
                 btnActionBarCenter.tap { handleReset() }
-                btnFlip.tap { viewModel.checkDataInternet(this@CustomizeCharacterActivity) { viewModel.setIsFlip() } }
+                btnFlip.tap { viewModel.setIsFlip() }
                 binding.actionBar.btnActionBarRightText.tap {
                     handleSave()
                 }
@@ -592,5 +592,11 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     override fun onResume() {
         super.onResume()
         hideNavigation(false)
+    }
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideNavigation(false)
+        }
     }
 }

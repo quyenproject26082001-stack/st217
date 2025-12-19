@@ -116,4 +116,5 @@
     <string name="exit_bg">अपनी पृष्ठभूमि से बाहर निकलें</string>
     <string name="exit_cus">अपने कस्टमाइज़ेशन से बाहर निकलें</string>
     <string name="loading">लोड हो रहा है</string>
+    <string name="internet_required_for_more_characters">Internet required for more characters</string>
 </resources>

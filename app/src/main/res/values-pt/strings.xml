@@ -116,4 +116,5 @@
     <string name="exit_bg">Sair do seu fundo</string>
     <string name="exit_cus">Sair da sua personalização</string>
     <string name="loading">Carregando</string>
+    <string name="internet_required_for_more_characters">Internet required for more characters</string>
 </resources>

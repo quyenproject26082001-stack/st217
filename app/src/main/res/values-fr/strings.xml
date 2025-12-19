@@ -116,4 +116,5 @@
     <string name="exit_bg">Quitter votre arrière-plan</string>
     <string name="exit_cus">Quitter votre personnalisation</string>
     <string name="loading">Chargement</string>
+    <string name="internet_required_for_more_characters">Internet required for more characters</string>
 </resources>

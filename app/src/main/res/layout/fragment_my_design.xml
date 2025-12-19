@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#A1CCEF"
     tools:context=".ui.my_creation.fragment.MyDesignFragment">
 
     <!--    rcvMyDesign-->
@@ -11,7 +12,7 @@
         android:id="@+id/rcvMyDesign"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingHorizontal="12dp"
+        android:paddingHorizontal="10dp"
         android:clipChildren="false"
         android:layout_marginTop="11.5dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

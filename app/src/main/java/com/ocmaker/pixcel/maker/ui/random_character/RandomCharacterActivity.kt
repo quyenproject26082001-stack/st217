@@ -224,4 +224,11 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
         super.onRestart()
         //initNativeCollab()
     }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideNavigation(false)
+        }
+    }
 }
