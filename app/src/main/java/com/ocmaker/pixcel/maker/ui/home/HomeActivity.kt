@@ -2,6 +2,7 @@ package com.ocmaker.pixcel.maker.ui.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.animation.AnimationUtils
 import androidx.lifecycle.lifecycleScope
 import com.lvt.ads.util.Admob
 import com.ocmaker.pixcel.maker.R
@@ -42,6 +43,10 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
         binding.tv1.isSelected = true
         binding.tv3.isSelected = true
         binding.tv2.isSelected = true
+
+        // Apply elastic bounce animation to app name
+        val elasticBounce = AnimationUtils.loadAnimation(this, R.anim.elastic_bounce)
+        binding.imvAppName.startAnimation(elasticBounce)
     }
 
     override fun viewListener() {

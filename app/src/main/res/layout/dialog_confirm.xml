@@ -61,6 +61,7 @@
 
 
                     <ImageView
+                        android:id="@+id/ic_dot"
                         android:layout_width="35dp"
                         android:layout_height="9dp"
                         android:layout_marginStart="9dp"

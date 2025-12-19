@@ -1,6 +1,7 @@
 package com.ocmaker.pixcel.maker.dialog
 
 import android.app.Activity
+import android.graphics.drawable.AnimationDrawable
 import com.ocmaker.pixcel.maker.R
 import com.ocmaker.pixcel.maker.core.base.BaseDialog
 import com.ocmaker.pixcel.maker.core.extensions.setBackgroundConnerSmooth
@@ -13,6 +14,10 @@ class WaitingDialog(val context: Activity) :
     override val isCancelableByBack: Boolean = false
 
     override fun initView() {
+        // Start loading animation for dot
+        binding.icDotLoading.setImageResource(R.drawable.dot_loading_animation)
+        val dotAnimation = binding.icDotLoading.drawable as? AnimationDrawable
+        dotAnimation?.start()
     }
 
     override fun initAction() {}

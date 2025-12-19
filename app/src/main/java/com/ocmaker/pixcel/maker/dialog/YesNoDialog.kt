@@ -1,6 +1,7 @@
 package com.ocmaker.pixcel.maker.dialog
 
 import android.app.Activity
+import android.graphics.drawable.AnimationDrawable
 import com.ocmaker.pixcel.maker.core.extensions.gone
 import com.ocmaker.pixcel.maker.core.extensions.hideNavigation
 import com.ocmaker.pixcel.maker.core.extensions.tap
@@ -28,6 +29,11 @@ class YesNoDialog(
         }
         context.hideNavigation()
         binding.tvTitle.isSelected =true
+
+        // Start loading animation for ic_dot
+        binding.icDot.setImageResource(R.drawable.dot_loading_animation)
+        val dotAnimation = binding.icDot.drawable as? AnimationDrawable
+        dotAnimation?.start()
     }
 
     override fun initAction() {
