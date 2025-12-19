@@ -33,6 +33,10 @@ import com.ocmaker.pixcel.maker.core.utils.state.SaveState
 class RandomCharacterAdapter(val context: Context) :
     BaseAdapter<SuggestionModel, ItemRandomCharacterBinding>(ItemRandomCharacterBinding::inflate) {
     var onItemClick: ((SuggestionModel) -> Unit) = {}
+
+    // ✅ Map to track active jobs per position to cancel them when recycled
+    private val activeJobs = mutableMapOf<Int, kotlinx.coroutines.Job>()
+
     override fun onBind(binding: ItemRandomCharacterBinding, item: SuggestionModel, position: Int) {
         binding.apply {
             Log.d("RandomAdapter", "========================================")
@@ -40,6 +44,20 @@ class RandomCharacterAdapter(val context: Context) :
             Log.d("RandomAdapter", "Avatar path: ${item.avatarPath}")
             Log.d("RandomAdapter", "Selected paths count: ${item.pathSelectedList.size}")
             Log.d("RandomAdapter", "Internal random path: ${item.pathInternalRandom}")
+
+            // ✅ Cancel any existing job for this position
+            activeJobs[position]?.cancel()
+
+            // ✅ OPTIMIZATION: If already processed, just load the cached image
+            if (item.pathInternalRandom.isNotEmpty()) {
+                Log.d("RandomAdapter", "⚡ CACHED - Loading from: ${item.pathInternalRandom}")
+                sflShimmer.gone()
+                sflShimmer.stopShimmer()
+                imvImage.visible()
+                Glide.with(root).load(item.pathInternalRandom).into(imvImage)
+                root.tap { onItemClick.invoke(item) }
+                return@apply
+            }
 
             sflShimmer.visible()
             sflShimmer.startShimmer()
@@ -53,7 +71,8 @@ class RandomCharacterAdapter(val context: Context) :
                 Log.e("RandomAdapter", "✗ ERROR at position $position: ${throwable.message}")
                 throwable.printStackTrace()
             }
-            CoroutineScope(SupervisorJob() + Dispatchers.IO + handleExceptionCoroutine).launch {
+            // ✅ Store the job so we can cancel it if the view is recycled
+            val job = CoroutineScope(SupervisorJob() + Dispatchers.IO + handleExceptionCoroutine).launch {
                 val job1 = async {
                     Log.d("RandomAdapter", "Loading first layer: ${item.pathSelectedList.first()}")
                     val bitmapDefault = Glide.with(context).asBitmap().load(item.pathSelectedList.first()).submit().get()
@@ -125,7 +144,16 @@ class RandomCharacterAdapter(val context: Context) :
                 }
             }
 
+            // ✅ Save the job reference
+            activeJobs[position] = job
+
             root.tap { onItemClick.invoke(item) }
         }
+    }
+
+    // ✅ Clean up when adapter is destroyed
+    fun cancelAllJobs() {
+        activeJobs.values.forEach { it.cancel() }
+        activeJobs.clear()
     }
 }

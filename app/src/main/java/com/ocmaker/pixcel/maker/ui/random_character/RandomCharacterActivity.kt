@@ -280,4 +280,10 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
         // nếu muốn icon status bar đen thì thêm:
         // or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // ✅ Cancel all pending image processing jobs to prevent memory leaks
+        randomCharacterAdapter.cancelAllJobs()
+    }
 }
