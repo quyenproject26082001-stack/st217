@@ -521,11 +521,15 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                                     dismissLoading()
                                     withContext(Dispatchers.Main) {
                                         logEvent("click_item_${viewModel.positionSelected}_edit")
+                                        // ✅ 1) GỬI RESULT VỀ ViewActivity NGAY (nhưng chưa finish)
+                                        val data = android.content.Intent().apply {
+                                            putExtra("NEW_PATH", result.path)
+                                        }
+                                        setResult(RESULT_OK, data)
+
+                                        // ✅ 2) VẪN SANG AddCharacterActivity như bạn muốn
                                         showInterAll {
-                                            startIntentRightToLeft(
-                                                AddCharacterActivity::class.java,
-                                                result.path
-                                            )
+                                            startIntentRightToLeft(AddCharacterActivity::class.java, result.path)
                                         }
                                     }
                                 }

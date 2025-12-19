@@ -1,5 +1,6 @@
 package com.ocmaker.pixcel.maker.ui.view
 
+import android.app.Activity
 import android.app.ActivityOptions
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -8,6 +9,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.FrameLayout
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
@@ -15,6 +17,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.bumptech.glide.Glide
+import com.bumptech.glide.signature.ObjectKey
 import com.lvt.ads.util.Admob
 import com.ocmaker.pixcel.maker.R
 import com.ocmaker.pixcel.maker.core.base.BaseActivity
@@ -25,6 +29,7 @@ import com.ocmaker.pixcel.maker.core.extensions.handleBackLeftToRight
 import com.ocmaker.pixcel.maker.core.extensions.hideNavigation
 import com.ocmaker.pixcel.maker.core.extensions.invisible
 import com.ocmaker.pixcel.maker.core.extensions.loadImage
+import com.ocmaker.pixcel.maker.core.extensions.loadImageFromFile
 import com.ocmaker.pixcel.maker.core.extensions.loadNativeCollabAds
 import com.ocmaker.pixcel.maker.core.extensions.requestPermission
 import com.ocmaker.pixcel.maker.core.extensions.select
@@ -55,6 +60,7 @@ import com.ocmaker.pixcel.maker.ui.permission.PermissionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class ViewActivity : BaseActivity<ActivityViewBinding>() {
     private val viewModel: ViewViewModel by viewModels()
@@ -123,6 +129,26 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             btnDownload.gone()
         }
     }
+
+//    @SuppressLint("CheckResult")
+//    fun loadImageFromFile(path: String) {
+//        val file = File(path)
+//        val request = Glide.with(context)
+//            .load(file)
+//
+//        request.signature(ObjectKey(file.lastModified()))
+//
+//        request.into(this)
+//    }
+
+    private val editLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val newPath = result.data?.getStringExtra("NEW_PATH") ?: return@registerForActivityResult
+                viewModel.setPath(newPath)
+                binding.imvImage.loadImageFromFile(newPath) // hoặc loadImage(...) của bạn
+            }
+        }
 
     override fun dataObservable() {
         lifecycleScope.launch {
@@ -375,20 +401,26 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         lifecycleScope.launch(Dispatchers.IO) {
             showLoading()
             myAvatarViewModel.editItem(this@ViewActivity, pathInternal, dataViewModel.allData.value)
+
             withContext(Dispatchers.Main) {
                 dismissLoading()
+
                 myAvatarViewModel.checkDataInternet(this@ViewActivity) {
-                    val intent = Intent(this@ViewActivity, CustomizeCharacterActivity::class.java)
-                    intent.putExtra(IntentKey.INTENT_KEY, myAvatarViewModel.positionCharacter)
-                    intent.putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
-                    val option = ActivityOptions.makeCustomAnimation(
-                        this@ViewActivity, R.anim.slide_out_left, R.anim.slide_in_right
-                    )
-                    startActivity(intent, option.toBundle())
+                    val intent = Intent(this@ViewActivity, CustomizeCharacterActivity::class.java).apply {
+                        putExtra(IntentKey.INTENT_KEY, myAvatarViewModel.positionCharacter)
+                        putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
+                    }
+
+                    // ✅ Chỉ launch 1 lần
+                    editLauncher.launch(intent)
+
+                    // ✅ Apply animation (nếu muốn)
+                    overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
                 }
             }
         }
     }
+
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
