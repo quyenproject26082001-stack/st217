@@ -333,7 +333,7 @@
             android:paddingTop="15dp"
             android:clipChildren="false"
             android:isScrollContainer="true"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
