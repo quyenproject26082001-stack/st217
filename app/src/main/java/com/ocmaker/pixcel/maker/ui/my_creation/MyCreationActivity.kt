@@ -127,6 +127,8 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
                                     dismissLoading()
                                     hideNavigation()
                                     showToast(R.string.download_success)
+                                    // Auto-click back button to exit selection mode
+                                    binding.actionBar.btnActionBarLeft.performClick()
                                 }
 
                                 else -> {
@@ -320,6 +322,8 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             return
         }
         viewModel.addToTelegram(this, list)
+        // Auto-click back button to exit selection mode
+        binding.actionBar.btnActionBarLeft.performClick()
     }
 
     fun handleAddToWhatsApp(list: ArrayList<String>) {
@@ -352,6 +356,8 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             viewModel.addToWhatsapp(this, packageName, list) { stickerPack ->
                 if (stickerPack != null) {
                     addToWhatsapp(stickerPack)
+                    // Auto-click back button to exit selection mode
+                    binding.actionBar.btnActionBarLeft.performClick()
                 }
             }
         }
@@ -489,6 +495,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             btnActionBarRight.gone()
             btnActionBarNextRight.gone()
         }
+
         updateBottomButtonsVisibility()
         android.util.Log.d("MyCreationActivity", "exitSelectionMode called - hiding buttons")
     }
@@ -499,13 +506,18 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         val btnTelegram = layoutBottom.findViewById<View>(R.id.btnTelegram)
         val btnDownload = layoutBottom.findViewById<View>(R.id.btnDownload)
 
-        if (isInSelectionMode && viewModel.typeStatus.value == ValueKey.MY_DESIGN_TYPE) {
+        if (!isInSelectionMode) {
+            // Not in selection mode: hide all bottom buttons
+            btnWhatsapp?.gone()
+            btnTelegram?.gone()
+            btnDownload?.gone()
+        } else if (viewModel.typeStatus.value == ValueKey.MY_DESIGN_TYPE) {
             // In My Design tab selection mode: show only Download button
             btnWhatsapp?.gone()
             btnTelegram?.gone()
             btnDownload?.visible()
         } else {
-            // In My Pixel tab or not in selection mode: show WhatsApp and Telegram, hide Download
+            // In My Pixel tab selection mode: show WhatsApp and Telegram
             btnWhatsapp?.visible()
             btnTelegram?.visible()
             btnDownload?.gone()

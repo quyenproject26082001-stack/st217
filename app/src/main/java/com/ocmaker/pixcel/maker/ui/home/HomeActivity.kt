@@ -40,6 +40,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
         sharePreference.setCountBack(sharePreference.getCountBack() + 1)
         deleteTempFolder()
         binding.tv1.isSelected = true
+        binding.tv3.isSelected = true
+        binding.tv2.isSelected = true
     }
 
     override fun viewListener() {
