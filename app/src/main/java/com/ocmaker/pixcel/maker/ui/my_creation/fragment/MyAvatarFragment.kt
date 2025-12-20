@@ -269,6 +269,8 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
 
     override fun onResume() {
         super.onResume()
+        resetData()
+
         android.util.Log.w("MyAvatarFragment", "🟢 onResume() called - Fragment is visible")
         // Force reload when returning from edit
     }

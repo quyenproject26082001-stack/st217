@@ -660,11 +660,18 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
         if (hasFocus) {
             applyUiCustomize()
             hideNavigation(true)
-            android.util.Log.d("UI", "flags=${window.decorView.systemUiVisibility}")
 
+            window.decorView.removeCallbacks(reHideRunnable)
+            window.decorView.postDelayed(reHideRunnable, 1500)
+        } else {
+            window.decorView.removeCallbacks(reHideRunnable)
         }
     }
 
+    private val reHideRunnable = Runnable {
+        applyUiCustomize()
+        hideNavigation(true)
+    }
     @Suppress("DEPRECATION")
     private fun applyUiCustomize() {
         // Cho phép app tự vẽ màu system bar

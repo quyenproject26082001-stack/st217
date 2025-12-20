@@ -355,6 +355,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                         HandleState.SUCCESS -> {
                             dismissLoading()
                             resetMyCreationSelectionMode()
+
+                            // ✅ Trả kết quả về màn trước (MyAvatarFragment/MyCreationActivity)
+                            setResult(Activity.RESULT_OK, Intent().apply {
+                                putExtra("DELETED_PATH", viewModel.pathInternal.value)
+                            })
                             finish()
                         }
 

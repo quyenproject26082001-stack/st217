@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -256,6 +257,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                         viewModel.isFocusEditText.collect { status ->
                             Log.d("EditTextFlow", "isFocusEditText.collect: status=$status")
                             if (status) {
+
                                 // Clear FLAG_LAYOUT_NO_LIMITS to allow adjustResize to work
                                 Log.d("EditTextFlow", "Keyboard showing - clearing FLAG_LAYOUT_NO_LIMITS")
                                 window.clearFlags(android.view.WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
@@ -263,18 +265,25 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                                 flFunction.layoutParams = viewModel.layoutParams
                                 Log.d("EditTextFlow", "Layout adjusted - topMargin: ${viewModel.layoutParams.topMargin}")
                             } else {
-                                Log.d("EditTextFlow", "Keyboard hiding - resetting layout")
                                 // Scroll back to top
-                                scvText.smoothScrollTo(0, 0)
-                                Log.d("EditTextFlow", "Scrolled back to top")
-                                viewModel.layoutParams.topMargin = viewModel.originalMarginBottom
-                                flFunction.layoutParams = viewModel.layoutParams
-                                Log.d("EditTextFlow", "Calling hideSoftKeyboard()")
+                                // 🔒 CHỈ reset layout KHI IME ĐÃ THẬT SỰ TẮT
+                                    scvText.smoothScrollTo(0, 0)
+                                    viewModel.layoutParams.topMargin = viewModel.originalMarginBottom
+                                    flFunction.layoutParams = viewModel.layoutParams
+
                                 hideSoftKeyboard()
-                                Log.d("EditTextFlow", "Calling edtText.clearFocus()")
+
                                 edtText.clearFocus()
-                                Log.d("EditTextFlow", "Calling hideNavigation() - re-setting FLAG_LAYOUT_NO_LIMITS")
-                                hideNavigation(true)  // Re-set FLAG_LAYOUT_NO_LIMITS
+
+                                hideSoftKeyboard()
+                                hideNavigation(true)
+                                delay(300)
+                                hideSoftKeyboard()
+
+
+
+                                // Keyboard vẫn mở → ÉP TẮT
+
                                 Log.d("EditTextFlow", "Layout reset complete - topMargin: ${viewModel.layoutParams.topMargin}")
                             }
                         }
@@ -1000,5 +1009,42 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             binding.edtText.setText(currentText.dropLast(1))
             binding.edtText.setSelection(binding.edtText.text.length)
         }
+    }
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            applyUiCustomize()
+            hideNavigation(true)
+
+            window.decorView.removeCallbacks(reHideRunnable)
+            window.decorView.postDelayed(reHideRunnable, 1500)
+        } else {
+            window.decorView.removeCallbacks(reHideRunnable)
+        }
+    }
+
+    private val reHideRunnable = Runnable {
+        applyUiCustomize()
+        hideNavigation(true)
+    }
+    @Suppress("DEPRECATION")
+    private fun applyUiCustomize() {
+        // Cho phép app tự vẽ màu system bar
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+
+        // Transparent status bar
+        window.statusBarColor = android.graphics.Color.TRANSPARENT
+        window.navigationBarColor = android.graphics.Color.TRANSPARENT
+
+        // Flags
+        window.decorView.systemUiVisibility =
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+        View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        // nếu muốn icon status bar đen thì thêm:
+        // or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
     }
 }
