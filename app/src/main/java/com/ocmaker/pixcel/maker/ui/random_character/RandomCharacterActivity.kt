@@ -81,6 +81,7 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
             setTextActionBar(tvCenter, getString(R.string.quick_maker_in))
+            tvCenter.isSelected =true
         }
     }
 

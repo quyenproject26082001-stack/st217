@@ -538,7 +538,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
         // Add extra margin when My Pixel (left tab) is selected
         if (isLeftTab) {
-            params.marginEnd = (-1.5 * resources.displayMetrics.density).toInt() // -2.5dp
+            params.marginEnd = (-0.5 * resources.displayMetrics.density).toInt() // -2.5dp
         } else {
             params.marginStart = (-1.5 * resources.displayMetrics.density).toInt() // Keep -1.5dp
         }
