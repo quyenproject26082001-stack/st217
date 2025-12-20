@@ -273,7 +273,7 @@
             <TextView
                 android:id="@+id/tvTitleSticker"
                 android:layout_width="match_parent"
-                android:layout_height="18sp"
+                android:layout_height="wrap_content"
                 android:text="@string/sticker"
                 android:gravity="center"
                 android:textColor="#BA0101"
@@ -306,7 +306,7 @@
             <TextView
                 android:id="@+id/tvTitleSpeech"
                 android:layout_width="match_parent"
-                android:layout_height="18sp"
+                android:layout_height="wrap_content"
                 android:text="@string/speech_bubbles"
                 android:gravity="center"
                 android:textColor="#BA0101"
@@ -354,7 +354,7 @@
                     <TextView
                         android:id="@+id/tvTitleText"
                         android:layout_width="match_parent"
-                        android:layout_height="18sp"
+                        android:layout_height="wrap_content"
                         android:text="@string/text"
                         android:gravity="center"
                         android:textColor="#BA0101"

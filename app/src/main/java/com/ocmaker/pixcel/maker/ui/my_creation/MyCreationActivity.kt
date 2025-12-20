@@ -89,7 +89,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             btnActionBarRight.gone()
             btnActionBarNextRight.gone()
         }
-        binding.lnlBottom.isSelected =true
+        binding.lnlBottom.isSelected = true
     }
 
     override fun dataObservable() {
@@ -101,13 +101,41 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
                             if (type != -1) {
                                 if (type == ValueKey.AVATAR_TYPE) {
                                     // MyAvatar selected
-                                    setupSelectedTab(btnMyPixel, tvSpace, imvFocusMyAvatar, subTabMyAvatar, isLeftTab = true)
-                                    setupUnselectedTab(btnMyDesign, tvMyDesign, imvFocusMyDesign, subTabMyDesign, isLeftTab = false)
+                                    binding.cvType.setBackgroundResource(R.drawable.bg_cvtype_avatar) // ảnh 1
+
+                                    setupSelectedTab(
+                                        btnMyPixel,
+                                        tvSpace,
+                                        imvFocusMyAvatar,
+                                        subTabMyAvatar,
+                                        isLeftTab = true
+                                    )
+                                    setupUnselectedTab(
+                                        btnMyDesign,
+                                        tvMyDesign,
+                                        imvFocusMyDesign,
+                                        subTabMyDesign,
+                                        isLeftTab = false
+                                    )
                                     showFragment(ValueKey.AVATAR_TYPE)
                                 } else {
                                     // MyDesign selected
-                                    setupSelectedTab(btnMyDesign, tvMyDesign, imvFocusMyDesign, subTabMyDesign, isLeftTab = false)
-                                    setupUnselectedTab(btnMyPixel, tvSpace, imvFocusMyAvatar, subTabMyAvatar, isLeftTab = true)
+                                    binding.cvType.setBackgroundResource(R.drawable.bg_cvtype_design) // ảnh 1
+
+                                    setupSelectedTab(
+                                        btnMyDesign,
+                                        tvMyDesign,
+                                        imvFocusMyDesign,
+                                        subTabMyDesign,
+                                        isLeftTab = false
+                                    )
+                                    setupUnselectedTab(
+                                        btnMyPixel,
+                                        tvSpace,
+                                        imvFocusMyAvatar,
+                                        subTabMyAvatar,
+                                        isLeftTab = true
+                                    )
                                     showFragment(ValueKey.MY_DESIGN_TYPE)
                                 }
                                 // Update bottom buttons visibility when tab changes
@@ -150,13 +178,16 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
                 btnActionBarLeft.tap {
                     if (isInSelectionMode) {
                         // Exit selection mode
-                        val avatarFragment = supportFragmentManager.findFragmentByTag("MyAvatarFragment")
-                        val designFragment = supportFragmentManager.findFragmentByTag("MyDesignFragment")
+                        val avatarFragment =
+                            supportFragmentManager.findFragmentByTag("MyAvatarFragment")
+                        val designFragment =
+                            supportFragmentManager.findFragmentByTag("MyDesignFragment")
 
                         when {
                             avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
                                 avatarFragment.resetSelectionMode()
                             }
+
                             designFragment is MyDesignFragment && designFragment.isVisible -> {
                                 designFragment.resetSelectionMode()
                             }
@@ -226,6 +257,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
                     binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_select_all)
                 }
             }
+
             designFragment is MyDesignFragment && designFragment.isVisible -> {
                 if (isAllSelected) {
                     // Deselect all
@@ -250,6 +282,7 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
                 avatarFragment.deleteSelectedItems()
             }
+
             designFragment is MyDesignFragment && designFragment.isVisible -> {
                 designFragment.deleteSelectedItems()
             }
@@ -295,7 +328,11 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == RequestKey.STORAGE_PERMISSION_CODE) {
@@ -373,8 +410,14 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
     private fun showFragment(type: Int) {
         android.util.Log.d("MyCreationActivity", "🔄 showFragment() called with type=$type")
-        android.util.Log.d("MyCreationActivity", "  type == AVATAR_TYPE: ${type == ValueKey.AVATAR_TYPE}")
-        android.util.Log.d("MyCreationActivity", "  type == MY_DESIGN_TYPE: ${type == ValueKey.MY_DESIGN_TYPE}")
+        android.util.Log.d(
+            "MyCreationActivity",
+            "  type == AVATAR_TYPE: ${type == ValueKey.AVATAR_TYPE}"
+        )
+        android.util.Log.d(
+            "MyCreationActivity",
+            "  type == MY_DESIGN_TYPE: ${type == ValueKey.MY_DESIGN_TYPE}"
+        )
 
         val transaction = supportFragmentManager.beginTransaction()
 
@@ -392,11 +435,17 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
         // Show/Hide based on type
         if (type == ValueKey.AVATAR_TYPE) {
-            android.util.Log.d("MyCreationActivity", "  ➡️ SHOWING MyAvatarFragment, HIDING MyDesignFragment")
+            android.util.Log.d(
+                "MyCreationActivity",
+                "  ➡️ SHOWING MyAvatarFragment, HIDING MyDesignFragment"
+            )
             myAvatarFragment?.let { transaction.show(it) }
             myDesignFragment?.let { transaction.hide(it) }
         } else {
-            android.util.Log.d("MyCreationActivity", "  ➡️ HIDING MyAvatarFragment, SHOWING MyDesignFragment")
+            android.util.Log.d(
+                "MyCreationActivity",
+                "  ➡️ HIDING MyAvatarFragment, SHOWING MyDesignFragment"
+            )
             myAvatarFragment?.let { transaction.hide(it) }
             myDesignFragment?.let { transaction.show(it) }
         }
@@ -424,12 +473,19 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
     override fun onRestart() {
         super.onRestart()
-        android.util.Log.w("MyCreationActivity", "🔄 onRestart() called - Activity restarting after being stopped")
-        android.util.Log.w("MyCreationActivity", "Current tab: ${if (viewModel.typeStatus.value == ValueKey.AVATAR_TYPE) "MyAvatar" else "MyDesign"}")
+        android.util.Log.w(
+            "MyCreationActivity",
+            "🔄 onRestart() called - Activity restarting after being stopped"
+        )
+        android.util.Log.w(
+            "MyCreationActivity",
+            "Current tab: ${if (viewModel.typeStatus.value == ValueKey.AVATAR_TYPE) "MyAvatar" else "MyDesign"}"
+        )
         android.util.Log.w("MyCreationActivity", "Selection mode: $isInSelectionMode")
 
         // Check permission status
-        val hasPermission = checkPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE))
+        val hasPermission =
+            checkPermissions(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE))
         android.util.Log.w("MyCreationActivity", "📱 Storage permission: $hasPermission")
 
         // Exit selection mode when returning from another activity
@@ -439,19 +495,26 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
 
             when {
                 avatarFragment is MyAvatarFragment && avatarFragment.isVisible -> {
-                    android.util.Log.d("MyCreationActivity", "Resetting MyAvatarFragment selection mode")
+                    android.util.Log.d(
+                        "MyCreationActivity",
+                        "Resetting MyAvatarFragment selection mode"
+                    )
                     avatarFragment.resetSelectionMode()
                 }
+
                 designFragment is MyDesignFragment && designFragment.isVisible -> {
-                    android.util.Log.d("MyCreationActivity", "Resetting MyDesignFragment selection mode")
+                    android.util.Log.d(
+                        "MyCreationActivity",
+                        "Resetting MyDesignFragment selection mode"
+                    )
                     designFragment.resetSelectionMode()
                 }
             }
             exitSelectionMode()
         }
 
-       // initNativeCollab()
-       android.util.Log.w("MyCreationActivity", "🔄 onRestart() END")
+        // initNativeCollab()
+        android.util.Log.w("MyCreationActivity", "🔄 onRestart() END")
     }
 
     override fun onStart() {
@@ -535,24 +598,17 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         params.weight = 1.0f
         params.topMargin = 0
 
-
-        // Add extra margin when My Pixel (left tab) is selected
-        if (isLeftTab) {
-            params.marginEnd = (-1.5 * resources.displayMetrics.density).toInt() // -2.5dp
-        } else {
-            params.marginStart = (-1.5 * resources.displayMetrics.density).toInt() // Keep -1.5dp
-        }
+        // nếu vẫn cần overlap thì giữ, còn không thì set về 0
+        if (isLeftTab) params.marginEnd = 0 else params.marginStart = 0
         tabView.layoutParams = params
 
-        // Set text size = 20sp
+        // Text selected
         textView.textSize = 16f
-
-        // Apply gradient color from top to bottom (using fixed height based on text size)
-        val textHeight = textView.lineHeight.toFloat()
+        textView.paint.shader = null
         textView.post {
-            val textHeight = textView.lineHeight.toFloat()
+            val h = textView.lineHeight.toFloat()
             val shader = LinearGradient(
-                0f, 0f, 0f, textHeight,
+                0f, 0f, 0f, h,
                 Color.parseColor("#FFFFFF"),
                 Color.parseColor("#FFFFFF"),
                 Shader.TileMode.CLAMP
@@ -561,15 +617,11 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             textView.invalidate()
         }
 
-        // Show selected_tab drawable
-        focusImage.setImageResource(R.drawable.selected_tab_album)
-        // Flip horizontally if on right side
-        focusImage.scaleX = if (isLeftTab) 1f else -1f
-        focusImage.visible()
-
-        // Hide subTab
+        // ❌ Không dùng background tab nữa
+        focusImage.gone()
         subTab.gone()
     }
+
 
     private fun setupUnselectedTab(
         tabView: View,
@@ -578,27 +630,21 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         subTab: View,
         isLeftTab: Boolean
     ) {
-        // Set weight = 1
         val params = tabView.layoutParams as android.widget.LinearLayout.LayoutParams
         params.weight = 1f
         params.topMargin = 0
 
-        // Reset to original margins when unselected
-        if (isLeftTab) {
-            params.marginEnd = (-1.5 * resources.displayMetrics.density).toInt() // -1.5dp
-        } else {
-            params.marginStart = (-1.5 * resources.displayMetrics.density).toInt() // -1.5dp
-        }
+        // nếu vẫn cần overlap thì giữ, còn không thì set về 0
+        if (isLeftTab) params.marginEnd = 0 else params.marginStart = 0
         tabView.layoutParams = params
 
-        // Set text size = 16sp, color = colorPrimary
+        // Text unselected
         textView.textSize = 16f
-        // Remove gradient shader and set solid color
         textView.paint.shader = null
         textView.post {
-            val textHeight = textView.lineHeight.toFloat()
+            val h = textView.lineHeight.toFloat()
             val shader = LinearGradient(
-                0f, 0f, 0f, textHeight,
+                0f, 0f, 0f, h,
                 Color.parseColor("#01579B"),
                 Color.parseColor("#01579B"),
                 Shader.TileMode.CLAMP
@@ -607,13 +653,8 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
             textView.invalidate()
         }
 
-        // Show un_selected_tab drawable
-        focusImage.setImageResource(R.drawable.un_selected_tab_album)
-        // Flip horizontally if on left side
-        focusImage.scaleX = if (isLeftTab) -1f else 1f
-        focusImage.visible()
-
-        // Show subTab
+        // ❌ Không dùng background tab nữa
+        focusImage.gone()
         subTab.gone()
     }
 

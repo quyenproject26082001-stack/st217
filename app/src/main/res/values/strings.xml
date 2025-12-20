@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Pixcel Character Maker</string>
+    <string name="app_name" translatable="false">Pixel Character Maker</string>
 
     <string name="go_to_setting_message">The app needs this permission</string>
     <string name="settings">Settings</string>
