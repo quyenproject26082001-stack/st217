@@ -7,6 +7,9 @@
     android:layout_height="match_parent"
     android:background="#A1CCEF"
     android:clipChildren="false"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:descendantFocusability="beforeDescendants"
     tools:context=".ui.add_character.AddCharacterActivity">
 
     <!--    flGetText-->
@@ -100,7 +103,7 @@
         android:layout_marginTop="30dp"
         app:layout_constraintBottom_toTopOf="@id/lnlBottom"
         app:layout_constraintTop_toBottomOf="@id/flSave"
-      >
+        >
         <!-- Space to replace layout_goneMarginTop - provides 16dp gap when sectionTab is GONE -->
         <TextView
             android:id="@+id/spaceSectionTab"
@@ -333,7 +336,7 @@
             android:paddingTop="15dp"
             android:clipChildren="false"
             android:isScrollContainer="true"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <LinearLayout
                 android:layout_width="match_parent"

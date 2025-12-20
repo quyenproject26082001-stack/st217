@@ -126,6 +126,14 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         initData()
         setupKeyboardLogging()
         setupBackPressHandler()
+
+        // 🔒 FIX CỨNG VIVO ANDROID 8 AUTO FOCUS
+        binding.main.post {
+            binding.main.requestFocus()     // Cướp focus khỏi EditText
+            binding.edtText.clearFocus()    // Đảm bảo edtText không focus
+            hideSoftKeyboard()              // Ép keyboard tắt
+            viewModel.setIsFocusEditText(false) // Reset state
+        }
     }
 
     private var lastImeVisible = false
