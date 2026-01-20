@@ -116,4 +116,5 @@
     <string name="exit_cus">कस्टमाइज़ेशन से बाहर निकलें</string>
     <string name="loading">लोड हो रहा है</string>
     <string name="internet_required_for_more_characters">अधिक पात्रों के लिए इंटरनेट आवश्यक है</string>
+    <string name="music">Music</string>
 </resources>

@@ -26,6 +26,7 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>() {
     }
 
     override fun initView() {
+        binding.tvMusic.select()
         initRate()
     }
 

@@ -5,8 +5,6 @@ import android.os.Build
 import android.text.TextUtils
 import android.view.LayoutInflater
 import androidx.activity.viewModels
-import androidx.core.content.res.ResourcesCompat
-import androidx.core.graphics.toColorInt
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -27,7 +25,6 @@ import com.ocmaker.pixcel.maker.core.helper.StringHelper
 import com.ocmaker.pixcel.maker.core.utils.key.RequestKey
 import com.ocmaker.pixcel.maker.databinding.ActivityPermissionBinding
 import com.ocmaker.pixcel.maker.ui.home.HomeActivity
-import com.ocmaker.pixcel.maker.core.extensions.setGradientTextHeightColor
 import com.ocmaker.pixcel.maker.core.extensions.tap
 import kotlinx.coroutines.launch
 
@@ -127,7 +124,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
 
     private fun updatePermissionUI(granted: Boolean, isStorage: Boolean) {
         val imageView = if (isStorage) binding.swPermission else binding.swNotification
-        imageView.setImageResource(if (granted) R.drawable.ic_sw_on else R.drawable.ic_sw_off)
+        imageView.setImageResource(if (granted) R.drawable.ic_sw_on else R.drawable.ic_sw_on)
     }
 
     override fun onRequestPermissionsResult(

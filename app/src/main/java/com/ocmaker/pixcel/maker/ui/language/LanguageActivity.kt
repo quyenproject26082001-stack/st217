@@ -48,6 +48,7 @@ class LanguageActivity : BaseActivity<ActivityLanguageBinding>() {
                         languageAdapter.isFirstLanguage = isFirst
                         if (isFirst) {
                             binding.actionBar.tvStart.visible()
+
                         } else {
                             binding.actionBar.btnActionBarLeft.visible()
                             binding.actionBar.tvCenter.visible()

@@ -44,7 +44,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:fontFamily="@font/pixelifysans_regular"
+                android:fontFamily="@font/roboto_regular"
                 android:gravity="start"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="@+id/imvFlag"

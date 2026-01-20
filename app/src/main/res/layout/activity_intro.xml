@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-       android:background="@color/color_app"
+       android:background="@drawable/bg_app"
         />
 
     <!--    vpgTutorial-->
@@ -21,6 +21,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="20dp"
         android:overScrollMode="never"
+        tools:item="@layout/item_intro"
         app:layout_constraintBottom_toTopOf="@+id/dotsIndicator"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,16 +34,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="16dp"
-        app:dotsColor="#FFEAFF"
+        app:dotsColor="@color/white"
         app:dotsCornerRadius="8dp"
         app:dotsSize="8dp"
         app:dotsSpacing="3dp"
         app:dotsWidthFactor="2.5"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnNext"
+        app:layout_constraintBottom_toBottomOf="@+id/btnNext"
         app:layout_constraintStart_toStartOf="parent"
         app:progressMode="false"
-        app:selectedDotColor="#FF9CFD" />
+        app:selectedDotColor="@color/app" />
 
     <!--    btnNext-->
     <TextView
@@ -50,11 +50,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/inter_18pt_regular"
+        android:fontFamily="@font/chewy_regular"
         android:padding="3dp"
         android:text="@string/next"
-        android:textColor="#FF9CFD"
-        android:textSize="14sp"
+        android:textColor="@color/app"
+        android:textSize="17sp"
         android:layout_marginBottom="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />

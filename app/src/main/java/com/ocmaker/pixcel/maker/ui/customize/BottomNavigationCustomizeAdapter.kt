@@ -40,10 +40,12 @@ class BottomNavigationCustomizeAdapter(private val context: Context) :
                 vFocus.setBackgroundResource(R.drawable.bg_bottom_navi)
                 imvImage.setBackgroundColor(Color.parseColor("#A1CCEF"))
                 cvContent.strokeColor = Color.TRANSPARENT
+                cvContent.setBackgroundResource(R.color.white)
+
             } else {
                 vFocus.setBackgroundColor(context.getColor(android.R.color.transparent))
                 imvImage.setBackgroundColor(Color.TRANSPARENT)
-                cvContent.strokeColor = Color.TRANSPARENT
+                cvContent.setBackgroundResource(R.drawable.bg_select_navi)
             }
 
             loadImage(root, item.imageNavigation, imvImage)

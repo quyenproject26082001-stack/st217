@@ -52,7 +52,7 @@ class LanguageAdapter(val context: Context) : BaseAdapter<LanguageModel, ItemLan
             val textColor = if (item.activate) {
                 android.graphics.Color.parseColor("#FFFFFF") // White when selected
             } else {
-                android.graphics.Color.parseColor("#01579B") // Dark blue when not selected
+                android.graphics.Color.parseColor("#AB5BFF") // Dark blue when not selected
             }
 
             // Remove shader and set solid color
@@ -67,14 +67,14 @@ class LanguageAdapter(val context: Context) : BaseAdapter<LanguageModel, ItemLan
             loadImage(root, ratio, btnRadio, false)
 
             // Apply color tint when activated and not first language
-            if (item.activate && !isFirstLanguage) {
-                btnRadio.setColorFilter(
-                    android.graphics.Color.parseColor("#01579B"),
-                    android.graphics.PorterDuff.Mode.SRC_IN
-                )
-            } else {
-                btnRadio.clearColorFilter()
-            }
+//            if (item.activate && !isFirstLanguage) {
+//                btnRadio.setColorFilter(
+//                    android.graphics.Color.parseColor("#01579B"),
+//                    android.graphics.PorterDuff.Mode.SRC_IN
+//                )
+//            } else {
+//                btnRadio.clearColorFilter()
+//            }
 
             // Set selected state to trigger the selector drawable
             flMain.isSelected = item.activate

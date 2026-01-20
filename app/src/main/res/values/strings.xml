@@ -8,8 +8,8 @@
     <string name="next">Next</string>
     <string name="language">Language</string>
 
-    <string name="title_1">Make Character</string>
-    <string name="title_2">Character Diversity</string>
+    <string name="title_1">Diverse Character Style</string>
+    <string name="title_2">Create Your Own Avatar However You Like</string>
     <string name="title_3">Variety Items</string>
 
     <string name="permission">Permission</string>
@@ -118,4 +118,5 @@
     <string name="exit_cus">Exit your customize</string>
     <string name="loading">Loading</string>
     <string name="internet_required_for_more_characters">Internet required for more characters</string>
+    <string name="music">Music</string>
 </resources>

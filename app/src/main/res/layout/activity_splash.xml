@@ -21,10 +21,10 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="33dp"
         android:layout_marginBottom="32dp"
-        android:fontFamily="@font/pixelifysans_regular"
+        android:fontFamily="@font/roboto_regular"
         android:gravity="center"
         android:text="@string/this_action_can_contain_ads"
-        android:textColor="#FFFFFF"
+        android:textColor="#FF00D0"
         android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +44,7 @@
             android:layout_width="37dp"
             android:layout_height="37dp"
             android:layout_gravity="center"
+            app:tint="#FF00D0"
             android:src="@drawable/ic_loading_spinner" />
 
     </FrameLayout>
