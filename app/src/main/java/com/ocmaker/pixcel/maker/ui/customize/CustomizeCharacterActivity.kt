@@ -129,8 +129,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
         binding.apply {
             actionBar.apply {
                 btnActionBarLeft.tap { confirmExit() }
-                btnActionBarCenter.tap { handleReset() }
-                btnFlip.tap { viewModel.setIsFlip() }
+                btnActionBarCenterLeft.tap { handleReset() }
+                btnActionBarCenterRight.tap { viewModel.setIsFlip() }
                 binding.actionBar.btnActionBarRightText.tap {
                     handleSave()
                 }
@@ -145,10 +145,11 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     override fun initActionBar() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
-            setImageActionBar(btnActionBarCenter, R.drawable.ic_reset)
             btnActionBarRightText.visible()
             btnActionBarRight.invisible()
+            btnActionBarCenterLeft.visible()
             tvRightText.isSelected = true
+            btnActionBarCenterRight.visible()
         }
 
     }
@@ -324,7 +325,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     private fun checkStatusColor() {
         if (viewModel.colorItemNavList[viewModel.positionNavSelected].isNotEmpty()) {
             binding.color.visible()
-            //  binding.btnColor.visible()
+             binding.btnColor.visible()
             val (res, status) = if (viewModel.isShowColorList[viewModel.positionNavSelected]) {
                 R.drawable.ic_color to true
             } else {
