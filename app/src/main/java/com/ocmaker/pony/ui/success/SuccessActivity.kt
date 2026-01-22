@@ -16,6 +16,7 @@ import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.checkPermissions
 import com.ocmaker.pony.core.extensions.goToSettings
 import com.ocmaker.pony.core.extensions.gone
+import com.ocmaker.pony.core.extensions.invisible
 import com.ocmaker.pony.core.extensions.loadImage
 import com.ocmaker.pony.core.extensions.requestPermission
 import com.ocmaker.pony.core.extensions.select
@@ -52,56 +53,11 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
 
     private fun setButtonBackgrounds() {
         binding.includeLayoutBottom.apply {
-            // Left button (Whatsapp -> My Album)
-            btnWhatsapp.setBackgroundResource(R.drawable.bg_btn_bottom)
-            btnWhatsapp.setPadding(0, 0, 0, 0)
-            val paramsLeft = btnWhatsapp.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
-            paramsLeft?.apply {
-                height = UnitHelper.dpToPx(this@SuccessActivity, 51f).toInt()
-                marginEnd = UnitHelper.dpToPx(this@SuccessActivity, 14f).toInt()
-                marginStart = UnitHelper.dpToPx(this@SuccessActivity, 4f).toInt()
-                btnWhatsapp.layoutParams = this
-            }
-            // Hide the CardView with rounded corners
-            val cardViewLeft = btnWhatsapp.getChildAt(0) as? androidx.cardview.widget.CardView
-            cardViewLeft?.gone()
-            // Hide WhatsApp icon
-            val lnlInLeft = btnWhatsapp.getChildAt(1) as? android.view.ViewGroup
-            lnlInLeft?.getChildAt(0)?.gone()
+            
+            tvMyWork.select()
+            tvDownload.select()
+            tvShare.select()
 
-            // Update tvWhatsapp text properties
-            tvWhatsapp.text = strings(R.string.my_album)
-            tvWhatsapp.textSize = 16f
-            tvWhatsapp.setTypeface(ResourcesCompat.getFont(this@SuccessActivity, R.font.pixelifysans_medium))
-            tvWhatsapp.select()
-
-            // Right button (Telegram -> Download)
-            btnTelegram.setBackgroundResource(R.drawable.bg_btn_bottom)
-            btnTelegram.setPadding(0, 0, 0, 0)
-            val paramsRight = btnTelegram.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
-            paramsRight?.apply {
-                height = UnitHelper.dpToPx(this@SuccessActivity, 51f).toInt()
-                marginStart = UnitHelper.dpToPx(this@SuccessActivity, 14f).toInt()
-                marginEnd = UnitHelper.dpToPx(this@SuccessActivity, 4f).toInt()
-                btnTelegram.layoutParams = this
-            }
-            // Hide the CardView with rounded corners
-            val cardViewRight = btnTelegram.getChildAt(0) as? androidx.cardview.widget.CardView
-            cardViewRight?.gone()
-            // Hide Telegram icon
-            val lnlInRight = btnTelegram.getChildAt(1) as? android.view.ViewGroup
-            lnlInRight?.getChildAt(0)?.gone()
-
-            tvTelegram.text = strings(R.string.download)
-            tvTelegram.textSize = 16f
-            tvTelegram.setTypeface(ResourcesCompat.getFont(this@SuccessActivity, R.font.pixelifysans_medium))
-            tvTelegram.select()
-
-            // Hide download button
-            btnDownload.visible()
-            btnDownload.setBackgroundResource(R.drawable.bg_btn_share_ss)
-            icDownload.gone()
-            tvDownload.setText(R.string.share)
         }
     }
 
@@ -122,7 +78,7 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
     override fun viewListener() {
         binding.apply {
             actionBar.apply {
-                btnActionBarLeft.tap {
+                btnActionBarRight.tap {
                     showInterAll {
                         startIntentWithClearTop(HomeActivity::class.java)
                     }
@@ -140,17 +96,20 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
             includeLayoutBottom.btnTelegram.tap(2000) {
                 checkStoragePermission()
             }
+            includeLayoutBottom.btnShare.tap(2000){
+                    viewModel.shareFiles(this@SuccessActivity)
+            }
         }
     }
 
     override fun initActionBar() {
         binding.actionBar.apply {
             setTextActionBar(tvCenter, getString(R.string.successfully))
-            setImageActionBar(btnActionBarLeft, R.drawable.ic_home_ss)
+            setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
             tvCenter.visible()
             imgCenter.gone()
-            btnActionBarRight.gone()
-            btnActionBarNextRight.gone()
+            setImageActionBar(btnActionBarRight, R.drawable.ic_home_ss)
+            btnActionBarNextRight.invisible()
         }
     }
 

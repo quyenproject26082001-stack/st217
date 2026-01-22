@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#A1CCEF"
     tools:context=".ui.my_creation.MyCreationActivity">
 
     <!-- layoutActionBar -->
@@ -30,7 +29,7 @@
         android:layout_height="0dp"
         android:layout_marginBottom="0dp"
         app:layout_goneMarginTop="0dp"
-        android:background="#A1CCEF"
+        android:background=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cvType" />
     <!--    cvType-->

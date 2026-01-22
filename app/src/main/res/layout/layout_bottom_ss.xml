@@ -30,7 +30,7 @@
                 android:scaleType="fitXY"
                 app:cardCornerRadius="102dp"
                 app:cardElevation="0dp"
-                app:strokeColor="@color/white"
+                app:strokeColor="@color/transparent"
                 app:layout_constraintBottom_toBottomOf="@+id/lnlInLeft"
                 app:layout_constraintEnd_toEndOf="@+id/lnlInLeft"
                 app:layout_constraintStart_toStartOf="@+id/lnlInLeft"
@@ -40,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_btn_whatsapp" />
+                    android:src="@drawable/bg_btn_bottom" />
             </com.google.android.material.card.MaterialCardView>
 
             <!--                        lnlInLeft-->
@@ -55,22 +55,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_whatsapp" />
 
-                <!--                        tvWhatsapp-->
+                <!--                        tvMyWork-->
                 <TextView
-                    android:id="@+id/tvWhatsapp"
+                    android:id="@+id/tvMyWork"
                     style="@style/single_marquee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="6dp"
-                    android:fontFamily="@font/nunito_bold"
-                    android:text="@string/add_to_whatsapp"
+                    android:fontFamily="@font/chewy_regular"
+                    android:text="@string/my_work"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -100,7 +96,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/bg_btn_telegram" />
+                    android:src="@drawable/bg_btn_bottom" />
             </com.google.android.material.card.MaterialCardView>
 
             <!--                        lnlInRight-->
@@ -115,22 +111,18 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_telegram" />
 
-                <!--                        tvTelegram-->
+                <!--                        tvDownload-->
                 <TextView
-                    android:id="@+id/tvTelegram"
+                    android:id="@+id/tvDownload"
                     style="@style/single_marquee"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="6dp"
-                    android:fontFamily="@font/londrina_solid_regular"
-                    android:text="@string/add_to_telegram"
+                    android:fontFamily="@font/chewy_regular"
+                    android:text="@string/download"
                     android:textColor="@color/white"
-                    android:textSize="13sp" />
+                    android:textSize="16sp" />
 
             </androidx.appcompat.widget.LinearLayoutCompat>
 
@@ -138,16 +130,16 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <!--            btnDownload-->
+    <!--            btnShare-->
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/btnDownload"
+        android:id="@+id/btnShare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="4dp"
         android:layout_marginTop="14dp"
         android:padding="2dp"
         android:visibility="visible"
-        android:background="@drawable/bg_btn_download"
+        android:background="@drawable/bg_btn_share_ss"
         app:layout_constraintTop_toBottomOf="@id/lnlShareButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -164,21 +156,16 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/ic_download"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_download_red" />
 
             <TextView
-                android:id="@+id/tvDownload"
+                android:id="@+id/tvShare"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"
                 android:layout_marginStart="14dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="@string/download"
-                android:textColor="#FFFFFF"
+                android:fontFamily="@font/chewy_regular"
+                android:text="@string/share"
+                android:textColor="@color/app"
                 android:textSize="16sp" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>

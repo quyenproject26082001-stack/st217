@@ -65,74 +65,30 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     }
 
     private fun setButtonBackgrounds() {
-        binding.includeLayoutBottom.apply {
-            // Left button - Share
-            btnWhatsapp.setBackgroundResource(R.drawable.bg_btn_bottom)
-            btnWhatsapp.setPadding(0, 0, 0, 0)
-            val paramsLeft = btnWhatsapp.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
-            paramsLeft?.apply {
-                height = UnitHelper.dpToPx(this@ViewActivity, 51f).toInt()
-                marginEnd = UnitHelper.dpToPx(this@ViewActivity, 14f).toInt()
-                marginStart = UnitHelper.dpToPx(this@ViewActivity, 4f).toInt()
-                btnWhatsapp.layoutParams = this
-            }
-            val cardViewLeft = btnWhatsapp.getChildAt(0) as? androidx.cardview.widget.CardView
-            cardViewLeft?.gone()
-            val lnlInLeft = btnWhatsapp.getChildAt(1) as? android.view.ViewGroup
-            lnlInLeft?.getChildAt(0)?.gone()
 
-            tvWhatsapp.text = strings(R.string.share)
-            tvWhatsapp.textSize = 16f
-            tvWhatsapp.setTypeface(ResourcesCompat.getFont(this@ViewActivity, R.font.pixelifysans_medium))
-            tvWhatsapp.select()
-
-            // Right button - Download
-            btnTelegram.setBackgroundResource(R.drawable.bg_btn_bottom)
-            btnTelegram.setPadding(0, 0, 0, 0)
-            val paramsRight = btnTelegram.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
-            paramsRight?.apply {
-                height = UnitHelper.dpToPx(this@ViewActivity, 51f).toInt()
-                marginStart = UnitHelper.dpToPx(this@ViewActivity, 14f).toInt()
-                marginEnd = UnitHelper.dpToPx(this@ViewActivity, 4f).toInt()
-                btnTelegram.layoutParams = this
-            }
-            val cardViewRight = btnTelegram.getChildAt(0) as? androidx.cardview.widget.CardView
-            cardViewRight?.gone()
-            val lnlInRight = btnTelegram.getChildAt(1) as? android.view.ViewGroup
-            lnlInRight?.getChildAt(0)?.gone()
-
-            tvTelegram.text = strings(R.string.download)
-            tvTelegram.textSize = 16f
-            tvTelegram.setTypeface(ResourcesCompat.getFont(this@ViewActivity, R.font.pixelifysans_medium))
-            tvTelegram.select()
-
-            btnDownload.gone()
-        }
     }
 
     private fun setupUI() {
         binding.apply {
             actionBar.apply {
                 setTextActionBar(tvCenter, getString(R.string.my_pixel))
-                setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
-                setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
+                //  setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
+                setImageActionBar(btnActionBarRight, R.drawable.ic_edit_view)
 
                 // Hide edit icon when coming from design section
                 if (viewModel.statusFrom == ValueKey.MY_DESIGN_TYPE) {
-                    btnActionBarNextRight.invisible()
+                    btnActionBarRight.invisible()
                 }
 
-                btnShare.gone()
             }
-
-            tvSuccess.gone()
         }
     }
 
     private val editLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                val newPath = result.data?.getStringExtra("NEW_PATH") ?: return@registerForActivityResult
+                val newPath =
+                    result.data?.getStringExtra("NEW_PATH") ?: return@registerForActivityResult
                 viewModel.setPath(newPath)
                 binding.imvImage.loadImageFromFile(newPath)
             }
@@ -152,8 +108,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         binding.apply {
             actionBar.apply {
                 btnActionBarLeft.tap { handleBack() }
-                btnActionBarRight.tap { handleDelete() }
-                btnActionBarNextRight.tap { handleEditClick(viewModel.pathInternal.value) }
+                btnActionBarRight.tap { handleEditClick(viewModel.pathInternal.value) }
             }
 
             includeLayoutBottom.btnWhatsapp.tap(2590) {
@@ -162,6 +117,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             includeLayoutBottom.btnTelegram.tap(2000) {
                 checkStoragePermission()
             }
+            includeLayoutBottom.btnDelete.tap { handleDelete() }
         }
     }
 
@@ -195,6 +151,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                         dismissLoading()
                         showToast(R.string.download_success)
                     }
+
                     else -> {
                         dismissLoading()
                         showToast(R.string.download_failed_please_try_again_later)
@@ -205,7 +162,8 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     }
 
     private fun handleDelete() {
-        val dialog = YesNoDialog(this, R.string.delete, R.string.are_you_sure_want_to_delete_this_item)
+        val dialog =
+            YesNoDialog(this, R.string.delete, R.string.are_you_sure_want_to_delete_this_item)
         LanguageHelper.setLocale(this)
         dialog.show()
         dialog.onNoClick = {
@@ -215,24 +173,26 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         dialog.onYesClick = {
             dialog.dismiss()
             lifecycleScope.launch {
-                viewModel.deleteFile(this@ViewActivity, viewModel.pathInternal.value).collect { state ->
-                    when (state) {
-                        HandleState.LOADING -> showLoading()
-                        HandleState.SUCCESS -> {
-                            dismissLoading()
-                            resetMyCreationSelectionMode()
+                viewModel.deleteFile(this@ViewActivity, viewModel.pathInternal.value)
+                    .collect { state ->
+                        when (state) {
+                            HandleState.LOADING -> showLoading()
+                            HandleState.SUCCESS -> {
+                                dismissLoading()
+                                resetMyCreationSelectionMode()
 
-                            setResult(Activity.RESULT_OK, Intent().apply {
-                                putExtra("DELETED_PATH", viewModel.pathInternal.value)
-                            })
-                            finish()
-                        }
-                        else -> {
-                            dismissLoading()
-                            showToast(R.string.delete_failed_please_try_again)
+                                setResult(Activity.RESULT_OK, Intent().apply {
+                                    putExtra("DELETED_PATH", viewModel.pathInternal.value)
+                                })
+                                finish()
+                            }
+
+                            else -> {
+                                dismissLoading()
+                                showToast(R.string.delete_failed_please_try_again)
+                            }
                         }
                     }
-                }
             }
         }
     }
@@ -247,19 +207,24 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         if (myCreationActivity != null) {
             android.util.Log.d("ViewActivity", "Resetting selection mode in MyCreationActivity")
 
-            val designFragment = myCreationActivity.supportFragmentManager.findFragmentByTag("MyDesignFragment")
+            val designFragment =
+                myCreationActivity.supportFragmentManager.findFragmentByTag("MyDesignFragment")
             if (designFragment is com.ocmaker.pony.ui.my_creation.fragment.MyDesignFragment) {
                 designFragment.resetSelectionMode()
             }
 
-            val avatarFragment = myCreationActivity.supportFragmentManager.findFragmentByTag("MyAvatarFragment")
+            val avatarFragment =
+                myCreationActivity.supportFragmentManager.findFragmentByTag("MyAvatarFragment")
             if (avatarFragment is MyAvatarFragment) {
                 avatarFragment.resetSelectionMode()
             }
 
             myCreationActivity.exitSelectionMode()
         } else {
-            android.util.Log.w("ViewActivity", "MyCreationActivity instance not found - unable to reset selection mode")
+            android.util.Log.w(
+                "ViewActivity",
+                "MyCreationActivity instance not found - unable to reset selection mode"
+            )
         }
     }
 
@@ -272,10 +237,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 dismissLoading()
 
                 myAvatarViewModel.checkDataInternet(this@ViewActivity) {
-                    val intent = Intent(this@ViewActivity, CustomizeCharacterActivity::class.java).apply {
-                        putExtra(IntentKey.INTENT_KEY, myAvatarViewModel.positionCharacter)
-                        putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
-                    }
+                    val intent =
+                        Intent(this@ViewActivity, CustomizeCharacterActivity::class.java).apply {
+                            putExtra(IntentKey.INTENT_KEY, myAvatarViewModel.positionCharacter)
+                            putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
+                        }
 
                     editLauncher.launch(intent)
                     overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
@@ -284,7 +250,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         if (requestCode == RequestKey.STORAGE_PERMISSION_CODE) {
