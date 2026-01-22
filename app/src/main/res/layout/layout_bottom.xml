@@ -147,29 +147,10 @@
         android:layout_marginTop="14dp"
         android:padding="2dp"
         android:visibility="visible"
+        android:background="@drawable/bg_btn_download"
         app:layout_constraintTop_toBottomOf="@id/lnlShareButtons"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="fitXY"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="0dp"
-            app:strokeColor="#01579B"
-
-            app:layout_constraintBottom_toBottomOf="@+id/lnlInBot"
-            app:layout_constraintEnd_toEndOf="@+id/lnlInBot"
-            app:layout_constraintStart_toStartOf="@+id/lnlInBot"
-            app:layout_constraintTop_toTopOf="@+id/lnlInBot">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="fitXY"
-                android:src="@drawable/bg_btn_download" />
-        </com.google.android.material.card.MaterialCardView>
 
         <!--                        lnlInBot-->
         <androidx.appcompat.widget.LinearLayoutCompat
@@ -184,11 +165,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
+                android:id="@+id/ic_download"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_download_red" />
 
             <TextView
+                android:id="@+id/tvDownload"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="6dp"

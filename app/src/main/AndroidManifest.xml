@@ -61,6 +61,11 @@
             android:screenOrientation="portrait" />
 
         <activity
+            android:name=".ui.success.SuccessActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+
+        <activity
             android:name=".ui.my_creation.MyCreationActivity"
             android:exported="false"
             android:screenOrientation="portrait" />

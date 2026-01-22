@@ -22,17 +22,10 @@ class ViewViewModel : ViewModel() {
     private val _pathInternal = MutableStateFlow<String>("")
     val pathInternal: StateFlow<String> = _pathInternal.asStateFlow()
 
-    private val _typeUI = MutableStateFlow<Int>(-1)
-    val typeUI: StateFlow<Int> = _typeUI.asStateFlow()
-
     var statusFrom = ValueKey.AVATAR_TYPE
 
     fun setPath(path: String) {
         _pathInternal.value = path
-    }
-
-    fun setType(type: Int) {
-        _typeUI.value = type
     }
 
     fun deleteFile(context: Context, path: String): Flow<HandleState> = flow {
@@ -52,11 +45,10 @@ class ViewViewModel : ViewModel() {
                 MediaHelper.writeListToFile(context, ValueKey.EDIT_FILE_INTERNAL, originList)
 
                 emit(HandleState.SUCCESS)
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Log.e("nbhieu", "deleteFile: $e")
                 emit(HandleState.FAIL)
             }
-
         }
     }
 

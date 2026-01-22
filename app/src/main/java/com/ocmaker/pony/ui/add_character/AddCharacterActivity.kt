@@ -71,6 +71,7 @@ import com.ocmaker.pony.ui.add_character.adapter.TextColorAdapter
 import com.ocmaker.pony.ui.add_character.adapter.TextFontAdapter
 import com.ocmaker.pony.ui.permission.PermissionViewModel
 import com.ocmaker.pony.ui.view.ViewActivity
+import com.ocmaker.pony.ui.success.SuccessActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -897,10 +898,8 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                         }
 
                         is SaveState.Success -> {
-                            val intent = Intent(this@AddCharacterActivity, ViewActivity::class.java)
+                            val intent = Intent(this@AddCharacterActivity, SuccessActivity::class.java)
                             intent.putExtra(IntentKey.INTENT_KEY, result.path)
-                            intent.putExtra(IntentKey.STATUS_KEY, ValueKey.MY_DESIGN_TYPE)
-                            intent.putExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_SUCCESS)
                             val options = ActivityOptions.makeCustomAnimation(
                                 this@AddCharacterActivity, R.anim.slide_in_right, R.anim.slide_out_left
                             )

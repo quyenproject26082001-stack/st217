@@ -1,25 +1,16 @@
 package com.ocmaker.pony.ui.view
 
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
-import android.view.Gravity
 import android.view.LayoutInflater
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.bumptech.glide.Glide
-import com.bumptech.glide.signature.ObjectKey
-import com.lvt.ads.util.Admob
 import com.ocmaker.pony.R
 import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.checkPermissions
@@ -30,37 +21,29 @@ import com.ocmaker.pony.core.extensions.hideNavigation
 import com.ocmaker.pony.core.extensions.invisible
 import com.ocmaker.pony.core.extensions.loadImage
 import com.ocmaker.pony.core.extensions.loadImageFromFile
-import com.ocmaker.pony.core.extensions.loadNativeCollabAds
 import com.ocmaker.pony.core.extensions.requestPermission
 import com.ocmaker.pony.core.extensions.select
 import com.ocmaker.pony.core.extensions.setImageActionBar
 import com.ocmaker.pony.core.extensions.setTextActionBar
-import com.ocmaker.pony.core.extensions.showInterAll
+import com.ocmaker.pony.core.extensions.strings
 import com.ocmaker.pony.core.extensions.tap
-
-import com.ocmaker.pony.core.extensions.startIntentWithClearTop
-import com.ocmaker.pony.core.extensions.visible
 import com.ocmaker.pony.core.helper.LanguageHelper
+import com.ocmaker.pony.core.helper.UnitHelper
 import com.ocmaker.pony.core.utils.key.IntentKey
 import com.ocmaker.pony.core.utils.key.RequestKey
 import com.ocmaker.pony.core.utils.key.ValueKey
 import com.ocmaker.pony.core.utils.state.HandleState
 import com.ocmaker.pony.databinding.ActivityViewBinding
 import com.ocmaker.pony.dialog.YesNoDialog
-import com.ocmaker.pony.ui.home.HomeActivity
-import com.ocmaker.pony.ui.my_creation.MyCreationActivity
-import com.ocmaker.pony.core.extensions.startIntentRightToLeft
-import com.ocmaker.pony.core.extensions.strings
-import com.ocmaker.pony.core.helper.UnitHelper
 import com.ocmaker.pony.ui.customize.CustomizeCharacterActivity
 import com.ocmaker.pony.ui.home.DataViewModel
 import com.ocmaker.pony.ui.my_creation.fragment.MyAvatarFragment
+import com.ocmaker.pony.ui.my_creation.MyCreationActivity
 import com.ocmaker.pony.ui.my_creation.view_model.MyAvatarViewModel
 import com.ocmaker.pony.ui.permission.PermissionViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class ViewActivity : BaseActivity<ActivityViewBinding>() {
     private val viewModel: ViewViewModel by viewModels()
@@ -76,15 +59,14 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         dataViewModel.ensureData(this)
         viewModel.setPath(intent.getStringExtra(IntentKey.INTENT_KEY)!!)
         viewModel.updateStatusFrom(intent.getIntExtra(IntentKey.STATUS_KEY, ValueKey.AVATAR_TYPE))
-        viewModel.setType(intent.getIntExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW))
 
-        // Set bg_btn_bottom for both buttons
         setButtonBackgrounds()
+        setupUI()
     }
 
     private fun setButtonBackgrounds() {
         binding.includeLayoutBottom.apply {
-            // Left button (Whatsapp)
+            // Left button - Share
             btnWhatsapp.setBackgroundResource(R.drawable.bg_btn_bottom)
             btnWhatsapp.setPadding(0, 0, 0, 0)
             val paramsLeft = btnWhatsapp.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
@@ -94,18 +76,17 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 marginStart = UnitHelper.dpToPx(this@ViewActivity, 4f).toInt()
                 btnWhatsapp.layoutParams = this
             }
-            // Hide the CardView with rounded corners
             val cardViewLeft = btnWhatsapp.getChildAt(0) as? androidx.cardview.widget.CardView
             cardViewLeft?.gone()
-            // Hide WhatsApp icon
-            val lnlInLeft = btnWhatsapp.getChildAt(1) as? ViewGroup
+            val lnlInLeft = btnWhatsapp.getChildAt(1) as? android.view.ViewGroup
             lnlInLeft?.getChildAt(0)?.gone()
 
-            // Update tvWhatsapp text properties
+            tvWhatsapp.text = strings(R.string.share)
             tvWhatsapp.textSize = 16f
             tvWhatsapp.setTypeface(ResourcesCompat.getFont(this@ViewActivity, R.font.pixelifysans_medium))
+            tvWhatsapp.select()
 
-            // Right button (Telegram)
+            // Right button - Download
             btnTelegram.setBackgroundResource(R.drawable.bg_btn_bottom)
             btnTelegram.setPadding(0, 0, 0, 0)
             val paramsRight = btnTelegram.layoutParams as? androidx.appcompat.widget.LinearLayoutCompat.LayoutParams
@@ -115,61 +96,55 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 marginEnd = UnitHelper.dpToPx(this@ViewActivity, 4f).toInt()
                 btnTelegram.layoutParams = this
             }
-            // Hide the CardView with rounded corners
             val cardViewRight = btnTelegram.getChildAt(0) as? androidx.cardview.widget.CardView
             cardViewRight?.gone()
-            // Hide Telegram icon
-            val lnlInRight = btnTelegram.getChildAt(1) as? ViewGroup
+            val lnlInRight = btnTelegram.getChildAt(1) as? android.view.ViewGroup
             lnlInRight?.getChildAt(0)?.gone()
 
+            tvTelegram.text = strings(R.string.download)
             tvTelegram.textSize = 16f
             tvTelegram.setTypeface(ResourcesCompat.getFont(this@ViewActivity, R.font.pixelifysans_medium))
+            tvTelegram.select()
 
-            // Hide download button
             btnDownload.gone()
         }
     }
 
-//    @SuppressLint("CheckResult")
-//    fun loadImageFromFile(path: String) {
-//        val file = File(path)
-//        val request = Glide.with(context)
-//            .load(file)
-//
-//        request.signature(ObjectKey(file.lastModified()))
-//
-//        request.into(this)
-//    }
+    private fun setupUI() {
+        binding.apply {
+            actionBar.apply {
+                setTextActionBar(tvCenter, getString(R.string.my_pixel))
+                setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
+                setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
+
+                // Hide edit icon when coming from design section
+                if (viewModel.statusFrom == ValueKey.MY_DESIGN_TYPE) {
+                    btnActionBarNextRight.invisible()
+                }
+
+                btnShare.gone()
+            }
+
+            tvSuccess.gone()
+        }
+    }
 
     private val editLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val newPath = result.data?.getStringExtra("NEW_PATH") ?: return@registerForActivityResult
                 viewModel.setPath(newPath)
-                binding.imvImage.loadImageFromFile(newPath) // hoặc loadImage(...) của bạn
+                binding.imvImage.loadImageFromFile(newPath)
             }
         }
 
     override fun dataObservable() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                launch {
-                    viewModel.pathInternal.collect { path ->
-                        loadImage(this@ViewActivity, path, binding.imvImage)
-                    }
-                }
-                launch {
-                    viewModel.typeUI.collect { type ->
-                        if (type != -1) {
-                            when (type) {
-                                ValueKey.TYPE_VIEW -> setUpViewUI()
-                                else -> setUpSuccessUI()
-                            }
-                        }
-                    }
+                viewModel.pathInternal.collect { path ->
+                    loadImage(this@ViewActivity, path, binding.imvImage)
                 }
             }
-
         }
     }
 
@@ -177,14 +152,16 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         binding.apply {
             actionBar.apply {
                 btnActionBarLeft.tap { handleBack() }
-                btnActionBarRight.tap { handleActionBarRight() }
+                btnActionBarRight.tap { handleDelete() }
                 btnActionBarNextRight.tap { handleEditClick(viewModel.pathInternal.value) }
-                btnShare.tap(2500) { viewModel.shareFiles(this@ViewActivity) }
             }
 
-            // Access buttons from included layout_bottom
-            includeLayoutBottom.btnWhatsapp.tap(2590) { handleBottomBarLeft() }
-            includeLayoutBottom.btnTelegram.tap(2000) { handleBottomBarRight() }
+            includeLayoutBottom.btnWhatsapp.tap(2590) {
+                viewModel.shareFiles(this@ViewActivity)
+            }
+            includeLayoutBottom.btnTelegram.tap(2000) {
+                checkStoragePermission()
+            }
         }
     }
 
@@ -192,114 +169,6 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
         binding.actionBar.apply {
             setImageActionBar(btnActionBarLeft, R.drawable.ic_back)
         }
-    }
-
-    private fun setUpViewUI() {
-        binding.apply {
-          //  loadNativeCollabAds(R.string.native_cl_detail, binding.flNativeCollab, lnlBottom, bottomFailed = 150, bottomLoadSuccess = 82)
-
-          //  nativeAds.visible()
-          //  flNativeCollab.gone()
-
-            actionBar.apply {
-               // setImageActionBar(btnActionBarRight, R.drawable.ic_delete_view)
-               // setImageActionBar(btnActionBarNextToRight, R.drawable.ic_edit_2)
-                setTextActionBar(tvCenter, getString(R.string.my_pixel))
-
-
-                setImageActionBar(btnActionBarNextRight, R.drawable.ic_edit_view)
-
-                // Hide delete icon when coming from design section
-                if (viewModel.statusFrom == ValueKey.MY_DESIGN_TYPE) {
-                    btnActionBarNextRight.invisible()
-
-                }
-
-                setImageActionBar(btnActionBarRight, R.drawable.ic_delete)
-                // Hide btnShare in view mode
-                btnShare.gone()
-
-            }
-//            cvImage.apply {
-//                radius = 16f
-//                strokeWidth = 2
-//                strokeColor = getColor(R.color.red_BA)
-//            }
-
-            val params = cvImage.layoutParams as ConstraintLayout.LayoutParams
-            cvImage.layoutParams = params
-
-            tvSuccess.gone()
-
-            includeLayoutBottom.tvWhatsapp.text = strings(R.string.share)
-            includeLayoutBottom.tvWhatsapp.select()
-
-            includeLayoutBottom.tvTelegram.text = strings(R.string.download)
-            includeLayoutBottom.tvTelegram.select()
-        }
-    }
-
-    private fun setUpSuccessUI() {
-        binding.apply {
-            actionBar.apply {
-                // Hide center text and imgCenter
-                tvCenter.visible()
-                tvCenter.setText(getString(R.string.successfully))
-                imgCenter.gone()
-
-                // Hide left and next right buttons
-                btnActionBarLeft.visible()
-                btnActionBarNextRight.gone()
-
-                // Show and configure btnShare as home button
-                btnShare.visible()
-                btnShare.setImageResource(R.drawable.ic_home_ss)
-                btnShare.setOnClickListener(null) // Clear any existing listeners
-                btnShare.tap {
-                    showInterAll {
-                        startIntentWithClearTop(HomeActivity::class.java)
-                    }
-                }
-            }
-
-            val params = cvImage.layoutParams as ConstraintLayout.LayoutParams
-            cvImage.layoutParams = params
-
-            tvSuccess.visible()
-
-            includeLayoutBottom.tvWhatsapp.text = strings(R.string.my_album)
-            includeLayoutBottom.tvWhatsapp.select()
-
-            includeLayoutBottom.tvTelegram.text = strings(R.string.download)
-            includeLayoutBottom.tvTelegram.select()
-        }
-    }
-    private fun handleActionBarRight() {
-        when (viewModel.typeUI.value) {
-            ValueKey.TYPE_VIEW -> {
-                handleDelete()
-            }
-
-            else -> {
-                showInterAll{ startIntentWithClearTop(HomeActivity::class.java) }
-            }
-        }
-    }
-
-    private fun handleBottomBarLeft() {
-        when (viewModel.typeUI.value) {
-            ValueKey.TYPE_VIEW -> {
-                viewModel.shareFiles(this@ViewActivity)
-            }
-
-            else -> {
-                showInterAll{ startIntentRightToLeft(MyCreationActivity::class.java, true) }
-            }
-        }
-    }
-
-    private fun handleBottomBarRight() {
-        checkStoragePermission()
     }
 
     private fun checkStoragePermission() {
@@ -326,16 +195,13 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                         dismissLoading()
                         showToast(R.string.download_success)
                     }
-
                     else -> {
                         dismissLoading()
                         showToast(R.string.download_failed_please_try_again_later)
                     }
-
                 }
             }
         }
-
     }
 
     private fun handleDelete() {
@@ -356,13 +222,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                             dismissLoading()
                             resetMyCreationSelectionMode()
 
-                            // ✅ Trả kết quả về màn trước (MyAvatarFragment/MyCreationActivity)
                             setResult(Activity.RESULT_OK, Intent().apply {
                                 putExtra("DELETED_PATH", viewModel.pathInternal.value)
                             })
                             finish()
                         }
-
                         else -> {
                             dismissLoading()
                             showToast(R.string.delete_failed_please_try_again)
@@ -379,12 +243,10 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     }
 
     private fun resetMyCreationSelectionMode() {
-        // Reset selection mode in MyCreationActivity before going back
         val myCreationActivity = MyCreationActivity.getInstance()
         if (myCreationActivity != null) {
             android.util.Log.d("ViewActivity", "Resetting selection mode in MyCreationActivity")
 
-            // Reset the fragment's selection state first
             val designFragment = myCreationActivity.supportFragmentManager.findFragmentByTag("MyDesignFragment")
             if (designFragment is com.ocmaker.pony.ui.my_creation.fragment.MyDesignFragment) {
                 designFragment.resetSelectionMode()
@@ -395,7 +257,6 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 avatarFragment.resetSelectionMode()
             }
 
-            // Exit selection mode in activity
             myCreationActivity.exitSelectionMode()
         } else {
             android.util.Log.w("ViewActivity", "MyCreationActivity instance not found - unable to reset selection mode")
@@ -416,16 +277,12 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                         putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
                     }
 
-                    // ✅ Chỉ launch 1 lần
                     editLauncher.launch(intent)
-
-                    // ✅ Apply animation (nếu muốn)
                     overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
                 }
             }
         }
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -444,5 +301,4 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     override fun onBackPressed() {
         handleBack()
     }
-
 }
