@@ -55,7 +55,7 @@
     </androidx.cardview.widget.CardView>
 
     <!--    tvStart-->
-    <com.ocmaker.pixcel.maker.core.custom.text.DoubleStrokeTextView
+    <com.ocmaker.pony.core.custom.text.DoubleStrokeTextView
         android:id="@+id/tvStart"
         style="@style/single_marquee"
         android:layout_width="100dp"
@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="@+id/btnActionBarLeft" />
 
     <!--    tvCenter-->
-    <com.ocmaker.pixcel.maker.core.custom.text.DoubleStrokeTextView
+    <com.ocmaker.pony.core.custom.text.DoubleStrokeTextView
     android:id="@+id/tvCenter"
         style="@style/single_marquee"
         android:layout_width="100dp"

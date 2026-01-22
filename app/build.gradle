@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace 'com.ocmaker.pixcel.maker'
+    namespace 'com.ocmaker.pony'
     compileSdk 36
 
     defaultConfig {
-        applicationId "com.ocmaker.pixcel.maker"
+        applicationId "com.ocmaker.pony"
         minSdk 24
         targetSdk 36
         versionCode 1

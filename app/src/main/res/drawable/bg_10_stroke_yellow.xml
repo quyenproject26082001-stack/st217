@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <corners android:radius="7dp" />
+            <corners android:radius="10dp" />
             <gradient
                 android:angle="-90"
-                android:endColor="#01579B"
-                android:centerColor="#01579B"
-                android:startColor="#01579B" />
+                android:endColor="#AB5BFF"
+                android:centerColor="#AB5BFF"
+                android:startColor="#AB5BFF" />
 
         </shape>
     </item>

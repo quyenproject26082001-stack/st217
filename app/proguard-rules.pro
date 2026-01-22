@@ -81,6 +81,6 @@
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
 
--keep class com.ocmaker.pixcel.maker.ui.splash.SplashActivity.** {*; }
--keep class com.ocmaker.pixcel.maker.data.** {*; }
+-keep class com.ocmaker.pony.ui.splash.SplashActivity.** {*; }
+-keep class com.ocmaker.pony.data.** {*; }
 -keep public class com.google.android.gms.** { public protected *; }

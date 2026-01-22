@@ -84,7 +84,7 @@
 
 
             <!--            btnQuickMaker-->
-            <com.ocmaker.pixcel.maker.core.custom.text.DoubleStrokeTextView
+            <com.ocmaker.pony.core.custom.text.DoubleStrokeTextView
                 android:id="@+id/tv1"
                 style="@style/single_marquee"
                 android:layout_width="0dp"
@@ -117,7 +117,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnCreate" />
 
             <!--            tv2-->
-            <com.ocmaker.pixcel.maker.core.custom.text.DoubleStrokeTextView
+            <com.ocmaker.pony.core.custom.text.DoubleStrokeTextView
                 android:id="@+id/tv2"
                 style="@style/single_marquee"
                 android:layout_width="0dp"
@@ -148,7 +148,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnQuickMaker" />
 
             <!--            tv3-->
-            <com.ocmaker.pixcel.maker.core.custom.text.DoubleStrokeTextView
+            <com.ocmaker.pony.core.custom.text.DoubleStrokeTextView
                 android:id="@+id/tv3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"

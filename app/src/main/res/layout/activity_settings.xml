@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ocmaker.pixcel.maker.ui.SettingsActivity">
+    tools:context="com.ocmaker.pony.ui.SettingsActivity">
 
     <ImageView
         android:id="@+id/imgBackground"
