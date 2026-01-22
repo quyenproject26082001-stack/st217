@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     app:layout_constraintDimensionRatio="1:1"
-    android:layout_margin="4dp"
-    >
+    android:layout_margin="1.5dp">
 
 
 
@@ -20,15 +20,12 @@
         app:layout_constraintEnd_toEndOf="parent"/>
 
 
-    <com.google.android.material.card.MaterialCardView
+    <FrameLayout
         android:id="@+id/cardLayerItem"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="2dp"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="6dp"
-        app:strokeWidth="2dp"
-        app:strokeColor="#FF9CFD"
+        tools:background="@drawable/layer_slt"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,8 +35,10 @@
         <!--                    imvImage-->
         <ImageView
             android:id="@+id/imvImage"
+            android:layout_margin="7dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            tools:src="1"
             android:scaleType="centerCrop"
             android:clipToOutline="true" />
 
@@ -50,9 +49,11 @@
             android:layout_height="match_parent"
             android:clickable="true"
             android:focusable="true"
+            android:layout_margin="7dp"
             android:scaleType="fitXY"
             android:src="@drawable/ic_none"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:tint="#AB5BFF" />
 
         <!--            btnRandom-->
         <ImageView
@@ -60,11 +61,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clickable="true"
+            android:layout_margin="7dp"
             android:focusable="true"
+            app:tint="#AB5BFF"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_random_layer"
             android:visibility="gone" />
 
 
-    </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

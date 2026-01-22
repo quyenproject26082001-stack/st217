@@ -124,7 +124,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
 
     private fun updatePermissionUI(granted: Boolean, isStorage: Boolean) {
         val imageView = if (isStorage) binding.swPermission else binding.swNotification
-        imageView.setImageResource(if (granted) R.drawable.ic_sw_on else R.drawable.ic_sw_on)
+        imageView.setImageResource(if (granted) R.drawable.ic_sw_on else R.drawable.ic_sw_off)
     }
 
     override fun onRequestPermissionsResult(

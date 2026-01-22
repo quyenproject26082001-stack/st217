@@ -19,6 +19,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
+import android.widget.ImageView
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -30,6 +31,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.facebook.shimmer.ShimmerDrawable
 import com.ocmaker.pony.R
 import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.checkPermissions
@@ -436,14 +438,29 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         }
     }
 
+
+    fun loadCharacter(context: Context, path: String, imageView: ImageView, isLoadShimmer: Boolean = true) {
+        val shimmerDrawable = ShimmerDrawable().apply {
+            setShimmer(DataLocal.shimmer)
+        }
+        if (isLoadShimmer){
+            Glide.with(context).load(path).placeholder(shimmerDrawable).error(shimmerDrawable).into(imageView)
+        }else{
+            Glide.with(context).load(path).placeholder(shimmerDrawable).error(shimmerDrawable).into(imageView)
+        }
+
+    }
     private fun initData() {
         lifecycleScope.launch(Dispatchers.IO) {
             showLoading()
             viewModel.loadDataDefault(this@AddCharacterActivity)
             viewModel.updatePathDefault(intent.getStringExtra(IntentKey.INTENT_KEY) ?: "")
-            addDrawable(viewModel.pathDefault, true)
+
+
 
             withContext(Dispatchers.Main) {
+                loadCharacter(this@AddCharacterActivity, viewModel.pathDefault, binding.imvCharacter)
+
                 viewModel.setTypeNavigation(ValueKey.BACKGROUND_NAVIGATION)
                 viewModel.setTypeBackground(ValueKey.IMAGE_BACKGROUND)
                 backgroundImageAdapter.submitList(viewModel.backgroundImageList)
@@ -579,7 +596,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         tabView.layoutParams = params
 
         // Set text size = 18sp
-        textView.textSize = 14f
+        textView.textSize = 16f
 
         // Apply gradient color from top to bottom - WHITE gradient for selected
         textView.post {
@@ -617,15 +634,15 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         tabView.layoutParams = params
 
         // Set text size = 14sp, color = colorPrimary
-        textView.textSize = 14f
+        textView.textSize = 16f
 
         // Apply RED gradient for unselected
         textView.post {
             val textHeight = textView.lineHeight.toFloat()
             val shader = LinearGradient(
                 0f, 0f, 0f, textHeight,
-                Color.parseColor("#BA0101"),
-                Color.parseColor("#BA0101"),
+                Color.parseColor("#AB5BFF"),
+                Color.parseColor("#AB5BFF"),
                 Shader.TileMode.CLAMP
             )
             textView.paint.shader = shader
@@ -656,13 +673,20 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
 
         // Show sectionTab and spaceSectionTab only when Background navigation is selected
         binding.apply {
-            if (type == ValueKey.BACKGROUND_NAVIGATION) {
-                sectionTab.visible()
-                spaceSectionTab.visible()
+            val isBackground = (type == ValueKey.BACKGROUND_NAVIGATION)
+
+            // Section tab
+            if (isBackground) sectionTab.visible() else sectionTab.gone()
+
+            if (isBackground) {
+                bgBg.visible()
+                bgOther.gone()
             } else {
-                sectionTab.gone()
-                spaceSectionTab.invisible()
+                bgBg.gone()
+                bgOther.visible()
             }
+
+
         }
     }
 

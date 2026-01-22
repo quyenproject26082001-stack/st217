@@ -36,18 +36,19 @@ class LayerCustomizeAdapter(val context: Context) : ListAdapter<ItemNavCustomMod
                     root.translationZ = 16f
                     root.scaleX = 1.0f
                     root.scaleY = 1.0f
-                    vFocus.visible()
-                    cardLayerItem.strokeColor = Color.parseColor("#A1CCEF")
-                    cardLayerItem.setCardBackgroundColor(Color.parseColor("#A1CCEF"))
-                    vFocus.setBackgroundResource(R.drawable.bg_10_stroke_yellow)
+                    vFocus.gone()
+
+                    cardLayerItem.setBackgroundResource(R.drawable.layer_slt)
+                   // vFocus.setBackgroundResource(R.drawable.bg_10_stroke_yellow)
                 } else {
                     // Reset to normal state
                     root.translationZ = 0f
                     root.scaleX = 1f
                     root.scaleY = 1f
                     vFocus.gone()
-                    cardLayerItem.strokeColor = Color.parseColor("#E0CBFC")
-                    cardLayerItem.setCardBackgroundColor(Color.WHITE)
+                    cardLayerItem.setBackgroundResource(R.drawable.layer_uslt)
+
+
                 }
 
                 when (item.path) {

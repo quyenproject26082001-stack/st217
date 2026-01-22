@@ -22,13 +22,14 @@
             android:layout_height="match_parent"
             android:layout_margin="2.5dp"
             android:visibility="gone"
+            tools:visibility="visible"
             android:background="@drawable/bg_stroke_img" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="4.5dp"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="12dp"
             app:cardElevation="0dp"
             app:strokeColor="@color/transparent"
             app:cardBackgroundColor="@color/transparent"
@@ -55,7 +56,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
-                    android:scaleType="fitCenter"
+                    android:scaleType="fitXY"
+
                     android:src="@drawable/ic_add_item" />
 
                 <LinearLayout
@@ -73,9 +75,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/add_image"
-                        android:textColor="#BA0101"
+                        android:textColor="@color/app"
                         android:gravity="center"
-                        android:fontFamily="@font/pixelifysans_bold"
+                        android:fontFamily="@font/roboto_bold"
                         android:textSize="8sp"
                         />
 

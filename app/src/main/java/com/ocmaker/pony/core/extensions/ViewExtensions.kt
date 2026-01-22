@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.view.View
+import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
@@ -20,6 +21,7 @@ import com.ocmaker.pony.core.helper.SharePreferenceHelper
 import com.ocmaker.pony.core.helper.SoundHelper
 import com.ocmaker.pony.core.utils.DataLocal
 import com.ocmaker.pony.core.utils.state.RateState
+import kotlin.math.roundToInt
 
 // ----------------------------
 // Visibility extensions
@@ -92,7 +94,23 @@ fun View.tapWithSound(interval: Long = 500, action: (View) -> Unit) {
         }
     }
 }
-
+fun Int.dp(context: Context): Int =
+    (this * context.resources.displayMetrics.density).roundToInt()
+fun View.setMargins(
+    left: Int? = null,
+    top: Int? = null,
+    right: Int? = null,
+    bottom: Int? = null
+) {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(
+        left ?: params.leftMargin,
+        top ?: params.topMargin,
+        right ?: params.rightMargin,
+        bottom ?: params.bottomMargin
+    )
+    layoutParams = params
+}
 // ----------------------------
 // UI Capture
 // ----------------------------

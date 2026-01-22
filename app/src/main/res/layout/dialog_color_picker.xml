@@ -11,7 +11,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="16dp"
-            android:background="@drawable/bg_16_solid_white_stroke_brown">
+            android:background="@drawable/bg_16_solid_white_stroke_brown"
+            >
 
             <TextView
                 android:id="@+id/tvTitle"
@@ -20,10 +21,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
-                android:fontFamily="@font/pixelifysans_bold"
+                android:fontFamily="@font/chewy_regular"
                 android:gravity="center"
                 android:text="@string/choose_color"
-                android:textColor="#BA0101"
+                android:textColor="#AB5BFF"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -45,6 +46,7 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:layout_alignParentEnd="true"
+                    app:tint="@color/app"
                     android:src="@drawable/ic_close_color_pick"
                     />
             </RelativeLayout>
@@ -81,27 +83,50 @@
                 <!--                btnDone-->
                 <RelativeLayout
                     android:id="@+id/btnDone"
-                    android:layout_width="180dp"
-                    android:layout_height="36dp"
+                    android:layout_width="115dp"
+                    android:layout_height="38dp"
                     android:layout_gravity="end"
                     android:layout_marginTop="32dp"
                     android:background="@drawable/bg_done_pickercolor"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
-
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:fontFamily="@font/londrina_solid_regular"
+                        android:fontFamily="@font/chewy_regular"
                         android:gravity="center"
                         android:text="@string/done"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textColor="@color/app"
+                        android:textSize="18sp" />
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:id="@+id/btnStringColor"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_gravity="start"
+                    android:layout_marginStart="6dp"
+                    android:layout_marginEnd="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/btnDone"
+                    app:layout_constraintBottom_toBottomOf="@id/btnDone"
+                    app:layout_constraintEnd_toStartOf="@id/btnDone"
+                    android:background="@drawable/bg_string_color">
 
+                    <TextView
+                        android:id="@+id/tvColorString"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:fontFamily="@font/chewy_regular"
+                        android:gravity="center"
+                        android:text="#FFFFFF"
+                        android:layout_marginStart="12dp"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp" />
+                </RelativeLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
 

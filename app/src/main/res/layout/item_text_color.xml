@@ -19,6 +19,7 @@
             android:id="@+id/vFocus"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:background="@drawable/bg_stroke_gradient_circle" />
 
         <FrameLayout
@@ -32,15 +33,17 @@
                 android:id="@+id/imvColor"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="2dp" />
+                android:layout_margin="0dp" />
 
             <!--            btnAddColor-->
             <ImageView
                 android:id="@+id/btnAddColor"
-                android:layout_width="16dp"
-                android:layout_height="16dp"
+                android:layout_width="match_parent"
+                android:layout_margin="1dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/img0text_color"
                 android:layout_gravity="center"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
         </FrameLayout>
     </FrameLayout>

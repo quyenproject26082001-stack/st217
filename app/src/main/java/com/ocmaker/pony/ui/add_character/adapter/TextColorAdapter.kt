@@ -56,7 +56,7 @@ class TextColorAdapter : BaseAdapter<SelectedModel, ItemTextColorBinding>(ItemTe
 
                 // Set margin to 2dp for other positions (keep normal size)
                 val layoutParams = imvColor.layoutParams as android.widget.FrameLayout.LayoutParams
-                val margin2dp = imvColor.context.resources.displayMetrics.density * 2
+                val margin2dp = imvColor.context.resources.displayMetrics.density * 1
                 layoutParams.setMargins(margin2dp.toInt(), margin2dp.toInt(), margin2dp.toInt(), margin2dp.toInt())
                 imvColor.layoutParams = layoutParams
 

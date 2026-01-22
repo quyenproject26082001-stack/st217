@@ -27,7 +27,7 @@
             android:layout_height="match_parent"
             android:layout_margin="4.5dp"
             app:cardBackgroundColor="@color/transparent"
-            app:cardCornerRadius="5dp"
+            app:cardCornerRadius="99dp"
             app:strokeColor="@color/transparent"
             app:cardElevation="0dp">
 
