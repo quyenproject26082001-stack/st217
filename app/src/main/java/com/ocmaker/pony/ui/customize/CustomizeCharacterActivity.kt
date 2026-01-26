@@ -43,6 +43,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.get
 import kotlin.jvm.java
 
 class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
@@ -82,8 +83,9 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                         viewModel.positionSelected = intent.getIntExtra(IntentKey.INTENT_KEY, 0)
                         viewModel.statusFrom =
                             intent.getIntExtra(IntentKey.STATUS_FROM_KEY, ValueKey.CREATE)
-                        viewModel.setDataCustomize(list[viewModel.positionSelected])
-                        viewModel.setIsDataAPI(list[viewModel.positionSelected].isFromAPI)
+                        val safePosition = viewModel.positionSelected.coerceIn(0, list.size - 1)
+                        viewModel.setDataCustomize(list[safePosition])
+                        viewModel.setIsDataAPI(list[safePosition].isFromAPI)
                         initData()
                     }
                 }
