@@ -60,7 +60,7 @@
             android:id="@+id/btnMusic"
             android:layout_marginTop="20dp"
             android:layout_gravity="center"
-            android:layout_width="96dp"
+            android:layout_width="90dp"
             android:scaleType="fitXY"
             android:layout_height="41dp"
             android:src="@drawable/ic_sw_on"

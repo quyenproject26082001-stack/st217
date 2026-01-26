@@ -27,6 +27,7 @@ import com.ocmaker.pony.core.utils.key.ValueKey
 import com.ocmaker.pony.core.utils.state.SaveState
 import com.ocmaker.pony.data.model.custom.ItemNavCustomModel
 import com.ocmaker.pony.databinding.ActivityCustomizeBinding
+import com.ocmaker.pony.dialog.DialogType
 import com.ocmaker.pony.dialog.YesNoDialog
 import com.ocmaker.pony.ui.home.DataViewModel
 import com.ocmaker.pony.core.extensions.tap
@@ -479,13 +480,21 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             viewModel.setPositionNavSelected(positionBottomNavigation)
             viewModel.setPositionCustom(viewModel.dataCustomize.value!!.layerList[positionBottomNavigation].positionCustom)
             viewModel.setClickBottomNavigation(positionBottomNavigation)
-            withContext(Dispatchers.Main) { showInterAll { checkStatusColor() } }
+            withContext(Dispatchers.Main) {
+                // Scroll color list to selected item when tab changes
+                if (viewModel.colorItemNavList[viewModel.positionNavSelected].isNotEmpty()) {
+                    binding.rcvColor.smoothScrollToPosition(
+                        viewModel.colorItemNavList[viewModel.positionNavSelected].indexOfFirst { it.isSelected }
+                    )
+                }
+                showInterAll { checkStatusColor() }
+            }
         }
     }
 
     private fun confirmExit() {
         val dialog =
-            YesNoDialog(this, R.string.exit_cus, R.string.haven_t_saved_it_yet_do_you_want_to_exit)
+            YesNoDialog(this, R.string.exit, R.string.do_you_want_to_exit)
         LanguageHelper.setLocale(this)
         dialog.show()
         dialog.onYesClick = {
@@ -563,7 +572,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
         val dialog = YesNoDialog(
             this@CustomizeCharacterActivity,
             R.string.reset,
-            R.string.change_your_whole_design_are_you_sure
+            R.string.change_your_whole_design_are_you_sure,
+            dialogType = DialogType.RESET
         )
         LanguageHelper.setLocale(this)
         dialog.show()

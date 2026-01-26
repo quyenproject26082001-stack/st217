@@ -70,6 +70,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
         }
     }
 
+    // Enable background music for HomeActivity
+    override fun shouldPlayBackgroundMusic(): Boolean = true
+
     @SuppressLint("MissingSuperCall", "GestureBackNavigation")
     override fun onBackPressed() {
         if (!sharePreference.getIsRate(this) && sharePreference.getCountBack() % 2 == 0) {
@@ -103,9 +106,9 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
 
     private fun updateText() {
         binding.apply {
-            tv1.text = strings(R.string.character_maker)
-            tv2.text = strings(R.string.quick_maker)
-            tv3.text = strings(R.string.my_character)
+            tv1.text = strings(R.string.pony_maker)
+            tv2.text = strings(R.string.trending)
+            tv3.text = strings(R.string.my_work)
         }
     }
 

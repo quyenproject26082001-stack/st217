@@ -11,6 +11,7 @@ import com.ocmaker.pony.R
 import com.ocmaker.pony.core.extensions.handleBackLeftToRight
 import com.ocmaker.pony.core.extensions.hideNavigation
 import com.ocmaker.pony.core.helper.LanguageHelper
+import com.ocmaker.pony.core.helper.MusicHelper
 import com.ocmaker.pony.core.helper.SharePreferenceHelper
 import com.ocmaker.pony.core.helper.SoundHelper
 import com.ocmaker.pony.dialog.WaitingDialog
@@ -38,6 +39,9 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     open fun initAds() {}
 
+    // Override this to enable background music for specific activities
+    protected open fun shouldPlayBackgroundMusic(): Boolean = false
+
     protected val loadingDialog: WaitingDialog by lazy {
         WaitingDialog(this)
     }
@@ -62,6 +66,13 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
         if (!SoundHelper.isSoundNotNull(R.raw.touch)) {
             SoundHelper.loadSound(this, R.raw.touch)
         }
+        // Initialize background music only if activity should play it
+        if (shouldPlayBackgroundMusic()) {
+            MusicHelper.init(this)
+            if (sharePreference.isMusicEnabled()) {
+                MusicHelper.play()
+            }
+        }
         initAds()
         dataObservable()
         viewListener()
@@ -72,6 +83,18 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         hideNavigation()
+        // Resume music if enabled and activity should play it
+        if (shouldPlayBackgroundMusic() && sharePreference.isMusicEnabled()) {
+            MusicHelper.play()
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // Pause music when app goes to background (only if this activity plays music)
+        if (shouldPlayBackgroundMusic()) {
+            MusicHelper.pause()
+        }
     }
 
     @SuppressLint("MissingSuperCall", "GestureBackNavigation")

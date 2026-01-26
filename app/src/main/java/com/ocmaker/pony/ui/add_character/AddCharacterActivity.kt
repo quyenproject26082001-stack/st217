@@ -62,6 +62,7 @@ import com.ocmaker.pony.data.model.draw.DrawableDraw
 import com.ocmaker.pony.databinding.ActivityAddCharacterBinding
 import com.ocmaker.pony.dialog.ChooseColorDialog
 import com.ocmaker.pony.dialog.DialogSpeech
+import com.ocmaker.pony.dialog.DialogType
 import com.ocmaker.pony.dialog.YesNoDialog
 import com.ocmaker.pony.listener.listenerdraw.OnDrawListener
 import com.ocmaker.pony.ui.add_character.adapter.BackgroundColorAdapter
@@ -76,6 +77,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.collections.get
 import kotlin.getValue
 import kotlin.toString
 
@@ -420,11 +422,15 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             rcvSticker.apply {
                 adapter = stickerAdapter
                 itemAnimator = null
+                setItemViewCacheSize(200)
+                setHasFixedSize(true)
             }
 
             rcvSpeech.apply {
                 adapter = speechAdapter
                 itemAnimator = null
+                setItemViewCacheSize(200)
+                setHasFixedSize(true)
             }
 
             rcvFont.apply {
@@ -456,11 +462,11 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             showLoading()
             viewModel.loadDataDefault(this@AddCharacterActivity)
             viewModel.updatePathDefault(intent.getStringExtra(IntentKey.INTENT_KEY) ?: "")
+            addDrawable(viewModel.pathDefault, true)
 
 
 
             withContext(Dispatchers.Main) {
-                loadCharacter(this@AddCharacterActivity, viewModel.pathDefault, binding.imvCharacter)
 
                 viewModel.setTypeNavigation(ValueKey.BACKGROUND_NAVIGATION)
                 viewModel.setTypeBackground(ValueKey.IMAGE_BACKGROUND)
@@ -711,7 +717,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
 
     private fun confirmReset() {
         viewModel.setIsFocusEditText(false)
-        val dialog = YesNoDialog(this, R.string.reset, R.string.change_your_whole_design_are_you_sure)
+        val dialog = YesNoDialog(this, R.string.reset, R.string.change_your_whole_design_are_you_sure, dialogType = DialogType.RESET)
         dialog.show()
 
         fun dismissDialog() {
@@ -737,6 +743,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                 binding.edtText.setText("")
                 binding.edtText.setFont(viewModel.textFontList.first().color)
                 binding.edtText.setTextColor(viewModel.textColorList[1].color)
+                binding.tvGetText.setTextColor(viewModel.textColorList[1].color) // Thêm dòng này
                 addDrawable(viewModel.pathDefault, true)
                 backgroundImageAdapter.submitList(viewModel.backgroundImageList)
                 backgroundColorAdapter.submitList(viewModel.backgroundColorList)

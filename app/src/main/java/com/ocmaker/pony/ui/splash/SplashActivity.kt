@@ -21,6 +21,11 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
     private val dataViewModel: DataViewModel by viewModels()
     var interCallBack: InterCallback? = null
 
+    private val MIN_SPLASH_MS = 0L  // Reduced from 3000ms to 1500ms for faster startup
+    private var minTimePassed = false
+    private var dataReady = false
+    private var triggered = false
+
     override fun setViewBinding(): ActivitySplashBinding {
         return ActivitySplashBinding.inflate(LayoutInflater.from(this))
     }
@@ -53,29 +58,39 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             }
         }
         dataViewModel.ensureData(this)
+
+        lifecycleScope.launch {
+            kotlinx.coroutines.delay(MIN_SPLASH_MS)
+            minTimePassed = true
+            tryProceed()
+        }
     }
 
     override fun dataObservable() {
         lifecycleScope.launch {
             dataViewModel.allData.collect { dataList ->
                 if (dataList.isNotEmpty()){
-                    dataViewModel.getAllParts(this@SplashActivity).collect { dataAPI ->
-                        when(dataAPI){
-                            HandleState.LOADING -> {}
-                            else -> {
-                                Admob.getInstance().loadSplashInterAds(
-                                    this@SplashActivity,
-                                    getString(R.string.inter_splash),
-                                    30000,
-                                    2000,
-                                    interCallBack
-                                )
-                            }
-                        }
-                    }
+                    // Data is ready, no need to call API again
+                    // (API already called in saveAndReadData if needed)
+                    dataReady = true
+                    tryProceed()
                 }
             }
         }
+    }
+
+    private fun tryProceed() {
+        if (triggered) return
+        if (!minTimePassed || !dataReady) return
+
+        triggered = true
+        Admob.getInstance().loadSplashInterAds(
+            this@SplashActivity,
+            getString(R.string.inter_splash),
+            30000,
+            2000,
+            interCallBack
+        )
     }
 
     override fun viewListener() {

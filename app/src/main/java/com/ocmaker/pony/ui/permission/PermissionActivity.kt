@@ -57,11 +57,11 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         val textRes = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) R.string.to_access_13 else R.string.to_access
 
         binding.txtPer.text = TextUtils.concat(
-            createColoredText(R.string.allow, R.color.white),
+            createColoredText(R.string.allow, R.color.purple_text),
             " ",
-            createColoredText(R.string.app_name, R.color.white),
+            createColoredText(R.string.app_name, R.color.purple_text),
             " ",
-            createColoredText(textRes, R.color.white)
+            createColoredText(textRes, R.color.purple_text)
         )
     }
 
@@ -175,7 +175,7 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
     private fun createColoredText(
         @androidx.annotation.StringRes textRes: Int,
         @androidx.annotation.ColorRes colorRes: Int,
-        font: Int = R.font.londrina_solid_regular
+        font: Int = R.font.roboto_medium
     ) = StringHelper.changeColor(this, getString(textRes), colorRes, font)
 
     private fun handleContinue() {
