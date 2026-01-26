@@ -31,7 +31,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.facebook.shimmer.ShimmerDrawable
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 import com.ocmaker.pony.R
 import com.ocmaker.pony.core.base.BaseActivity
 import com.ocmaker.pony.core.extensions.checkPermissions
@@ -490,14 +495,57 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         }
     }
 
-    private fun addDrawable(path: String, isCharacter: Boolean = false, bitmapText: Bitmap? = null) {
-        lifecycleScope.launch(Dispatchers.IO) {
-            val bitmapDefault = if (bitmapText == null) Glide.with(this@AddCharacterActivity).load(path).submit().get()
-                .toBitmap() else bitmapText
-            val drawableEmoji = viewModel.loadDrawableEmoji(this@AddCharacterActivity, bitmapDefault, isCharacter)
+    /**
+     * Async bitmap loading using Glide without blocking threads
+     */
+    private suspend fun loadBitmapAsync(path: String): Bitmap = suspendCancellableCoroutine { continuation ->
+        val target = object : CustomTarget<Bitmap>() {
+            override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                if (continuation.isActive) {
+                    continuation.resume(resource)
+                }
+            }
 
-            withContext(Dispatchers.Main) {
-                drawableEmoji.let { binding.drawView.addDraw(it) }
+            override fun onLoadFailed(errorDrawable: android.graphics.drawable.Drawable?) {
+                if (continuation.isActive) {
+                    continuation.resumeWithException(Exception("Failed to load bitmap from: $path"))
+                }
+            }
+
+            override fun onLoadCleared(placeholder: android.graphics.drawable.Drawable?) {
+                // Cleanup if needed
+            }
+        }
+
+        Glide.with(this@AddCharacterActivity)
+            .asBitmap()
+            .load(path)
+            .into(target)
+
+        continuation.invokeOnCancellation {
+            Glide.with(this@AddCharacterActivity).clear(target)
+        }
+    }
+
+    private fun addDrawable(path: String, isCharacter: Boolean = false, bitmapText: Bitmap? = null) {
+        lifecycleScope.launch {
+            try {
+                val bitmapDefault = if (bitmapText == null) {
+                    loadBitmapAsync(path)
+                } else {
+                    bitmapText
+                }
+
+                val drawableEmoji = withContext(Dispatchers.IO) {
+                    viewModel.loadDrawableEmoji(this@AddCharacterActivity, bitmapDefault, isCharacter)
+                }
+
+                binding.drawView.addDraw(drawableEmoji)
+            } catch (e: Exception) {
+                Log.e("AddCharacterActivity", "Failed to add drawable: ${e.message}", e)
+                withContext(Dispatchers.Main) {
+                    showToast(getString(R.string.save_failed_please_try_again))
+                }
             }
         }
     }

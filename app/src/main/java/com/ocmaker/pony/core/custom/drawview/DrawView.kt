@@ -48,7 +48,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     FrameLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val MIN_SCALE_PERCENT = 0.5f
+        private const val MIN_SCALE_PERCENT = 0.6f
     }
 
     private val initialScaleMap = HashMap<DrawableDraw, Float>()
