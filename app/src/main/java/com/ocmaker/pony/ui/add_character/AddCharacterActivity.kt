@@ -56,6 +56,7 @@ import com.ocmaker.pony.core.extensions.showInterAll
 import com.ocmaker.pony.core.extensions.tap
 import com.ocmaker.pony.core.extensions.visible
 import com.ocmaker.pony.core.helper.BitmapHelper
+import com.ocmaker.pony.core.helper.LanguageHelper
 import com.ocmaker.pony.core.helper.UnitHelper
 import com.ocmaker.pony.core.utils.DataLocal
 import com.ocmaker.pony.core.utils.key.IntentKey
@@ -528,19 +529,25 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
     }
 
     private fun addDrawable(path: String, isCharacter: Boolean = false, bitmapText: Bitmap? = null) {
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val bitmapDefault = if (bitmapText == null) {
-                    loadBitmapAsync(path)
+                    Glide.with(this@AddCharacterActivity)
+                        .asBitmap()
+                        .load(path)
+                        .override(256, 256)
+                        .encodeQuality(50)
+                        .submit()
+                        .get()
                 } else {
                     bitmapText
                 }
 
-                val drawableEmoji = withContext(Dispatchers.IO) {
-                    viewModel.loadDrawableEmoji(this@AddCharacterActivity, bitmapDefault, isCharacter)
-                }
+                val drawableEmoji = viewModel.loadDrawableEmoji(this@AddCharacterActivity, bitmapDefault, isCharacter)
 
-                binding.drawView.addDraw(drawableEmoji)
+                withContext(Dispatchers.Main) {
+                    binding.drawView.addDraw(drawableEmoji)
+                }
             } catch (e: Exception) {
                 Log.e("AddCharacterActivity", "Failed to add drawable: ${e.message}", e)
                 withContext(Dispatchers.Main) {
@@ -746,20 +753,18 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
     }
 
     private fun confirmExit() {
-        viewModel.setIsFocusEditText(false)
-        val dialog = YesNoDialog(this, R.string.exit, R.string.haven_t_saved_it_yet_do_you_want_to_exit)
+        val dialog =
+            YesNoDialog(this, R.string.exit, R.string.do_you_want_to_exit,  isError = false,
+                dialogType = DialogType.DELETE_EXIT)
+        LanguageHelper.setLocale(this)
         dialog.show()
-
-        fun dismissDialog() {
+        dialog.onYesClick = {
             dialog.dismiss()
-            hideNavigation(true)
+            showInterAll { finish() }
         }
         dialog.onNoClick = {
-            dismissDialog()
-        }
-        dialog.onYesClick = {
-            dismissDialog()
-            finish()
+            dialog.dismiss()
+            hideNavigation(false)
         }
     }
 

@@ -500,26 +500,28 @@
         android:layout_marginBottom="13dp"
         android:background="@drawable/bg_bottom"
         android:gravity="center"
-        android:layout_marginHorizontal="86dp"
+        android:layout_marginHorizontal="76dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <!--        btnBackground-->
         <ImageView
             android:id="@+id/btnBackground"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
             android:layout_marginStart="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:background="?attr/selectableItemBackgroundBorderless"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:src="@drawable/ic_background_selected" />
 
         <!--        btnSticker-->
         <ImageView
             android:id="@+id/btnSticker"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/btnBackground"
             app:layout_constraintEnd_toStartOf="@id/btnSpeech"
             android:background="?attr/selectableItemBackgroundBorderless"
@@ -528,18 +530,20 @@
         <!--        btnSpeech-->
         <ImageView
             android:id="@+id/btnSpeech"
-            android:layout_width="40dp"
+            android:layout_width="39dp"
             app:layout_constraintStart_toEndOf="@id/btnSticker"
             app:layout_constraintEnd_toStartOf="@id/btnText"
-            android:layout_height="40dp"
+            android:layout_height="39dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:src="@drawable/ic_speech" />
 
         <!--        btnText-->
         <ImageView
             android:id="@+id/btnText"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="39dp"
+            android:layout_height="39dp"
             android:layout_marginEnd="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

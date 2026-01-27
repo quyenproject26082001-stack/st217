@@ -496,7 +496,8 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
 
     private fun confirmExit() {
         val dialog =
-            YesNoDialog(this, R.string.exit, R.string.do_you_want_to_exit)
+            YesNoDialog(this, R.string.exit, R.string.do_you_want_to_exit,  isError = false,
+                dialogType = DialogType.DELETE_EXIT)
         LanguageHelper.setLocale(this)
         dialog.show()
         dialog.onYesClick = {

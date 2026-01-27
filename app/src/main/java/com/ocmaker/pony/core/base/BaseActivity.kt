@@ -39,8 +39,8 @@ abstract class BaseActivity<T : ViewBinding> : AppCompatActivity() {
 
     open fun initAds() {}
 
-    // Override this to enable background music for specific activities
-    protected open fun shouldPlayBackgroundMusic(): Boolean = false
+    // Override this to disable background music for specific activities (splash, intro, language, permission)
+    protected open fun shouldPlayBackgroundMusic(): Boolean = true
 
     protected val loadingDialog: WaitingDialog by lazy {
         WaitingDialog(this)

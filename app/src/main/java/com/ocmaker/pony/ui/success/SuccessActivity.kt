@@ -169,8 +169,6 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
 
     @android.annotation.SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
-        showInterAll {
-            startIntentWithClearTop(HomeActivity::class.java)
-        }
+        handleBackLeftToRight()
     }
 }

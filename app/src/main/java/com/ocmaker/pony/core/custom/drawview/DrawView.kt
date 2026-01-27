@@ -48,7 +48,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
     FrameLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        private const val MIN_SCALE_PERCENT = 0.6f
+        private const val MIN_SCALE_PERCENT = 0.5f
     }
 
     private val initialScaleMap = HashMap<DrawableDraw, Float>()
@@ -971,22 +971,22 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
 
     private fun setupDefaultIcons() {
         val deleteIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_close_1), DrawKey.LEFT_BOTTOM
+            ContextCompat.getDrawable(context, R.drawable.ic_close_1), DrawKey.RIGHT_TOP
         )
         deleteIcon.event = DeleteEvent()
 
         val zoomIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_rotation), DrawKey.RIGHT_TOP
+            ContextCompat.getDrawable(context, R.drawable.ic_rotation), DrawKey.RIGHT_BOTTOM
         )
         zoomIcon.event = ZoomEvent()
 
         val flipIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_flip_cs), DrawKey.RIGHT_BOTTOM
+            ContextCompat.getDrawable(context, R.drawable.ic_flip_cs), DrawKey.TOP_LEFT
         )
         flipIcon.event = FlipEvent()
 
         val editIcon = BitmapDrawIcon(
-            ContextCompat.getDrawable(context, R.drawable.ic_flip_cs), DrawKey.RIGHT_BOTTOM
+            ContextCompat.getDrawable(context, R.drawable.ic_flip_cs), DrawKey.TOP_LEFT
         )
         editIcon.event = FlipEvent()
 
@@ -994,7 +994,7 @@ open class DrawView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
         iconList.add(deleteIcon)
         iconList.add(flipIcon)
         iconList.add(zoomIcon)
-        //  iconList.add(editIcon)
+        iconList.add(editIcon)
     }
 
     private fun flip(draw: Draw?, direction: Int) {

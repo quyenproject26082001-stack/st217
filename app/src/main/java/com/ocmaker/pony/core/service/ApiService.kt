@@ -3,6 +3,6 @@ import com.ocmaker.pony.data.model.PartAPI
 import retrofit2.Response
 import retrofit2.http.GET
 interface ApiService {
-    @GET("/api/ST193_PixelMaker")
+    @GET("/api/ST193_PiaxelMaker")
     suspend fun getAllData(): Response<Map<String, List<PartAPI>>>
 }

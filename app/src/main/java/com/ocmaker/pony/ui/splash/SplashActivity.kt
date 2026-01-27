@@ -107,4 +107,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         super.onResume()
         Admob.getInstance().onCheckShowSplashWhenFail(this, interCallBack, 1000)
     }
+
+    override fun shouldPlayBackgroundMusic(): Boolean = false
 }

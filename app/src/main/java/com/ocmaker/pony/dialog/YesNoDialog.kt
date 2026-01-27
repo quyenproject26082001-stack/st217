@@ -69,6 +69,7 @@ class YesNoDialog(
         when (dialogType) {
             DialogType.LOADING, DialogType.INTERNET -> {
                 binding.btnNo.gone()
+                binding.btnYes.setBackgroundResource(R.drawable.bg_btn_internet_yes)
                 (binding.btnYes.layoutParams as LinearLayout.LayoutParams).marginStart = 0
             }
             DialogType.PERMISSION -> {
@@ -82,6 +83,31 @@ class YesNoDialog(
                 binding.btnNo.setPadding(0, paddingVertical, 0, paddingVertical)
                 binding.btnYes.setPadding(0, paddingVertical, 0, paddingVertical)
             }
+            DialogType.RESET -> {
+                // Set custom backgrounds for PERMISSION dialog buttons
+                binding.btnNo.setBackgroundResource(R.drawable.bg_btn_reset_no)
+                binding.btnYes.setBackgroundResource(R.drawable.bg_btn_reset_yes)
+                // Set Yes button text color to white
+                binding.btnYes.setTextColor(Color.parseColor("#FFFFFF"))
+                // Set same padding for both buttons to have equal height
+                val paddingVertical = (9 * context.resources.displayMetrics.density).toInt()
+                binding.btnNo.setPadding(0, paddingVertical, 0, paddingVertical)
+                binding.btnYes.setPadding(0, paddingVertical, 0, paddingVertical)
+            }
+
+            DialogType.DELETE_EXIT -> {
+                // Set custom backgrounds for PERMISSION dialog buttons
+                binding.btnNo.setBackgroundResource(R.drawable.bg_btn_delete_no)
+                binding.btnYes.setBackgroundResource(R.drawable.bg_btn_delete_yes)
+                // Set Yes button text color to white
+                binding.btnYes.setTextColor(Color.parseColor("#FFFFFF"))
+                // Set same padding for both buttons to have equal height
+                val paddingVertical = (9 * context.resources.displayMetrics.density).toInt()
+                binding.btnNo.setPadding(0, paddingVertical, 0, paddingVertical)
+                binding.btnYes.setPadding(0, paddingVertical, 0, paddingVertical)
+            }
+
+
             else -> {}
         }
     }
