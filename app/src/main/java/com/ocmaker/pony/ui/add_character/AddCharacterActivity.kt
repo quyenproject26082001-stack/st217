@@ -765,12 +765,11 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         }
         dialog.onNoClick = {
             dialog.dismiss()
-            hideNavigation(false)
+            hideNavigation(true)
         }
     }
 
     private fun confirmReset() {
-        viewModel.setIsFocusEditText(false)
         val dialog = YesNoDialog(this, R.string.reset, R.string.change_your_whole_design_are_you_sure, dialogType = DialogType.RESET)
         dialog.show()
 
@@ -1001,6 +1000,9 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
     @SuppressLint("GestureBackNavigation")
     override fun onBackPressed() {
         Log.d("EditTextFlow", "DEPRECATED onBackPressed called - this should NOT happen if callback is working")
+
+        confirmExit()
+
         // Don't call super or handle anything - let the callback handle it
         // This method should not be called if the OnBackPressedCallback is working properly
     }
@@ -1095,18 +1097,18 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
             binding.edtText.setSelection(binding.edtText.text.length)
         }
     }
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-        if (hasFocus) {
-            applyUiCustomize()
-            hideNavigation(true)
-
-            window.decorView.removeCallbacks(reHideRunnable)
-            window.decorView.postDelayed(reHideRunnable, 1500)
-        } else {
-            window.decorView.removeCallbacks(reHideRunnable)
-        }
-    }
+//    override fun onWindowFocusChanged(hasFocus: Boolean) {
+//        super.onWindowFocusChanged(hasFocus)
+//        if (hasFocus) {
+//            applyUiCustomize()
+//            hideNavigation(true)
+//
+//            window.decorView.removeCallbacks(reHideRunnable)
+//            window.decorView.postDelayed(reHideRunnable, 1500)
+//        } else {
+//            window.decorView.removeCallbacks(reHideRunnable)
+//        }
+//    }
 
     private val reHideRunnable = Runnable {
         applyUiCustomize()
