@@ -56,8 +56,8 @@
     <string name="ok">OK</string>
     <string name="wait_a_minute">Einen Moment bitte</string>
     <string name="reset">Zurücksetzen</string>
-    <string name="download_success">Download erfolgreich in das Pixcel Character Maker-Album</string>
-    <string name="please_check_your_internet">Bitte überprüfen Sie Ihre Internetverbindung</string>
+    <string name="download_success">Download erfolgreich in das Pony OC: Pony Avatar Maker-Album</string>
+    <string name="please_check_your_internet">Internetverbindung prüfen</string>
     <string name="please_select_an_image">Bitte wählen Sie ein Bild aus</string>
     <string name="error">Fehler</string>
     <string name="an_error_occurred">Ein Fehler ist aufgetreten, bitte versuchen Sie es später erneut.</string>
@@ -115,7 +115,7 @@
     <string name="exit_add">Hintergrund verlassen</string>
     <string name="exit_bg">Hintergrund verlassen</string>
     <string name="loading">Wird geladen</string>
-    <string name="internet_required_for_more_characters">Internet erforderlich für mehr Charaktere</string>
+    <string name="internet_required_for_more_characters">Internet für mehr Zeichen</string>
     <string name="music">Musik</string>
     <string name="my_work">Meine Arbeit</string>
     <string name="pony_maker">Pony-Ersteller</string>
