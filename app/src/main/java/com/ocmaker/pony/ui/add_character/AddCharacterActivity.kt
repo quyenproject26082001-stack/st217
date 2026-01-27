@@ -485,6 +485,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                 // Set initial text color and font to match selected items
                 binding.edtText.setFont(viewModel.textFontList.first().color)
                 binding.edtText.setTextColor(viewModel.textColorList[1].color)
+                binding.tvGetText.setFont(viewModel.textFontList.first().color)
                 binding.tvGetText.setTextColor(viewModel.textColorList[1].color)
                 delay(200)
                 binding.drawView.autoSelectFirstDraw()
@@ -796,7 +797,8 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
                 binding.edtText.setText("")
                 binding.edtText.setFont(viewModel.textFontList.first().color)
                 binding.edtText.setTextColor(viewModel.textColorList[1].color)
-                binding.tvGetText.setTextColor(viewModel.textColorList[1].color) // Thêm dòng này
+                binding.tvGetText.setFont(viewModel.textFontList.first().color)
+                binding.tvGetText.setTextColor(viewModel.textColorList[1].color)
                 addDrawable(viewModel.pathDefault, true)
                 backgroundImageAdapter.submitList(viewModel.backgroundImageList)
                 backgroundColorAdapter.submitList(viewModel.backgroundColorList)
