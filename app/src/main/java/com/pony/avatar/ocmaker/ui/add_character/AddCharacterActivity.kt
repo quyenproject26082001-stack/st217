@@ -47,7 +47,6 @@ import com.pony.avatar.ocmaker.core.extensions.hideSoftKeyboard
 import com.pony.avatar.ocmaker.core.extensions.invisible
 import com.pony.avatar.ocmaker.core.extensions.loadImage
 import com.pony.avatar.ocmaker.core.extensions.loadNativeCollabAds
-import com.pony.avatar.ocmaker.core.extensions.openImagePicker
 import com.pony.avatar.ocmaker.core.extensions.requestPermission
 import com.pony.avatar.ocmaker.core.extensions.select
 import com.pony.avatar.ocmaker.core.extensions.setFont
@@ -956,26 +955,6 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        if (requestCode == RequestKey.STORAGE_PERMISSION_CODE) {
-            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                permissionViewModel.updateStorageGranted(sharePreference, true)
-                openImagePicker()
-            } else {
-                permissionViewModel.updateStorageGranted(sharePreference, false)
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RequestKey.PICK_IMAGE_REQUEST_CODE && resultCode == RESULT_OK) {
-            val selectedImageUri: Uri? = data?.data
-            handleSetBackgroundImage(selectedImageUri.toString(), 0)
-        }
-    }
 
     @Deprecated("Use OnBackPressedCallback instead")
     @SuppressLint("GestureBackNavigation")

@@ -32,11 +32,6 @@ fun AppCompatActivity.deleteTempDataFolder(folder: String) {
     }
 }
 
-fun Activity.openImagePicker() {
-    val intent = Intent(Intent.ACTION_PICK)
-    intent.type = "image/*"
-    startActivityForResult(intent, RequestKey.PICK_IMAGE_REQUEST_CODE)
-}
 
 
 
