@@ -9,11 +9,13 @@ import com.lvt.ads.callback.InterCallback
 import com.lvt.ads.util.Admob
 import com.pony.avatar.ocmaker.R
 import com.pony.avatar.ocmaker.core.base.BaseActivity
+import com.pony.avatar.ocmaker.core.extensions.loadNativeCollabAds
 import com.pony.avatar.ocmaker.core.utils.state.HandleState
 import com.pony.avatar.ocmaker.databinding.ActivitySplashBinding
 import com.pony.avatar.ocmaker.ui.intro.IntroActivity
 import com.pony.avatar.ocmaker.ui.language.LanguageActivity
 import com.pony.avatar.ocmaker.ui.home.DataViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class SplashActivity : BaseActivity<ActivitySplashBinding>() {
@@ -49,7 +51,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
             Intent(this, IntroActivity::class.java)
         }
         Admob.getInstance().setTimeLimitShowAds(30000)
-        Admob.getInstance().setOpenShowAllAds(false)
+        Admob.getInstance().setOpenShowAllAds(true)
         interCallBack = object : InterCallback() {
             override fun onNextAction() {
                 super.onNextAction()
@@ -84,6 +86,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
         if (!minTimePassed || !dataReady) return
 
         triggered = true
+
+      lifecycleScope.launch { delay(7000) }
+
         Admob.getInstance().loadSplashInterAds(
             this@SplashActivity,
             getString(R.string.inter_splash),
@@ -102,6 +107,17 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>() {
 
     @SuppressLint("GestureBackNavigation", "MissingSuperCall")
     override fun onBackPressed() {}
+
+    override fun initAds() {
+        initNativeCollab()
+    }
+
+    fun initNativeCollab() {
+
+        loadNativeCollabAds(R.string.native_splash, binding.flNativeCollab)
+
+
+    }
 
     override fun onResume() {
         super.onResume()

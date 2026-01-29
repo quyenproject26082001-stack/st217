@@ -1,5 +1,6 @@
 package com.pony.avatar.ocmaker.ui.choose_character
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -124,6 +125,18 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
             val selectedCharacter = dataViewModel.allData.value.getOrNull(position)
             val needsInternet = selectedCharacter?.isFromAPI ?: false
 
+
+
+            // Log AdMob event with detailed information
+            val bundle = Bundle()
+            bundle.putString("character_name", selectedCharacter?.dataName ?: "unknown")
+            bundle.putString("avatar_path", selectedCharacter?.avatar ?: "unknown")
+            bundle.putInt("position", position)
+            bundle.putBoolean("is_from_api", needsInternet)
+            AdmobEvent.logEvent(this@ChooseCharacterActivity, "click_character_item", bundle)
+
+
+
             android.util.Log.d("ChooseCharacter", "Character isFromAPI: $needsInternet")
             android.util.Log.d("ChooseCharacter", "Character name: ${selectedCharacter?.dataName}")
 
@@ -172,18 +185,18 @@ class ChooseCharacterActivity : BaseActivity<ActivityChooseCharacterBinding>() {
     }
 
     fun initNativeCollab() {
-        // loadNativeCollabAds(R.string.native_cl_category, binding.flNativeCollab, binding.rcvCharacter)
+        Admob.getInstance().loadNativeCollapNotBanner(this,getString(R.string.native_cl_category), binding.flNativeCollab)
     }
 
-//    override fun initAds() {
-//        initNativeCollab()
-//        Admob.getInstance().loadNativeAd(
-//            this,
-//            getString(R.string.native_category),
-//            binding.nativeAds,
-//            R.layout.ads_native_banner
-//        )
-//    }
+    override fun initAds() {
+        initNativeCollab()
+        Admob.getInstance().loadNativeAd(
+            this,
+            getString(R.string.native_category),
+            binding.nativeAds,
+            R.layout.ads_native_banner
+        )
+    }
 
     override fun onRestart() {
         super.onRestart()

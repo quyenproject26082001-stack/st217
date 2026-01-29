@@ -34,6 +34,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.facebook.shimmer.ShimmerDrawable
+import com.lvt.ads.util.Admob
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -741,7 +742,7 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         dialog.show()
         dialog.onYesClick = {
             dialog.dismiss()
-            showInterAll { finish() }
+          finish()
         }
         dialog.onNoClick = {
             dialog.dismiss()
@@ -967,17 +968,17 @@ class AddCharacterActivity : BaseActivity<ActivityAddCharacterBinding>() {
         // This method should not be called if the OnBackPressedCallback is working properly
     }
 
-//    fun initNativeCollab() {
-//        loadNativeCollabAds(R.string.native_cl_bg, binding.flNativeCollab, binding.lnlBottom)
-//    }
+    fun initNativeCollab() {
+        Admob.getInstance().loadNativeCollapNotBanner(this,getString(R.string.native_cl_bg), binding.flNativeCollab)
+    }
 
-//    override fun initAds() {
-//        initNativeCollab()
-//    }
+    override fun initAds() {
+        initNativeCollab()
+    }
 
     override fun onRestart() {
         super.onRestart()
-      //  initNativeCollab()
+        initNativeCollab()
     }
 
     // Custom Input View Functions

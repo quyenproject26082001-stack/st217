@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
+import com.lvt.ads.util.Admob
 import com.pony.avatar.ocmaker.R
 import com.pony.avatar.ocmaker.core.base.BaseActivity
 import com.pony.avatar.ocmaker.core.extensions.dLog
@@ -489,7 +490,7 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                         viewModel.colorItemNavList[viewModel.positionNavSelected].indexOfFirst { it.isSelected }
                     )
                 }
-                showInterAll { checkStatusColor() }
+                checkStatusColor()
             }
         }
     }
@@ -625,9 +626,6 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
                 colorLayerCustomizeAdapter.submitList(viewModel.colorItemNavList[viewModel.positionNavSelected])
                 if (isOutTurn) binding.btnRandom.invisible()
                 val timeEnd = System.currentTimeMillis()
-                showInterAll {
-                    dLog("time random all : ${timeEnd - timeStart}")
-                }
                 delay(800)
                 binding.actionBar.btnActionBarRightText.isEnabled = true
             }
@@ -644,22 +642,19 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
         confirmExit()
     }
 
-//    fun initNativeCollab() {
-//        loadNativeCollabAds(
-//            R.string.native_cl_custom,
-//            binding.flNativeCollab,
-//            binding.flBottomNav,
-//            bottomLoadSuccess = 80
-//        )
-//    }
+    fun initNativeCollab() {
+        Admob.getInstance().loadNativeCollapNotBanner(this,getString(R.string.native_cl_custom),
+            binding.flNativeCollab
+        )
+    }
 
-//    override fun initAds() {
-//        initNativeCollab()
-//    }
+    override fun initAds() {
+        initNativeCollab()
+    }
 
     override fun onRestart() {
         super.onRestart()
-        // initNativeCollab()
+        initNativeCollab()
 
     }
 

@@ -38,7 +38,7 @@ class SettingsActivity : BaseActivity<ActivitySettingsBinding>() {
 
     private fun updateMusicUI(isEnabled: Boolean) {
         binding.btnMusic.setImageResource(
-            if (isEnabled) R.drawable.ic_sw_on else R.drawable.ic_sw_off
+            if (isEnabled) R.drawable.ic_sw_on_ms else R.drawable.ic_sw_off_ms
         )
     }
 

@@ -6,7 +6,7 @@ import android.os.Build
 object PermissionHelper {
 
     val storagePermission = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q ->
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ->
             emptyArray() // Android 10+: MediaStore API không cần quyền
 
         else -> arrayOf(

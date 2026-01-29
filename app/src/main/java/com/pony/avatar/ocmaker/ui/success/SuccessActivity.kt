@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.lvt.ads.util.Admob
 import com.pony.avatar.ocmaker.R
 import com.pony.avatar.ocmaker.core.base.BaseActivity
 import com.pony.avatar.ocmaker.core.extensions.checkPermissions
@@ -19,6 +20,7 @@ import com.pony.avatar.ocmaker.core.extensions.gone
 import com.pony.avatar.ocmaker.core.extensions.handleBackLeftToRight
 import com.pony.avatar.ocmaker.core.extensions.invisible
 import com.pony.avatar.ocmaker.core.extensions.loadImage
+import com.pony.avatar.ocmaker.core.extensions.loadNativeCollabAds
 import com.pony.avatar.ocmaker.core.extensions.requestPermission
 import com.pony.avatar.ocmaker.core.extensions.select
 import com.pony.avatar.ocmaker.core.extensions.setImageActionBar
@@ -87,7 +89,7 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
                         startIntentWithClearTop(HomeActivity::class.java)
                     }
                 }
-                btnActionBarLeft.tap { showInterAll { handleBack() } }
+                btnActionBarLeft.tap {  handleBack()  }
 
             }
 
@@ -165,6 +167,17 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
                 permissionViewModel.updateStorageGranted(sharePreference, false)
             }
         }
+    }
+
+    override fun initAds() {
+        initNativeCollab()
+    }
+
+    fun initNativeCollab() {
+
+        loadNativeCollabAds(R.string.native_cl_success, binding.flNativeCollab)
+
+
     }
 
     @android.annotation.SuppressLint("MissingSuperCall")

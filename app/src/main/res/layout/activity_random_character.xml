@@ -38,6 +38,13 @@
         app:spanCount="2"
         tools:listitem="@layout/item_choose_avatar" />
 
+    <!--    flNativeCollab-->
+    <FrameLayout
+        android:id="@+id/flNativeCollab"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent">
 
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

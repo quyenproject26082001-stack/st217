@@ -7,6 +7,7 @@ import android.view.View
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.lifecycle.lifecycleScope
+import com.lvt.ads.util.Admob
 import com.pony.avatar.ocmaker.R
 import com.pony.avatar.ocmaker.ui.customize.CustomizeCharacterActivity
 import com.pony.avatar.ocmaker.ui.customize.CustomizeCharacterViewModel
@@ -230,17 +231,17 @@ class RandomCharacterActivity : BaseActivity<ActivityRandomCharacterBinding>() {
         }
     }
 //
-//    fun initNativeCollab() {
-//        loadNativeCollabAds(R.string.native_cl_random, binding.flNativeCollab, binding.rcvRandomCharacter)
-//    }
-//
-//    override fun initAds() {
-//        initNativeCollab()
-//    }
+    fun initNativeCollab() {
+    Admob.getInstance().loadNativeCollapNotBanner(this,getString(R.string.native_cl_trending), binding.flNativeCollab)
+    }
+
+    override fun initAds() {
+        initNativeCollab()
+    }
 
     override fun onRestart() {
         super.onRestart()
-        //initNativeCollab()
+        initNativeCollab()
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

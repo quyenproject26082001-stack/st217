@@ -55,7 +55,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
             actionBar.btnActionBarRight.tap(800) { startIntentRightToLeft(SettingsActivity::class.java) }
             btnCreate.tap(800) { startIntentRightToLeft(ChooseCharacterActivity::class.java) }
             btnMyAlbum.tap(800) { showInterAll { startIntentRightToLeft(MyCreationActivity::class.java) } }
-            btnQuickMaker.tap(800) { startIntentRightToLeft(RandomCharacterActivity::class.java) }
+            btnQuickMaker.tap(800) { showInterAll {startIntentRightToLeft(RandomCharacterActivity::class.java) }}
         }
     }
 
@@ -150,13 +150,13 @@ class HomeActivity : BaseActivity<ActivityHomeBinding>() {
         }, 400)
     }
 
-//    fun initNativeCollab() {
-//        loadNativeCollabAds(R.string.native_cl_home, binding.flNativeCollab, binding.scvMain)
-//    }
+    fun initNativeCollab() {
+        Admob.getInstance().loadNativeCollapNotBanner(this,getString(R.string.native_cl_home), binding.flNativeCollab)
+    }
 
-//    override fun initAds() {
-//        initNativeCollab()
-//        Admob.getInstance().loadInterAll(this, getString(R.string.inter_all))
-//        Admob.getInstance().loadNativeAll(this, getString(R.string.native_all))
-//    }
+    override fun initAds() {
+        initNativeCollab()
+        Admob.getInstance().loadInterAll(this, getString(R.string.inter_all))
+        Admob.getInstance().loadNativeAll(this, getString(R.string.native_all))
+    }
 }

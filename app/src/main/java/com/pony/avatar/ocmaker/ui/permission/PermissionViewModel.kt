@@ -5,6 +5,7 @@ import com.pony.avatar.ocmaker.core.helper.PermissionHelper
 import com.pony.avatar.ocmaker.core.helper.SharePreferenceHelper
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlin.compareTo
 
 class PermissionViewModel : ViewModel() {
 

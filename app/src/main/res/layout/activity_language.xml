@@ -26,6 +26,18 @@
             android:id="@+id/actionBar"
             layout="@layout/layout_actionbar" />
     </FrameLayout>
+    <!--    native_ads-->
+    <FrameLayout
+        android:id="@+id/native_ads"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layoutActionBar">
+
+        <include layout="@layout/ads_native_big_btn_bottom_shimmer" />
+
+    </FrameLayout>
+
 
     <!-- rcv -->
     <androidx.recyclerview.widget.RecyclerView
@@ -40,6 +52,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutActionBar"
+        app:layout_constraintTop_toBottomOf="@id/native_ads"
         tools:listitem="@layout/item_language" />
 </androidx.constraintlayout.widget.ConstraintLayout>

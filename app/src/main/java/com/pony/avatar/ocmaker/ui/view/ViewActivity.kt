@@ -21,10 +21,12 @@ import com.pony.avatar.ocmaker.core.extensions.hideNavigation
 import com.pony.avatar.ocmaker.core.extensions.invisible
 import com.pony.avatar.ocmaker.core.extensions.loadImage
 import com.pony.avatar.ocmaker.core.extensions.loadImageFromFile
+import com.pony.avatar.ocmaker.core.extensions.loadNativeCollabAds
 import com.pony.avatar.ocmaker.core.extensions.requestPermission
 import com.pony.avatar.ocmaker.core.extensions.select
 import com.pony.avatar.ocmaker.core.extensions.setImageActionBar
 import com.pony.avatar.ocmaker.core.extensions.setTextActionBar
+import com.pony.avatar.ocmaker.core.extensions.showInterAll
 import com.pony.avatar.ocmaker.core.extensions.strings
 import com.pony.avatar.ocmaker.core.extensions.tap
 import com.pony.avatar.ocmaker.core.helper.LanguageHelper
@@ -254,7 +256,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                             putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
                         }
 
-                    editLauncher.launch(intent)
+                    showInterAll { editLauncher.launch(intent) }
                     overridePendingTransition(R.anim.slide_out_left, R.anim.slide_in_right)
                 }
             }
@@ -276,6 +278,17 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                 permissionViewModel.updateStorageGranted(sharePreference, false)
             }
         }
+    }
+
+    override fun initAds() {
+        initNativeCollab()
+    }
+
+    fun initNativeCollab() {
+
+        loadNativeCollabAds(R.string.native_cl_detail, binding.flNativeCollab)
+
+
     }
 
     @android.annotation.SuppressLint("MissingSuperCall")

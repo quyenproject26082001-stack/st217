@@ -27,6 +27,7 @@ import com.pony.avatar.ocmaker.databinding.ActivityPermissionBinding
 import com.pony.avatar.ocmaker.ui.home.HomeActivity
 import com.pony.avatar.ocmaker.core.extensions.tap
 import kotlinx.coroutines.launch
+import kotlin.compareTo
 
 class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
 
@@ -189,23 +190,23 @@ class PermissionActivity : BaseActivity<ActivityPermissionBinding>() {
         })
     }
 
-
     override fun shouldPlayBackgroundMusic(): Boolean = false
 
-//    override fun initAds() {
-//        Admob.getInstance().loadInterAds(
-//            this@PermissionActivity, getString(R.string.inter_per), object : InterCallback() {
-//                override fun onAdLoadSuccess(interstitialAd: InterstitialAd?) {
-//                    super.onAdLoadSuccess(interstitialAd)
-//                    inter = interstitialAd
-//                }
-//            })
-//
-//        Admob.getInstance().loadNativeAd(
-//            this@PermissionActivity,
-//            getString(R.string.native_per),
-//            binding.nativeAds,
-//            R.layout.ads_native_big_btn_bottom
-//        )
-//    }
+
+    override fun initAds() {
+        Admob.getInstance().loadInterAds(
+            this@PermissionActivity, getString(R.string.inter_per), object : InterCallback() {
+                override fun onAdLoadSuccess(interstitialAd: InterstitialAd?) {
+                    super.onAdLoadSuccess(interstitialAd)
+                    inter = interstitialAd
+                }
+            })
+
+        Admob.getInstance().loadNativeAd(
+            this@PermissionActivity,
+            getString(R.string.native_per),
+            binding.nativeAds,
+            R.layout.ads_native_big_btn_top
+        )
+    }
 }
