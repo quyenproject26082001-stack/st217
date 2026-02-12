@@ -409,9 +409,11 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
     }
 
     private fun handleChangeColorLayer(position: Int) {
+        android.util.Log.d("ColorClick", "=== handleChangeColorLayer === position from adapter: $position")
         lifecycleScope.launch(Dispatchers.IO) {
             // 1. Lấy path màu mới cho item đang được chọn
             val pathColor = viewModel.setClickChangeColor(position)
+            android.util.Log.d("ColorClick", "pathColor result: $pathColor")
 
             // 2. ⭐ Update màu cho TẤT CẢ items trong rcvLayer
             viewModel.updateAllItemsColor(position)

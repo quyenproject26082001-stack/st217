@@ -401,21 +401,29 @@ class CustomizeCharacterViewModel : ViewModel() {
         var pathColor = ""
         positionColorItemList[positionNavSelected] = position
 
+        android.util.Log.d("ColorClick", "--- setClickChangeColor --- position: $position, positionNavSelected: $positionNavSelected, positionCustom: $positionCustom")
+        android.util.Log.d("ColorClick", "keySelectedItemList[$positionNavSelected]: ${keySelectedItemList[positionNavSelected]}")
+
         // Đã chọn hình ảnh chưa
         if (keySelectedItemList[positionNavSelected] != "") {
             // Lấy filename từ keySelected (vd: "1.png" từ "403347/1.png" hoặc "746C78/1.png")
             val keySelected = keySelectedItemList[positionNavSelected]
             val keyFileName = keySelected.substringAfterLast('/')
 
+            android.util.Log.d("ColorClick", "keySelected: $keySelected, keyFileName: $keyFileName")
+
             // Duyệt qua từng item trong bộ phận
-            for (item in _dataCustomize.value!!.layerList[positionNavSelected].layer) {
+            for ((index, item) in _dataCustomize.value!!.layerList[positionNavSelected].layer.withIndex()) {
                 // So sánh theo filename thay vì full path
                 val itemFileName = item.image.substringAfterLast('/')
 
                 if (itemFileName == keyFileName) {
                     // Tìm thấy item matching
+                    android.util.Log.d("ColorClick", "MATCHED at layer index: $index, item.image: ${item.image}, listColor.size: ${item.listColor.size}")
                     pathColor = item.listColor[position].path
                     pathSelectedList[positionCustom] = pathColor
+
+                    android.util.Log.d("ColorClick", "pathColor (listColor[$position].path): $pathColor")
 
                     // ⭐ Update keySelected để lần sau vẫn tìm được
                     keySelectedItemList[positionNavSelected] = item.listColor[position].path

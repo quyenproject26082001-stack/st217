@@ -3,6 +3,7 @@ package com.pony.avatar.ocmaker.ui.customize
 import android.content.Context
 import androidx.core.graphics.toColorInt
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
 import com.pony.avatar.ocmaker.core.base.BaseAdapter
 import com.pony.avatar.ocmaker.core.extensions.tap
 import com.pony.avatar.ocmaker.data.model.custom.ItemColorModel
@@ -15,7 +16,13 @@ class ColorLayerCustomizeAdapter(val context: Context) :
         binding.apply {
             imvImage.setBackgroundColor(item.color.toColorInt())
             imvFocus.isVisible = item.isSelected
-            root.tap { onItemClick.invoke(position) }
+            root.tap {
+                val rv = root.parent as? RecyclerView ?: return@tap
+                val currentPosition = rv.getChildAdapterPosition(root)
+                if (currentPosition != RecyclerView.NO_POSITION) {
+                    onItemClick.invoke(currentPosition)
+                }
+            }
         }
     }
 }
