@@ -287,6 +287,7 @@ class CustomizeCharacterViewModel : ViewModel() {
         setItemNavList(positionNavSelected, randomLayer)
         if (isMoreColors) {
             setColorItemNav(positionNavSelected, randomColor!!)
+            updateAllItemsColor(randomColor, positionNavSelected)
         }
         return pathRandom to isMoreColors
     }
@@ -327,6 +328,7 @@ class CustomizeCharacterViewModel : ViewModel() {
             setItemNavList(i, randomLayer)
             if (isMoreColors) {
                 setColorItemNav(i, randomColor)
+                updateAllItemsColor(randomColor, i)
             }
         }
         return isOutTurn
@@ -447,8 +449,8 @@ class CustomizeCharacterViewModel : ViewModel() {
      * - Skip NONE và RANDOM buttons
      * - Skip items không có màu (listImageColor rỗng)
      */
-    suspend fun updateAllItemsColor(colorPosition: Int) {
-        val currentNavIndex = positionNavSelected
+    suspend fun updateAllItemsColor(colorPosition: Int, navIndex: Int = positionNavSelected) {
+        val currentNavIndex = navIndex
         val currentList = itemNavList[currentNavIndex]
 
         // Validate: Check list không rỗng
