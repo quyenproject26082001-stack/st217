@@ -340,6 +340,7 @@ class CustomizeCharacterViewModel : ViewModel() {
             val positionSelected = if (index == 0) 1 else 0
             setItemNavList(index, positionSelected)
             setColorItemNav(index, 0)
+            updateAllItemsColor(0, index)
         }
         val pathDefault = _dataCustomize.value!!.layerList.first().layer.first().image
         pathSelectedList[_dataCustomize.value!!.layerList.first().positionCustom] = pathDefault
@@ -384,7 +385,7 @@ class CustomizeCharacterViewModel : ViewModel() {
         }
         setColorListMost(
             getAllColor.groupingBy { it }.eachCount()
-                .filter { it.value > 3 }.keys.toCollection(ArrayList())
+                .filter { it.value > 1 }.keys.toCollection(ArrayList())
         )
     }
 
