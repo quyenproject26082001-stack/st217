@@ -297,9 +297,11 @@ class CustomizeCharacterViewModel : ViewModel() {
         val isOutTurn = countRandom == 300
 
         val colorCode = if (colorListMost.isNotEmpty()) colorListMost[(0..<colorListMost.size).random()] else "#123456"
+        android.util.Log.d("RandomAll", "=== setClickRandomFullLayer === colorCode: $colorCode, colorListMost.size: ${colorListMost.size}")
         for (i in 0 until _bottomNavigationList.value.size) {
             val minSize = if (i == 0) 1 else 2
             if (itemNavList[i].size <= minSize) {
+                android.util.Log.d("RandomAll", "tab[$i] SKIP - itemNavList size: ${itemNavList[i].size}, minSize: $minSize")
                 continue
             }
             val randomLayer = (minSize..<itemNavList[i].size).random()
@@ -308,8 +310,10 @@ class CustomizeCharacterViewModel : ViewModel() {
 
             val isMoreColors = if (itemNavList[i][minSize].listImageColor.isNotEmpty()) {
                 randomColor = itemNavList[i][randomLayer].listImageColor.indexOfFirst { it.color == colorCode }
+                android.util.Log.d("RandomAll", "tab[$i] indexOfFirst colorCode=$colorCode -> randomColor: $randomColor")
                 if (randomColor == -1) {
                     randomColor = (0..<itemNavList[i][minSize].listImageColor.size).random()
+                    android.util.Log.d("RandomAll", "tab[$i] color not found, fallback randomColor: $randomColor")
                 }
                 true
             } else {
@@ -324,6 +328,7 @@ class CustomizeCharacterViewModel : ViewModel() {
                 positionColorItemList[i] = randomColor
                 itemNavList[i][randomLayer].listImageColor[randomColor].path
             }
+            android.util.Log.d("RandomAll", "tab[$i] randomLayer: $randomLayer, randomColor: $randomColor, isMoreColors: $isMoreColors, pathItem: $pathItem")
             pathSelectedList[_dataCustomize.value!!.layerList[i].positionCustom] = pathItem
             setItemNavList(i, randomLayer)
             if (isMoreColors) {
@@ -384,7 +389,7 @@ class CustomizeCharacterViewModel : ViewModel() {
         }
         setColorListMost(
             getAllColor.groupingBy { it }.eachCount()
-                .filter { it.value > 3 }.keys.toCollection(ArrayList())
+                .filter { it.value > 1 }.keys.toCollection(ArrayList())
         )
     }
 

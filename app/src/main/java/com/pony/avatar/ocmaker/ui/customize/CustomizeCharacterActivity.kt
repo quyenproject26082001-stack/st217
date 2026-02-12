@@ -619,7 +619,9 @@ class CustomizeCharacterActivity : BaseActivity<ActivityCustomizeBinding>() {
             val isOutTurn = viewModel.setClickRandomFullLayer()
 
             withContext(Dispatchers.Main) {
+                android.util.Log.d("RandomAll", "=== Loading into canvas === pathSelectedList.size: ${viewModel.pathSelectedList.size}, imageViewList.size: ${viewModel.imageViewList.size}")
                 viewModel.pathSelectedList.forEachIndexed { index, path ->
+                    android.util.Log.d("RandomAll", "canvas[$index] path: $path")
                     Glide.with(this@CustomizeCharacterActivity)
                         .load(path)
                         .into(viewModel.imageViewList[index])
