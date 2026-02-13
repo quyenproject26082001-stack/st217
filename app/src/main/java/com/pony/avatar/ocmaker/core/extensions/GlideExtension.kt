@@ -113,7 +113,7 @@ fun loadImage(
             target: Target<Drawable?>,
             isFirstResource: Boolean
         ): Boolean {
-            onDismissLoading?.invoke()
+            //onDismissLoading?.invoke()
             return false
         }
 
