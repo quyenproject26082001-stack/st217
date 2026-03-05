@@ -13,7 +13,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@drawable/bg_app_character_item"
-        app:layout_constraintDimensionRatio="160:210"
+        app:layout_constraintDimensionRatio="1:1"
 
         />
 
@@ -24,7 +24,7 @@
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="0dp"
-        app:layout_constraintDimensionRatio="160:210"
+        app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
