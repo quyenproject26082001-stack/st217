@@ -11,4 +11,6 @@ data class SuggestionModel (
     var pathSelectedList : ArrayList<String> = arrayListOf(),
     var pathInternalRandom: String = "",
     var pathInternalEdit: String = "",
+    var isFlip: Boolean = false,
+    var isFromAPI: Boolean = false,
 )

@@ -42,5 +42,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "ST217"
+rootProject.name = "ST217_Pony_Maker_OC_Maker_4"
 include ':app'

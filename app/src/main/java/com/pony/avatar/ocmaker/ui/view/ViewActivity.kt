@@ -249,6 +249,11 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
             withContext(Dispatchers.Main) {
                 dismissLoading()
 
+                if (myAvatarViewModel.positionCharacter < 0) {
+                    showToast(R.string.an_error_occurred)
+                    return@withContext
+                }
+
                 myAvatarViewModel.checkDataInternet(this@ViewActivity) {
                     val intent =
                         Intent(this@ViewActivity, CustomizeCharacterActivity::class.java).apply {

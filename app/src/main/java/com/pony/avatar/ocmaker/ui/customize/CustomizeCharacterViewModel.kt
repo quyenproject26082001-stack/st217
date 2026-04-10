@@ -10,6 +10,8 @@ import androidx.lifecycle.ViewModel
 import com.pony.avatar.ocmaker.R
 import com.pony.avatar.ocmaker.core.extensions.hideNavigation
 
+import com.pony.avatar.ocmaker.core.utils.DataLocal.isFailBaseURL
+import com.pony.avatar.ocmaker.core.utils.key.DomainKey
 import com.pony.avatar.ocmaker.core.helper.BitmapHelper
 import com.pony.avatar.ocmaker.core.helper.InternetHelper
 import com.pony.avatar.ocmaker.core.helper.MediaHelper
@@ -111,6 +113,10 @@ class CustomizeCharacterViewModel : ViewModel() {
 
     fun setIsFlip() {
         _isFlip.value = !_isFlip.value
+    }
+
+    fun setIsFlipValue(value: Boolean) {
+        _isFlip.value = value
     }
 
     fun setIsHideView() {
@@ -659,6 +665,7 @@ class CustomizeCharacterViewModel : ViewModel() {
         updateKeySelectedItemList(suggestionModel.keySelectedItemList)
         updateIsShowColorList(suggestionModel.isShowColorList)
         updatePathSelectedList(suggestionModel.pathSelectedList)
+        setIsFlipValue(suggestionModel.isFlip)
     }
 
     suspend fun updateEditCharacter(context: Context, pathInternal: String) {
@@ -695,6 +702,8 @@ class CustomizeCharacterViewModel : ViewModel() {
             isShowColorList = this@CustomizeCharacterViewModel.isShowColorList,
             pathSelectedList = this@CustomizeCharacterViewModel.pathSelectedList,
             pathInternalEdit = pathInternal,
+            isFlip = _isFlip.value,
+            isFromAPI = _isDataAPI.value,
         )
         editList.add(0, newEditModel)
         MediaHelper.writeListToFile(context, ValueKey.EDIT_FILE_INTERNAL, editList)
@@ -710,5 +719,36 @@ class CustomizeCharacterViewModel : ViewModel() {
         }
     }
 //----------------------------------------------------------------------------------------------------------------------
+
+    fun rewriteDomainsToActive() {
+        val activeDomain = if (!isFailBaseURL) DomainKey.BASE_URL else DomainKey.BASE_URL_PREVENTIVE
+        val deadDomain = if (!isFailBaseURL) DomainKey.BASE_URL_PREVENTIVE else DomainKey.BASE_URL
+        if (!pathSelectedList.any { it.contains(deadDomain) } &&
+            !keySelectedItemList.any { it.contains(deadDomain) }) return
+        Log.d("PATTERN_P", "🔄 Rewriting dead domain in saved creation...")
+        Log.d("PATTERN_P", "   dead  : $deadDomain")
+        Log.d("PATTERN_P", "   active: $activeDomain")
+        for (i in pathSelectedList.indices) {
+            pathSelectedList[i] = pathSelectedList[i].replace(deadDomain, activeDomain)
+        }
+        for (i in keySelectedItemList.indices) {
+            keySelectedItemList[i] = keySelectedItemList[i].replace(deadDomain, activeDomain)
+        }
+        for (i in itemNavList.indices) {
+            val navList = itemNavList[i]
+            for (j in navList.indices) {
+                val item = navList[j]
+                val newColors = ArrayList<ItemColorImageModel>(item.listImageColor.size)
+                for (colorItem in item.listImageColor) {
+                    newColors.add(colorItem.copy(path = colorItem.path.replace(deadDomain, activeDomain)))
+                }
+                navList[j] = item.copy(
+                    path = item.path.replace(deadDomain, activeDomain),
+                    listImageColor = newColors
+                )
+            }
+        }
+        Log.d("PATTERN_P", "✅ Domain rewrite complete")
+    }
 
 }

@@ -13,11 +13,11 @@ android {
         applicationId "com.pony.avatar.ocmaker"
         minSdk 24
         targetSdk 36
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 9
+        versionName "1.0.8"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         def formattedDate = new Date().format('MM.dd.yyyy')
-        archivesBaseName = "ST_217_v${versionName}_${formattedDate}"
+        archivesBaseName = "ST217_Pony_Maker_OC_Maker_4_v${versionName}_${formattedDate}"
     }
 
     buildTypes {

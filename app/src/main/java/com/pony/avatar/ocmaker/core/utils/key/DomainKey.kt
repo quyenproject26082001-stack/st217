@@ -2,7 +2,7 @@ package com.pony.avatar.ocmaker.core.utils.key
 
 object DomainKey {
     const val BASE_URL = "https://lvtglobal.tech"
-    const val BASE_URL_PREVENTIVE = "https://lvtglobal.site"
+    const val BASE_URL_PREVENTIVE = "https://lvt-api-tech.io.vn"
     const val SUB_DOMAIN = "/public/app/ST215_PonyMaker2"
     const val HTTP = "https://"
 

@@ -30,6 +30,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withTimeoutOrNull
 import java.io.File
 import kotlin.collections.forEachIndexed
@@ -53,7 +55,7 @@ class DataViewModel() : ViewModel() {
                     .toCollection(ArrayList())
                 var dataApi = MediaHelper.readListFromFile<CustomizeModel>(context, ValueKey.DATA_FILE_API_INTERNAL)
                     ?: arrayListOf()
-                if (dataApi.isEmpty() && InternetHelper.checkInternet(context)) {
+                if (InternetHelper.checkInternet(context)) {
                     getAllParts(context).collect { state ->
                         when (state) {
                             HandleState.LOADING -> {}
@@ -83,24 +85,33 @@ class DataViewModel() : ViewModel() {
     }
 
     fun getAllParts(context: Context): Flow<HandleState> = flow {
-        Log.d("nbhieu", "API Calling...")
         emit(HandleState.LOADING)
-
-        val response = withTimeoutOrNull(5_000) {
-            try {
-                RetrofitClient.api.getAllData()
-            } catch (e: Exception) {
-                Log.e("nbhieu", "BASE_URL failed: ${e.message}")
-                null
-            }
-        } ?: withTimeoutOrNull(5_000) {
-            try {
-                RetrofitPreventive.api.getAllData()
-            } catch (e: Exception) {
-                Log.e("nbhieu", "BASE_URL_PREVENTIVE failed: ${e.message}")
-                null
+        Log.d("PATTERN_P", "========================================")
+        Log.d("PATTERN_P", "🚀 Firing both URLs concurrently...")
+        Log.d("PATTERN_P", "   PRIMARY   : ${DomainKey.BASE_URL}")
+        Log.d("PATTERN_P", "   PREVENTIVE: ${DomainKey.BASE_URL_PREVENTIVE}")
+        data class ApiResult(val response: retrofit2.Response<Map<String, List<PartAPI>>>?, val isPreventive: Boolean)
+        val result = coroutineScope {
+            val primaryDeferred = async { withTimeoutOrNull(5_000) { try { RetrofitClient.api.getAllData() } catch (e: Exception) { Log.e("PATTERN_P", "❌ PRIMARY failed: ${e.javaClass.simpleName} - ${e.message}"); null } } }
+            val preventiveDeferred = async { withTimeoutOrNull(5_000) { try { RetrofitPreventive.api.getAllData() } catch (e: Exception) { Log.e("PATTERN_P", "❌ PREVENTIVE failed: ${e.javaClass.simpleName} - ${e.message}"); null } } }
+            val primary = primaryDeferred.await()
+            if (primary != null && primary.isSuccessful) {
+                preventiveDeferred.cancel()
+                Log.d("PATTERN_P", "✅ PRIMARY won — PREVENTIVE cancelled")
+                ApiResult(primary, false)
+            } else {
+                Log.w("PATTERN_P", "⚠️ PRIMARY failed or null, waiting for PREVENTIVE...")
+                val preventive = preventiveDeferred.await()
+                if (preventive != null && preventive.isSuccessful) {
+                    Log.d("PATTERN_P", "✅ PREVENTIVE won")
+                } else {
+                    Log.e("PATTERN_P", "❌ Both URLs failed")
+                }
+                ApiResult(preventive, true)
             }
         }
+        isFailBaseURL = result.isPreventive
+        val response = result.response
 
         if (response != null && response.isSuccessful && response.body() != null) {
             val dataMap = ArrayList<DataAPI>()
