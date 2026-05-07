@@ -684,6 +684,8 @@ class CustomizeCharacterViewModel : ViewModel() {
                 pathInternalEdit = pathInternal
             }
             MediaHelper.writeListToFile(context, ValueKey.EDIT_FILE_INTERNAL, editList)
+            MediaHelper.writeListToFile(context, ValueKey.MY_CREATION_PATHS_FILE,
+                editList.map { it.pathInternalEdit })
 
             // ⭐ CRITICAL FIX: Update suggestionModel.pathInternalEdit so next save can find the entry
             suggestionModel.pathInternalEdit = pathInternal
@@ -707,6 +709,8 @@ class CustomizeCharacterViewModel : ViewModel() {
         )
         editList.add(0, newEditModel)
         MediaHelper.writeListToFile(context, ValueKey.EDIT_FILE_INTERNAL, editList)
+        MediaHelper.writeListToFile(context, ValueKey.MY_CREATION_PATHS_FILE,
+            editList.map { it.pathInternalEdit })
     }
 
     private fun loadEditList(context: Context): ArrayList<SuggestionModel> {
