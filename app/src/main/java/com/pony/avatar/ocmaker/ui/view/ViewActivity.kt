@@ -217,7 +217,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
 
     private fun resetMyCreationSelectionMode() {
         val myCreationActivity = MyCreationActivity.getInstance()
-        if (myCreationActivity != null) {
+        if (myCreationActivity != null && !myCreationActivity.isDestroyed && !myCreationActivity.isFinishing) {
             android.util.Log.d("ViewActivity", "Resetting selection mode in MyCreationActivity")
 
             val designFragment =
