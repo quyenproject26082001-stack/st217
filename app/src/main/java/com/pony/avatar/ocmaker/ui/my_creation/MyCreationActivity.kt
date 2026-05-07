@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Shader
 import android.os.Build
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -59,13 +60,7 @@ import kotlinx.coroutines.launch
 import kotlin.text.replace
 
 class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
-    companion object {
-        private var instanceRef: java.lang.ref.WeakReference<MyCreationActivity>? = null
-
-        fun getInstance(): MyCreationActivity? = instanceRef?.get()
-    }
-
-    private val viewModel: MyCreationViewModel by viewModels()
+private val viewModel: MyCreationViewModel by viewModels()
     private val permissionViewModel: PermissionViewModel by viewModels()
 
     private var myAvatarFragment: MyAvatarFragment? = null
@@ -79,9 +74,6 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
     }
 
     override fun initView() {
-        // Store instance reference for ViewActivity to access
-        instanceRef = java.lang.ref.WeakReference(this)
-
         viewModel.setTypeStatus(ValueKey.AVATAR_TYPE)
         viewModel.setStatusFrom(intent.getBooleanExtra(IntentKey.FROM_SAVE, false))
 
@@ -673,5 +665,15 @@ class MyCreationActivity : WhatsappSharingActivity<ActivityAlbumBinding>() {
         } else {
             binding.actionBar.btnActionBarRight.setImageResource(R.drawable.ic_not_select_all)
         }
+    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("tab_type", viewModel.typeStatus.value)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        val savedTab = savedInstanceState.getInt("tab_type", ValueKey.AVATAR_TYPE)
+        viewModel.setTypeStatus(savedTab)
     }
 }

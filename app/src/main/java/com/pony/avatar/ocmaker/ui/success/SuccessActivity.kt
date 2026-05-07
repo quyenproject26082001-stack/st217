@@ -87,6 +87,7 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
                 btnActionBarRight.tap {
                     showInterAll {
                         startIntentWithClearTop(HomeActivity::class.java)
+                        finish()
                     }
                 }
                 btnActionBarLeft.tap {  handleBack()  }
@@ -97,6 +98,7 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
             includeLayoutBottom.btnWhatsapp.tap(2590) {
                 showInterAll {
                     startIntentRightToLeft(MyCreationActivity::class.java, true)
+                    finish()
                 }
             }
 

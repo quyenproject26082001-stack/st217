@@ -1,7 +1,8 @@
 package com.pony.avatar.ocmaker.ui.my_creation.fragment
 
-import android.app.ActivityOptions
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -46,6 +47,10 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
     private val viewModel: MyDesignViewModel by viewModels()
     private val myCreationViewModel: MyCreationViewModel by activityViewModels()
     private val myDesignAdapter by lazy { MyDesignAdapter() }
+
+    private val viewLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        resetSelectionMode()
+    }
 
     private val myAlbumActivity: MyCreationActivity
         get() = requireActivity() as MyCreationActivity
@@ -169,16 +174,13 @@ class MyDesignFragment : BaseFragment<FragmentMyDesignBinding>() {
     }
 
     private fun handleItemClick(pathInternal: String) {
-        if (myDesignAdapter.items.any { it.isShowSelection }) {
-            // In selection mode - reset before navigating
-            resetSelectionMode()
+        val intent = Intent(myAlbumActivity, ViewActivity::class.java).apply {
+            putExtra(IntentKey.INTENT_KEY, pathInternal)
+            putExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW)
+            putExtra(IntentKey.STATUS_KEY, ValueKey.MY_DESIGN_TYPE)
         }
-        val intent = Intent(myAlbumActivity, ViewActivity::class.java)
-        intent.putExtra(IntentKey.INTENT_KEY, pathInternal)
-        intent.putExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW)
-        intent.putExtra(IntentKey.STATUS_KEY, ValueKey.MY_DESIGN_TYPE)
-        val options = ActivityOptions.makeCustomAnimation(myAlbumActivity, R.anim.slide_in_right, R.anim.slide_out_left)
-        myAlbumActivity.showInterAll { startActivity(intent, options.toBundle()) }
+        val options = ActivityOptionsCompat.makeCustomAnimation(myAlbumActivity, R.anim.slide_in_right, R.anim.slide_out_left)
+        myAlbumActivity.showInterAll { viewLauncher.launch(intent, options) }
     }
 
     private fun handleLongClick(position: Int) {

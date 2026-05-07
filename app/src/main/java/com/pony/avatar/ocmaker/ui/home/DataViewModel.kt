@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.pony.avatar.ocmaker.core.helper.AssetHelper
 import com.pony.avatar.ocmaker.core.helper.InternetHelper
 import com.pony.avatar.ocmaker.core.helper.MediaHelper
@@ -129,56 +130,69 @@ class DataViewModel() : ViewModel() {
         }
     }
 
-    fun getDataAPI(context: Context, dataList: ArrayList<DataAPI>) {
-        val allDataAPI: ArrayList<CustomizeModel> = arrayListOf()
-        // Character 1, Character 2,...
-        dataList.forEachIndexed { indexCharacter, data ->
-            ///public/app/ChibiMaker/1/avatar.png
-            val baseDomain = if (!isFailBaseURL) DomainKey.BASE_URL else DomainKey.BASE_URL_PREVENTIVE
-            val avatarCharacter = "$baseDomain${DomainKey.SUB_DOMAIN}/${data.name}/${DomainKey.AVATAR_CHARACTER_API}"
-            val layerList = ArrayList<LayerListModel>(data.parts.size)
+    fun getDataAPI(context: Context, dataList:
+    ArrayList<DataAPI>) {
+        val file = context.getFileStreamPath(ValueKey.DATA_FILE_API_INTERNAL)
+        val gson = Gson()
 
-            // Sort parts by level in ascending order
-            val sortedParts = data.parts.sortedBy { it.level }
 
-            sortedParts.forEachIndexed { indexLayer, dataLayer ->
-                // Handle both "-" and "_" delimiters, similar to local asset loading
-                val layerName = if (dataLayer.parts.contains("-")) {
-                    dataLayer.parts.split("-")
-                } else {
-                    dataLayer.parts.split("_")
+        context.openFileOutput(ValueKey.DATA_FILE_API_INTERNAL,
+            Context.MODE_PRIVATE)
+            .bufferedWriter().use { writer ->
+                writer.write("[")
+                dataList.forEachIndexed { indexCharacter,
+                                          data ->
+                    val baseDomain = if (!isFailBaseURL)
+                        DomainKey.BASE_URL else DomainKey.BASE_URL_PREVENTIVE
+                    val avatarCharacter =
+                        "$baseDomain${DomainKey.SUB_DOMAIN}/${data.name}/${DomainKey.AVATAR_CHARACTER_API}"
+                    val layerList =
+                        ArrayList<LayerListModel>(data.parts.size)
+                    val sortedParts = data.parts.sortedBy {
+                        it.level }
+
+                    sortedParts.forEachIndexed { indexLayer,
+                                                 dataLayer ->
+                        val layerName = if
+                                                (dataLayer.parts.contains("-")) {
+                            dataLayer.parts.split("-")
+                        } else {
+                            dataLayer.parts.split("_")
+                        }
+                        val positionCustom =
+                            layerName.first().toInt() - 1
+                        val positionNavigation =
+                            layerName.last().toInt() - 1
+                        val imageNavigation =
+                            "${baseDomain}${DomainKey.SUB_DOMAIN}/${data.name}/${dataLayer.parts}/${DomainKey.IMAGE_NAVIGATION}"
+                        val layer = getDataLayer(baseDomain,
+                            dataLayer, dataLayer.parts)
+
+                        layerList.add(LayerListModel(positionCustom,
+                            positionNavigation, imageNavigation, layer))
+                    }
+                    layerList.sortBy { it.positionNavigation
+                    }
+
+                    val characterLevel =
+                        sortedParts.minOfOrNull { it.level } ?: 100
+                    val dataApi = CustomizeModel(
+                        dataName = data.name,
+                        avatar = avatarCharacter,
+                        layerList = layerList,
+                        level = characterLevel,
+                        isFromAPI = true
+                    )
+
+                    // Stream từng item vào file, không giữ trong memory
+                            if (indexCharacter > 0)
+                                writer.write(",")
+                    gson.toJson(dataApi, writer)
+
+                    Log.d("nbhieu", "avatar:${dataApi.avatar}")
                 }
-                val positionCustom = layerName.first().toInt() - 1
-                val positionNavigation = layerName.last().toInt() - 1
-                val imageNavigation = "${baseDomain}${DomainKey.SUB_DOMAIN}/${data.name}/${dataLayer.parts}/${DomainKey.IMAGE_NAVIGATION}"
-                val layer = getDataLayer(baseDomain, dataLayer, dataLayer.parts)
-
-                val layerListModel = LayerListModel(
-                    positionCustom = positionCustom,
-                    positionNavigation = positionNavigation,
-                    imageNavigation = imageNavigation,
-                    layer = layer
-                )
-                layerList.add(layerListModel)
+                writer.write("]")
             }
-            layerList.sortBy { it.positionNavigation }
-
-            // Use the minimum level from all parts as the character level
-            val characterLevel = sortedParts.minOfOrNull { it.level } ?: 100
-
-            val dataApi = CustomizeModel(
-                dataName = data.name,
-                avatar = avatarCharacter,
-                layerList = layerList,
-                level = characterLevel,
-                isFromAPI = true
-            )
-            allDataAPI.add(dataApi)
-        }
-        MediaHelper.writeListToFile(context, ValueKey.DATA_FILE_API_INTERNAL, allDataAPI)
-        allDataAPI.forEach {
-            Log.d("nbhieu", "avatar: ${it.avatar}")
-        }
     }
 
     private fun getDataLayer(baseDomain: String, partData: PartAPI, layer: String): ArrayList<LayerModel> {

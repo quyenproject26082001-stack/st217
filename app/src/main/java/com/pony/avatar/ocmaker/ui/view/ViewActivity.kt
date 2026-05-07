@@ -39,8 +39,6 @@ import com.pony.avatar.ocmaker.databinding.ActivityViewBinding
 import com.pony.avatar.ocmaker.dialog.YesNoDialog
 import com.pony.avatar.ocmaker.ui.customize.CustomizeCharacterActivity
 import com.pony.avatar.ocmaker.ui.home.DataViewModel
-import com.pony.avatar.ocmaker.ui.my_creation.fragment.MyAvatarFragment
-import com.pony.avatar.ocmaker.ui.my_creation.MyCreationActivity
 import com.pony.avatar.ocmaker.ui.my_creation.view_model.MyAvatarViewModel
 import com.pony.avatar.ocmaker.ui.permission.PermissionViewModel
 import kotlinx.coroutines.Dispatchers
@@ -192,8 +190,6 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
                             HandleState.LOADING -> showLoading()
                             HandleState.SUCCESS -> {
                                 dismissLoading()
-                                resetMyCreationSelectionMode()
-
                                 setResult(Activity.RESULT_OK, Intent().apply {
                                     putExtra("DELETED_PATH", viewModel.pathInternal.value)
                                 })
@@ -211,34 +207,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     }
 
     private fun handleBack() {
-        resetMyCreationSelectionMode()
         handleBackLeftToRight()
-    }
-
-    private fun resetMyCreationSelectionMode() {
-        val myCreationActivity = MyCreationActivity.getInstance()
-        if (myCreationActivity != null) {
-            android.util.Log.d("ViewActivity", "Resetting selection mode in MyCreationActivity")
-
-            val designFragment =
-                myCreationActivity.supportFragmentManager.findFragmentByTag("MyDesignFragment")
-            if (designFragment is com.pony.avatar.ocmaker.ui.my_creation.fragment.MyDesignFragment) {
-                designFragment.resetSelectionMode()
-            }
-
-            val avatarFragment =
-                myCreationActivity.supportFragmentManager.findFragmentByTag("MyAvatarFragment")
-            if (avatarFragment is MyAvatarFragment) {
-                avatarFragment.resetSelectionMode()
-            }
-
-            myCreationActivity.exitSelectionMode()
-        } else {
-            android.util.Log.w(
-                "ViewActivity",
-                "MyCreationActivity instance not found - unable to reset selection mode"
-            )
-        }
     }
 
     private fun handleEditClick(pathInternal: String) {

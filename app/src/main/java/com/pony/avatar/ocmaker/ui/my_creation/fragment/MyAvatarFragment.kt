@@ -1,7 +1,8 @@
 package com.pony.avatar.ocmaker.ui.my_creation.fragment
 
-import android.app.ActivityOptions
 import android.content.Intent
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityOptionsCompat
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -49,6 +50,10 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
     private val dataViewModel: DataViewModel by viewModels()
     private val myCreationViewModel: MyCreationViewModel by activityViewModels()
     private val myAvatarAdapter by lazy { MyAvatarAdapter(requireActivity()) }
+
+    private val viewLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        resetSelectionMode()
+    }
 
     private val myAlbumActivity: MyCreationActivity
         get() = requireActivity() as MyCreationActivity
@@ -189,7 +194,7 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
                     val intent = Intent(myAlbumActivity, CustomizeCharacterActivity::class.java)
                     intent.putExtra(IntentKey.INTENT_KEY, viewModel.positionCharacter)
                     intent.putExtra(IntentKey.STATUS_FROM_KEY, ValueKey.EDIT)
-                    val option = ActivityOptions.makeCustomAnimation(
+                    val option = ActivityOptionsCompat.makeCustomAnimation(
                         myAlbumActivity, R.anim.slide_out_left, R.anim.slide_in_right
                     )
                     myAlbumActivity.showInterAll { startActivity(intent, option.toBundle()) }
@@ -199,12 +204,13 @@ class MyAvatarFragment : BaseFragment<FragmentMyAvatarBinding>() {
     }
 
     private fun handleItemClick(pathInternal: String) {
-        val intent = Intent(myAlbumActivity, ViewActivity::class.java)
-        intent.putExtra(IntentKey.INTENT_KEY, pathInternal)
-        intent.putExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW)
-        intent.putExtra(IntentKey.STATUS_KEY, ValueKey.AVATAR_TYPE)
-        val options = ActivityOptions.makeCustomAnimation(myAlbumActivity, R.anim.slide_in_right, R.anim.slide_out_left)
-        myAlbumActivity.showInterAll { startActivity(intent, options.toBundle()) }
+        val intent = Intent(myAlbumActivity, ViewActivity::class.java).apply {
+            putExtra(IntentKey.INTENT_KEY, pathInternal)
+            putExtra(IntentKey.TYPE_KEY, ValueKey.TYPE_VIEW)
+            putExtra(IntentKey.STATUS_KEY, ValueKey.AVATAR_TYPE)
+        }
+        val options = ActivityOptionsCompat.makeCustomAnimation(myAlbumActivity, R.anim.slide_in_right, R.anim.slide_out_left)
+        myAlbumActivity.showInterAll { viewLauncher.launch(intent, options) }
     }
 
     private fun handleLongClick(position: Int) {
