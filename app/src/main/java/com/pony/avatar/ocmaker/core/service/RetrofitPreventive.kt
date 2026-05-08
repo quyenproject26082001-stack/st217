@@ -3,7 +3,6 @@ package com.pony.avatar.ocmaker.core.service
 import com.pony.avatar.ocmaker.core.utils.key.DomainKey
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
@@ -23,13 +22,9 @@ open class BaseRetrofitHelper() {
     var okHttpClient: OkHttpClient? = null
 
     init {
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
-        val builder =
-            OkHttpClient.Builder()
-                .writeTimeout(4_500L, TimeUnit.MILLISECONDS)
-                .readTimeout(4_500L, TimeUnit.MILLISECONDS)
-                .addInterceptor(interceptor)
-        okHttpClient = builder.build()
+        okHttpClient = OkHttpClient.Builder()
+            .writeTimeout(4_500L, TimeUnit.MILLISECONDS)
+            .readTimeout(4_500L, TimeUnit.MILLISECONDS)
+            .build()
     }
 }

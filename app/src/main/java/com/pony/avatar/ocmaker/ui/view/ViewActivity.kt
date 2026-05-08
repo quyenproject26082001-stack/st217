@@ -44,6 +44,7 @@ import com.pony.avatar.ocmaker.ui.my_creation.MyCreationActivity
 import com.pony.avatar.ocmaker.ui.my_creation.view_model.MyAvatarViewModel
 import com.pony.avatar.ocmaker.ui.permission.PermissionViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -58,7 +59,7 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     }
 
     override fun initView() {
-        dataViewModel.ensureData(this)
+        dataViewModel.ensureDataFromCache(this)
         viewModel.setPath(intent.getStringExtra(IntentKey.INTENT_KEY)!!)
         viewModel.updateStatusFrom(intent.getIntExtra(IntentKey.STATUS_KEY, ValueKey.AVATAR_TYPE))
 
@@ -244,7 +245,10 @@ class ViewActivity : BaseActivity<ActivityViewBinding>() {
     private fun handleEditClick(pathInternal: String) {
         lifecycleScope.launch(Dispatchers.IO) {
             showLoading()
-            myAvatarViewModel.editItem(this@ViewActivity, pathInternal, dataViewModel.allData.value)
+            val allData = dataViewModel.allData.value.ifEmpty {
+                dataViewModel.allData.first { it.isNotEmpty() }
+            }
+            myAvatarViewModel.editItem(this@ViewActivity, pathInternal, allData)
 
             withContext(Dispatchers.Main) {
                 dismissLoading()

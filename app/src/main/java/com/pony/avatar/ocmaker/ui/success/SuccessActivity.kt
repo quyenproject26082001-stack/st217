@@ -11,6 +11,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.lvt.ads.callback.InterCallback
 import com.lvt.ads.util.Admob
 import com.pony.avatar.ocmaker.R
 import com.pony.avatar.ocmaker.core.base.BaseActivity
@@ -40,6 +41,7 @@ import com.pony.avatar.ocmaker.ui.home.HomeActivity
 import com.pony.avatar.ocmaker.ui.my_creation.MyCreationActivity
 import com.pony.avatar.ocmaker.ui.permission.PermissionViewModel
 import kotlinx.coroutines.launch
+import java.lang.ref.WeakReference
 
 class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
     private val viewModel: SuccessViewModel by viewModels()
@@ -81,6 +83,17 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
     private fun handleBack() {
         handleBackLeftToRight()
     }
+
+    fun Activity.showInterAll(onFinishInter: () -> Unit) {
+        val weakRef = WeakReference(this)
+        Admob.getInstance().showInterAll(this, object : InterCallback() {
+            override fun onNextAction() {
+                super.onNextAction()
+                if (weakRef.get() != null) onFinishInter.invoke()
+            }
+        })
+    }
+
     override fun viewListener() {
         binding.apply {
             actionBar.apply {
@@ -97,6 +110,7 @@ class SuccessActivity : BaseActivity<ActivitySuccessBinding>() {
             includeLayoutBottom.btnWhatsapp.tap(2590) {
                 showInterAll {
                     startIntentRightToLeft(MyCreationActivity::class.java, true)
+                    finish()
                 }
             }
 

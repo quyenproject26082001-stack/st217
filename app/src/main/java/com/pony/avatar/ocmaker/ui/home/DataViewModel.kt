@@ -84,6 +84,26 @@ class DataViewModel() : ViewModel() {
         }
     }
 
+    fun ensureDataFromCache(context: Context) {
+        if (_allData.value.isEmpty()) {
+            viewModelScope.launch {
+                val list = withContext(Dispatchers.IO) {
+                    if (!MediaHelper.checkFileInternal(context, ValueKey.DATA_FILE_INTERNAL)) {
+                        AssetHelper.getDataFromAsset(context)
+                    }
+                    val totalData = MediaHelper.readListFromFile<CustomizeModel>(context, ValueKey.DATA_FILE_INTERNAL)
+                        .toCollection(ArrayList())
+                    val dataApi = MediaHelper.readListFromFile<CustomizeModel>(context, ValueKey.DATA_FILE_API_INTERNAL)
+                        ?: arrayListOf()
+                    totalData.addAll(dataApi)
+                    totalData.sortBy { it.level }
+                    totalData
+                }
+                _allData.value = list
+            }
+        }
+    }
+
     fun getAllParts(context: Context): Flow<HandleState> = flow {
         emit(HandleState.LOADING)
         Log.d("PATTERN_P", "========================================")

@@ -85,12 +85,35 @@ class MyAvatarViewModel : ViewModel() {
             .readListFromFile<SuggestionModel>(context, ValueKey.EDIT_FILE_INTERNAL)
             .toCollection(ArrayList())
 
-        editModel = originList.first { it.pathInternalEdit == pathInternal }
+        editModel = originList.firstOrNull { it.pathInternalEdit == pathInternal }
+            ?: run {
+                android.util.Log.e("editItem", "no entry for pathInternal=$pathInternal")
+                positionCharacter = -1
+                return
+            }
         val savedAvatarPath = editModel.avatarPath.urlPath()
         positionCharacter = allData.indexOfFirst { character ->
             character.avatar.urlPath() == savedAvatarPath
         }
-        // ✅ FIX: Use isFromAPI flag from saved SuggestionModel (reliable even when API data not loaded)
+
+        if (positionCharacter < 0) {
+            android.util.Log.e("editItem", "MISS: saved='${editModel.avatarPath}' -> '$savedAvatarPath'")
+            android.util.Log.e("editItem", "isFromAPI=${editModel.isFromAPI}, allData.size=${allData.size}")
+            allData.take(5).forEachIndexed { i, c ->
+                android.util.Log.e("editItem", "  [$i] dataName=${c.dataName} avatar='${c.avatar}' -> '${c.avatar.urlPath()}'")
+            }
+            // Fallback: match by character folder name extracted from avatar path
+            val savedCharName = editModel.avatarPath
+                .substringBeforeLast("/").substringAfterLast("/")
+            if (savedCharName.isNotEmpty()) {
+                positionCharacter = allData.indexOfFirst { character ->
+                    character.dataName == savedCharName ||
+                    character.avatar.substringBeforeLast("/").substringAfterLast("/") == savedCharName
+                }
+                android.util.Log.e("editItem", "fallback by name '$savedCharName' -> positionCharacter=$positionCharacter")
+            }
+        }
+
         isApi = editModel.isFromAPI
         MediaHelper.writeModelToFile(context, ValueKey.SUGGESTION_FILE_INTERNAL, editModel)
     }
